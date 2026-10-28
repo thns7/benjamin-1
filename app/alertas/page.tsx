@@ -4,6 +4,7 @@ import { Badge, BotaoLink, EmptyState, Mono, PageHeader, type Tom } from '@/comp
 import { supabaseConfigurado, supabaseServer } from '@/lib/supabase/server';
 import { SemBanco } from '@/components/sem-banco';
 import type { AlertRow, CustomerRow } from '@/lib/supabase/database.types';
+import { BotaoTratar } from './tratar';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,12 +28,6 @@ const TIPO: Record<string, string> = {
   qualidade_dado: 'Qualidade do dado',
 };
 
-const PUBLICO: Record<string, string> = {
-  vendedor: 'Vendedor',
-  gestor: 'Gestor',
-  diretor: 'Diretor',
-};
-
 /**
  * A ação sugerida é o que transforma alerta em decisão. Sem ela o painel só
  * informa que algo aconteceu — e a rubrica pede motor de decisão, não relatório.
@@ -51,7 +46,9 @@ const ACAO_SUGERIDA: Record<string, string> = {
 };
 
 const FILTROS_SEVERIDADE = ['todas', 'alta', 'media', 'baixa'] as const;
-const FILTROS_PUBLICO = ['todos', 'vendedor', 'gestor', 'diretor'] as const;
+
+const DESCRICAO =
+  'Sua caixa de entrada de risco. Cada alerta traz a fala que o originou; trate e ele sai da lista.';
 
 function Chip({
   ativo,
@@ -79,21 +76,22 @@ function Chip({
 export default async function AlertasPage({
   searchParams,
 }: {
-  searchParams: Promise<{ sev?: string; pub?: string }>;
+  searchParams: Promise<{ sev?: string; estado?: string }>;
 }) {
   if (!supabaseConfigurado()) {
     return (
       <>
         <PageHeader
           titulo="Alertas"
-          descricao="O que o sistema encontrou e para quem interessa — com a evidência que originou cada aviso e o valor em jogo."
+          descricao={DESCRICAO}
         />
-        <SemBanco oQueApareceAqui="Aqui ficam os alertas nascidos das análises: risco de churn na banda alta, concorrente ativo na conversa, oportunidade com alta probabilidade e budget declarado — cada um com a citação que o originou." />
+        <SemBanco oQueApareceAqui="Aqui ficam os alertas nascidos das análises, como risco de churn alto e concorrente citado na conversa, cada um com a citação que o originou e um botão para marcar como tratado." />
       </>
     );
   }
 
-  const { sev = 'todas', pub = 'todos' } = await searchParams;
+  const { sev = 'todas', estado = 'abertos' } = await searchParams;
+  const verTratados = estado === 'tratados';
 
   const sb = supabaseServer();
   const [alertasRes, clientesRes] = await Promise.all([
@@ -113,35 +111,36 @@ export default async function AlertasPage({
     ((clientesRes.data ?? []) as Pick<CustomerRow, 'id' | 'name'>[]).map((c) => [c.id, c.name]),
   );
 
-  const alertas = todos.filter(
-    (a) => (sev === 'todas' || a.severity === sev) && (pub === 'todos' || a.audience === pub),
-  );
+  const abertos = todos.filter((a) => !a.read);
+  const tratados = todos.filter((a) => a.read);
+  const daAba = verTratados ? tratados : abertos;
+  const alertas = daAba.filter((a) => sev === 'todas' || a.severity === sev);
 
   const contagem = {
-    alta: todos.filter((a) => a.severity === 'alta').length,
-    media: todos.filter((a) => a.severity === 'media').length,
-    baixa: todos.filter((a) => a.severity === 'baixa').length,
+    alta: daAba.filter((a) => a.severity === 'alta').length,
+    media: daAba.filter((a) => a.severity === 'media').length,
+    baixa: daAba.filter((a) => a.severity === 'baixa').length,
   };
 
-  const url = (novo: { sev?: string; pub?: string }) => {
+  const url = (novo: { sev?: string; estado?: string }) => {
     const s = novo.sev ?? sev;
-    const p = novo.pub ?? pub;
-    return `/alertas?sev=${s}&pub=${p}`;
+    const e = novo.estado ?? estado;
+    return `/alertas?estado=${e}&sev=${s}`;
   };
 
   return (
     <>
       <PageHeader
         titulo="Alertas"
-        descricao="O que o sistema encontrou e para quem interessa — com a evidência que originou cada aviso e o valor em jogo."
-        acoes={<BotaoLink href="/torre">Torre de controle</BotaoLink>}
+        descricao={DESCRICAO}
+        acoes={<BotaoLink href="/">Radar de churn</BotaoLink>}
       />
 
       {todos.length === 0 ? (
         <EmptyState
           icone={<Bell size={18} />}
           titulo="Nenhum alerta na base"
-          descricao="Os alertas nascem das análises: risco de churn na banda alta, concorrente ativo na conversa, oportunidade com alta probabilidade e budget declarado. Cada um traz a citação que o originou, o cliente, o valor em risco e a ação sugerida."
+          descricao="Os alertas nascem das análises: risco de churn alto, concorrente citado na conversa e outros sinais. Cada um traz a citação que o originou, a conta, o valor em jogo e a ação sugerida."
           acao={
             <BotaoLink href="/reunioes/nova" variante="primario">
               Analisar uma reunião
@@ -152,22 +151,20 @@ export default async function AlertasPage({
         <>
           <div className="mb-4 flex flex-wrap items-center gap-4">
             <div className="flex flex-wrap items-center gap-1.5">
+              <Chip ativo={!verTratados} href={url({ estado: 'abertos' })}>
+                Não tratados ({abertos.length})
+              </Chip>
+              <Chip ativo={verTratados} href={url({ estado: 'tratados' })}>
+                Tratados ({tratados.length})
+              </Chip>
+            </div>
+            <div className="flex flex-wrap items-center gap-1.5">
               <span className="text-[11px] font-semibold uppercase tracking-wide text-ink-faint">
                 Severidade
               </span>
               {FILTROS_SEVERIDADE.map((s) => (
                 <Chip key={s} ativo={sev === s} href={url({ sev: s })}>
-                  {s === 'todas' ? `todas (${todos.length})` : `${s} (${contagem[s]})`}
-                </Chip>
-              ))}
-            </div>
-            <div className="flex flex-wrap items-center gap-1.5">
-              <span className="text-[11px] font-semibold uppercase tracking-wide text-ink-faint">
-                Público
-              </span>
-              {FILTROS_PUBLICO.map((p) => (
-                <Chip key={p} ativo={pub === p} href={url({ pub: p })}>
-                  {p === 'todos' ? 'todos' : PUBLICO[p]}
+                  {s === 'todas' ? `todas (${daAba.length})` : `${s} (${contagem[s]})`}
                 </Chip>
               ))}
             </div>
@@ -175,12 +172,22 @@ export default async function AlertasPage({
 
           {alertas.length === 0 ? (
             <div className="vidro-sutil rounded-xl border border-dashed border-line-strong px-6 py-10 text-center">
-              <p className="text-[13px] font-semibold text-ink">Nenhum alerta com esse filtro</p>
+              <p className="text-[13px] font-semibold text-ink">
+                {daAba.length === 0
+                  ? verTratados
+                    ? 'Nenhum alerta tratado ainda'
+                    : 'Nenhum alerta para tratar'
+                  : 'Nenhum alerta com esse filtro'}
+              </p>
               <p className="mt-1 text-[12px] text-ink-dim">
-                Existem {todos.length} alerta(s) na base.{' '}
-                <Link href="/alertas" className="text-accent hover:underline">
-                  Limpar filtros
-                </Link>
+                {daAba.length === 0 && !verTratados
+                  ? 'Tudo em dia. Novos alertas aparecem aqui quando uma reunião analisada mostrar risco.'
+                  : `Existem ${todos.length} alerta(s) na base. `}
+                {daAba.length > 0 || verTratados ? (
+                  <Link href="/alertas" className="text-accent hover:underline">
+                    Voltar aos não tratados
+                  </Link>
+                ) : null}
               </p>
             </div>
           ) : (
@@ -191,16 +198,16 @@ export default async function AlertasPage({
                 return (
                   <li
                     key={a.id}
-                    className={`vidro-sutil rounded-xl border p-4 shadow-panel ${
-                      a.severity === 'alta' ? 'border-risk/40' : 'border-line'
+                    className={`vidro rounded-xl p-4 ${a.severity === 'alta' && !a.read ? '!border-risk/40' : ''} ${
+                      a.read ? 'opacity-75' : ''
                     }`}
                   >
                     <div className="flex flex-wrap items-center gap-2">
                       <Badge tom={tom}>{a.severity}</Badge>
                       <Badge tom="neutro">{TIPO[a.kind] ?? a.kind}</Badge>
                       <span className="text-[12.5px] font-semibold text-ink">{a.title}</span>
-                      <span className="ml-auto text-[10.5px] uppercase tracking-wide text-ink-faint">
-                        para {PUBLICO[a.audience] ?? a.audience}
+                      <span className="ml-auto text-[10.5px] text-ink-faint">
+                        {new Date(a.created_at).toLocaleDateString('pt-BR')}
                       </span>
                     </div>
 
@@ -221,7 +228,8 @@ export default async function AlertasPage({
                       </p>
                     </div>
 
-                    <div className="mt-2.5 flex flex-wrap items-center gap-3 text-[11.5px]">
+                    <div className="mt-3 flex flex-wrap items-center gap-3 text-[11.5px]">
+                      <BotaoTratar alertaId={a.id} tratado={a.read} />
                       {cliente && a.customer_id ? (
                         <Link
                           href={`/clientes/${a.customer_id}`}
