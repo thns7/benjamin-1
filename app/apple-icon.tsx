@@ -23,7 +23,7 @@ export default function AppleIcon() {
         }}
       >
         <svg width="104" height="104" viewBox="0 0 32 32" fill="none">
-          {MarcaFormas({ cor: '#111827' })}
+          {MarcaFormas({ cor: '#161616' })}
         </svg>
       </div>
     ),
