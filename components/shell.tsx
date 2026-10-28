@@ -6,48 +6,39 @@ import { useEffect, useState, type ReactNode } from 'react';
 import {
   Bell,
   Building2,
-  FlaskConical,
   FolderUp,
-  GraduationCap,
-  LayoutDashboard,
   MessagesSquare,
   Moon,
   Plus,
   Radar,
-  RadioTower,
   Sun,
   type LucideIcon,
 } from 'lucide-react';
-import { Logo, Wordmark } from './logo';
+import { Logo, TAGLINE, Wordmark } from './logo';
 
 type Item = { href: string; rotulo: string; icone: LucideIcon };
 type Grupo = { titulo: string; itens: Item[] };
 
+/*
+ * O menu é o radar de churn. As telas da época de vendas (Coaching, Radar de
+ * dores, Torre de controle, Validação) saíram daqui em 2026-10-28, mas as rotas
+ * continuam funcionando: dá para reaproveitar ou trazer de volta sem perda.
+ */
 const GRUPOS: Grupo[] = [
   {
-    titulo: 'Operação',
+    titulo: 'Retenção',
     itens: [
-      { href: '/', rotulo: 'Dashboard', icone: LayoutDashboard },
-      { href: '/reunioes', rotulo: 'Reuniões', icone: MessagesSquare },
-      { href: '/clientes', rotulo: 'Clientes', icone: Building2 },
-      { href: '/reunioes/lote', rotulo: 'Importar em lote', icone: FolderUp },
-    ],
-  },
-  {
-    titulo: 'Inteligência',
-    itens: [
-      { href: '/radar', rotulo: 'Radar de dores', icone: Radar },
-      { href: '/coaching', rotulo: 'Coaching', icone: GraduationCap },
+      { href: '/', rotulo: 'Radar', icone: Radar },
+      { href: '/clientes', rotulo: 'Contas', icone: Building2 },
       { href: '/alertas', rotulo: 'Alertas', icone: Bell },
     ],
   },
   {
-    titulo: 'Gestão',
-    itens: [{ href: '/torre', rotulo: 'Torre de controle', icone: RadioTower }],
-  },
-  {
-    titulo: 'Sistema',
-    itens: [{ href: '/validacao', rotulo: 'Validação', icone: FlaskConical }],
+    titulo: 'Reuniões',
+    itens: [
+      { href: '/reunioes', rotulo: 'Reuniões', icone: MessagesSquare },
+      { href: '/reunioes/lote', rotulo: 'Importar', icone: FolderUp },
+    ],
   },
 ];
 
@@ -101,7 +92,7 @@ function AlternadorTema() {
 
 /**
  * Botão de ação primária. É o único bloco de tinta chapada da interface — numa
- * tela feita de vidro translúcido, opacidade total é o destaque mais forte
+ * tela de papel e tinta, um bloco chapado de tinta é o destaque mais forte
  * disponível, e ele fica reservado para a única coisa que o usuário SEMPRE pode
  * fazer: trazer uma reunião nova para dentro.
  */
@@ -136,7 +127,7 @@ export function Shell({ children, motor }: { children: ReactNode; motor: string 
               uma promessa pela metade é pior que promessa nenhuma.
             */}
             <p className="mt-1.5 text-[10px] leading-[1.35] text-ink-faint">
-              O ouro invisível de cada conversa
+              {TAGLINE}
             </p>
           </div>
         </div>

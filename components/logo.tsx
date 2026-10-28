@@ -1,19 +1,16 @@
 /**
  * Marca do Benjamin.
  *
- * Uma ficha sólida com a onda vazada: a fala entra como três traços de
- * amplitude e sai como um ponto único — conversa vira dado.
+ * Um "B" geométrico em três peças: a haste é uma pílula e as duas barrigas são
+ * blocos soltos, a de baixo maior. O vão entre as peças é o que faz a letra —
+ * sem ele seria só um B grosso.
  *
- * A ficha lê `--ink` e a onda lê `--canvas`, então ela inverte junto com o
- * tema. Antes a marca carregava a própria cor, o que fazia sentido enquanto era
- * âmbar: âmbar aparece nos dois fundos. Tinta não — ficha preta sobre canvas
- * preto é um buraco. Numa identidade monocromática a marca não pode ignorar o
- * tema, porque a tinta dela É o tema.
+ * As três formas leem `--ink`, então a marca inverte junto com o tema. Não há
+ * ficha atrás: o B é a marca inteira, e precisa funcionar sozinho no papel, no
+ * cartão e gravado em relevo (ver a identidade em `IDENTIDADE.md`).
  *
- * Sem gradiente, some também o `id` de SVG que precisava ser único por
- * instância (a barra lateral e o cabeçalho do mobile coexistem no DOM). Quatro
- * formas chapadas não têm o que colidir, e o componente volta a ser renderizável
- * no servidor.
+ * Formas chapadas, sem gradiente nem `id` de SVG: a barra lateral e o
+ * cabeçalho do mobile coexistem no DOM e não há nada para colidir.
  */
 export function Logo({ size = 28 }: { size?: number }) {
   return (
@@ -26,24 +23,29 @@ export function Logo({ size = 28 }: { size?: number }) {
       aria-label="Benjamin"
       className="shrink-0"
     >
-      <rect x="1" y="1" width="30" height="30" rx="9" fill="var(--ink)" />
-
-      {/* onda vazada: amplitude decrescente até virar ponto */}
-      <g stroke="var(--canvas)" strokeWidth="2.4" strokeLinecap="round">
-        <path d="M9 10.5v11" />
-        <path d="M14.5 13v6" />
-        <path d="M20 14.75v2.5" />
-      </g>
-      <circle cx="24.5" cy="16" r="1.6" fill="var(--canvas)" />
+      <MarcaFormas cor="var(--ink)" />
     </svg>
   );
 }
 
 /**
- * O nome espaçado É a identidade — é o pedido central deste redesenho, não um
- * detalhe tipográfico. O tracking largo transforma oito letras em uma régua
- * horizontal, e por isso o wordmark nunca aparece em corpo grande: ele ocupa
- * largura, não altura.
+ * As três formas do B, separadas do `<svg>` para o ícone de tela inicial
+ * (`app/apple-icon.tsx`) desenhar a mesma marca com cor fixa.
+ */
+export function MarcaFormas({ cor }: { cor: string }) {
+  return (
+    <g fill={cor}>
+      <rect x="4.5" y="4" width="5.75" height="24" rx="2.875" />
+      <path d="M14 4H19.5A5.5 5.5 0 0 1 19.5 15H14Q13 15 13 14V5Q13 4 14 4Z" />
+      <path d="M13 25C13 20.2 16.8 16 21.5 16A6 6 0 0 1 21.5 28H14Q13 28 13 27Z" />
+    </g>
+  );
+}
+
+/**
+ * O nome espaçado é a identidade. Peso leve e tracking largo transformam oito
+ * letras em uma régua horizontal, por isso o wordmark nunca aparece em corpo
+ * grande: ele ocupa largura, não altura.
  *
  * `aria-label` devolve a palavra inteira ao leitor de tela, que de outro modo
  * soletraria as letras uma a uma por causa do espaçamento.
@@ -52,9 +54,12 @@ export function Wordmark({ className = '' }: { className?: string }) {
   return (
     <span
       aria-label="Benjamin"
-      className={`block text-[12.5px] font-medium uppercase leading-none tracking-[0.42em] text-ink ${className}`}
+      className={`block text-[12.5px] font-light uppercase leading-none tracking-[0.42em] text-ink ${className}`}
     >
       Benjamin
     </span>
   );
 }
+
+/** A frase da marca. Um só lugar, para a barra lateral, o login e os metadados. */
+export const TAGLINE = 'Conversas que viram retenção';

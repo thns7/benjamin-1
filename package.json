@@ -2,12 +2,12 @@
   "name": "benjamin",
   "version": "0.1.0",
   "private": true,
-  "description": "Benjamin — o ouro invisível de cada conversa. Challenge FIAP x TOTVS 2026.",
+  "description": "Benjamin — conversas que viram retenção. Radar de churn para Customer Success.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "node --import tsx --test lib/analysis/__tests__/golden.test.ts lib/analysis/__tests__/armadilhas.test.ts lib/analysis/__tests__/evidencia.test.ts lib/analysis/__tests__/papeis.test.ts lib/analysis/__tests__/papeis-integracao.test.ts lib/validation/__tests__/papel.test.ts lib/analysis/__tests__/abstencao.test.ts lib/lote/__tests__/formatos.test.ts lib/lote/__tests__/agenda.test.ts lib/lote/__tests__/audio.test.ts lib/gravacao/__tests__/mesclar.test.ts lib/gravacao/__tests__/whisper.test.ts",
+    "test": "node --import tsx --test lib/analysis/__tests__/golden.test.ts lib/analysis/__tests__/armadilhas.test.ts lib/analysis/__tests__/evidencia.test.ts lib/analysis/__tests__/papeis.test.ts lib/analysis/__tests__/papeis-integracao.test.ts lib/validation/__tests__/papel.test.ts lib/analysis/__tests__/abstencao.test.ts lib/lote/__tests__/formatos.test.ts lib/lote/__tests__/agenda.test.ts lib/lote/__tests__/audio.test.ts lib/gravacao/__tests__/mesclar.test.ts lib/gravacao/__tests__/whisper.test.ts lib/__tests__/radar.test.ts",
     "validar": "tsx scripts/validar.ts",
     "types": "echo \"gerado via MCP Supabase — ver lib/supabase/database.types.ts\""
   },

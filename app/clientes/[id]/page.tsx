@@ -24,6 +24,8 @@ import {
   tomHealth,
   tomInteresse,
 } from '@/components/cliente-ui';
+import { Motivo, ROTULO_FAIXA, TOM_FAIXA, Tendencia } from '@/components/radar-ui';
+import { faixaRisco } from '@/lib/radar';
 import { visaoDoCliente } from '@/lib/memory';
 import { supabaseConfigurado } from '@/lib/supabase/server';
 import { SemBanco } from '@/components/sem-banco';
@@ -71,7 +73,7 @@ export default async function ClientePage({ params }: { params: Promise<{ id: st
     return (
       <>
         <PageHeader titulo="Cliente" descricao="A memória da conta, reunião a reunião." />
-        <SemBanco oQueApareceAqui="Aqui fica a ficha da conta: health score explicado fator a fator, linha do tempo das reuniões, objeções recorrentes, ecossistema TOTVS mapeado e o que ficou pendente." />
+        <SemBanco oQueApareceAqui="Aqui fica a ficha da conta: health score explicado fator a fator, linha do tempo das reuniões, objeções recorrentes, por que a conta está em risco, com a fala que gerou cada alerta, e o que ficou pendente." />
       </>
     );
   }
@@ -86,6 +88,10 @@ export default async function ClientePage({ params }: { params: Promise<{ id: st
   const ultimoInteresse = v.interesseHistorico.at(-1) ?? null;
   const ultimaConfianca = v.confiancaHistorica.at(-1) ?? null;
   const churnAtual = v.ultimaReuniao?.analise?.churn_risk ?? null;
+  // Série de risco sem as abstenções: null não é zero e não entra no gráfico.
+  const churnSerie = v.linhaTempo.flatMap((p) => (p.churn == null ? [] : [p.churn]));
+  const churnTendencia = churnSerie.length >= 2 ? churnSerie.at(-1)! - churnSerie.at(-2)! : null;
+  const faixa = faixaRisco(churnSerie.at(-1) ?? null);
 
   return (
     <>
@@ -94,7 +100,7 @@ export default async function ClientePage({ params }: { params: Promise<{ id: st
         className="mb-3 inline-flex items-center gap-1 text-[12px] text-ink-dim transition-colors hover:text-ink"
       >
         <Building2 size={13} />
-        Clientes
+        Contas
       </Link>
 
       <PageHeader
@@ -108,6 +114,69 @@ export default async function ClientePage({ params }: { params: Promise<{ id: st
           </BotaoLink>
         }
       />
+
+      {/*
+        A pergunta que trouxe o CS até aqui vem primeiro: esta conta vai
+        cancelar, e por quê? Cada motivo carrega a fala que o originou.
+      */}
+      <section className="vidro mb-4 rounded-xl p-5">
+        <div className="grid gap-x-8 gap-y-6 lg:grid-cols-[minmax(230px,290px)_1fr] lg:[&>*+*]:border-l lg:[&>*+*]:border-line lg:[&>*+*]:pl-8">
+          <Card plano titulo="Risco de churn" legenda="Uma leitura por reunião analisada">
+            {churnSerie.length > 0 ? (
+              <>
+                <div className="flex items-baseline gap-2">
+                  <Mono tom={tomChurn(churnSerie.at(-1)!)} className="text-4xl">
+                    {churnSerie.at(-1)}
+                  </Mono>
+                  <span className="text-[12px] text-ink-faint">/100</span>
+                  <Tendencia valor={churnTendencia} />
+                </div>
+                <div className="mt-1">
+                  <Badge tom={TOM_FAIXA[faixa]}>{ROTULO_FAIXA[faixa]}</Badge>
+                </div>
+                <div className="mt-3">
+                  <Sparkline valores={churnSerie} tom={tomChurn(churnSerie.at(-1)!)} rotulo="Evolução do risco de churn" />
+                </div>
+                {churnAtual == null ? (
+                  <p className="mt-2 text-[11px] leading-relaxed text-ink-faint">
+                    Na última reunião o motor não conseguiu separar quem falou e não deu risco. O número acima é da
+                    leitura anterior.
+                  </p>
+                ) : null}
+              </>
+            ) : (
+              <p className="text-[12px] leading-relaxed text-ink-faint">
+                Sem leitura de risco ainda. Ela aparece quando uma reunião com falantes identificados é analisada.
+              </p>
+            )}
+          </Card>
+
+          <Card
+            plano
+            titulo="Por que esta conta está em risco"
+            legenda="Sinais de churn e concorrentes citados, da reunião mais recente para a mais antiga"
+          >
+            {v.motivosRisco.length === 0 ? (
+              <p className="text-[12px] text-ink-faint">
+                Nenhum sinal de risco com citação nas reuniões desta conta.
+              </p>
+            ) : (
+              <ul className="space-y-4">
+                {v.motivosRisco.slice(0, 6).map((m) => (
+                  <li key={`${m.texto}-${m.reuniaoId}`}>
+                    <Motivo motivo={m} vezes={m.vezes} />
+                  </li>
+                ))}
+              </ul>
+            )}
+            {v.motivosRisco.length > 6 ? (
+              <p className="mt-3 text-[11px] text-ink-faint">
+                Mais {v.motivosRisco.length - 6} motivo(s) nas reuniões da linha do tempo abaixo.
+              </p>
+            ) : null}
+          </Card>
+        </div>
+      </section>
 
       {/*
         Estado da conta — UMA superfície de vidro, não cinco.
@@ -307,16 +376,14 @@ export default async function ClientePage({ params }: { params: Promise<{ id: st
 
       {/* Stack e concorrentes */}
       <Painel className="mt-4">
+        {v.stack.length > 0 ? (
         <Card
           plano
-          titulo="Stack TOTVS"
-          legenda="O que está em uso e o que é oportunidade, por unidade de negócio"
+          titulo="Produtos em uso"
+          legenda="O que o cliente usa, avalia ou citou nas reuniões"
           acoes={<Layers size={14} className="text-ink-faint" />}
         >
-          {v.stack.length === 0 ? (
-            <p className="text-[12px] text-ink-faint">Nenhum produto identificado ainda.</p>
-          ) : (
-            <ul className="space-y-1.5">
+          <ul className="space-y-1.5">
               {v.stack.map((s) => {
                 const st = STATUS_PRODUTO[s.status] ?? STATUS_PRODUTO.mencionado;
                 return (
@@ -332,9 +399,9 @@ export default async function ClientePage({ params }: { params: Promise<{ id: st
                   </li>
                 );
               })}
-            </ul>
-          )}
+          </ul>
         </Card>
+        ) : null}
 
         <Card
           plano

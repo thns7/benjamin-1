@@ -36,9 +36,9 @@ Challenge FIAP × TOTVS 2026 — Inteligência Conversacional.
         ┌───────────────────────────────┼───────────────────────────────┐
         ▼                               ▼                               ▼
   CAMADA 1                        CAMADA 2                        CAMADA 3
-  Briefing da reunião             Memória do cliente              Torre de controle
-  /reunioes/[id]                  /clientes/[id]                  /torre  /radar  /coaching
-                                  lib/memory.ts                   lib/torre.ts  lib/value.ts
+  Briefing da reunião             Memória do cliente              Radar de churn
+  /reunioes/[id]                  /clientes/[id]                  /  (+ /alertas)
+                                  lib/memory.ts                   lib/radar.ts  lib/radar-dados.ts
                                         │
                                         └─→ realimenta a próxima análise
 ```
@@ -202,18 +202,19 @@ Sem UI kit pesado: os componentes são próprios, em `components/ui.tsx`.
 
 ```
 app/
-  page.tsx                    Dashboard do vendedor
-  torre/                      Torre de controle (R$)
+  page.tsx                    Radar de churn: contas por receita em risco, com a fala que explica
+  torre/                      Torre de controle (R$) — fora do menu desde 2026-10
   reunioes/[id]/              Briefing com evidência clicável
   reunioes/nova/              Ingestão: texto, áudio, ao vivo
   clientes/[id]/              Memória do cliente
   clientes/[id]/preparar/     Briefing pré-reunião
-  radar/                      Radar de dores agregado
-  coaching/                   Talk ratio e performance
-  alertas/                    Painel consolidado
-  validacao/                  Metodologia e métricas ao vivo
+  radar/                      Radar de dores agregado — fora do menu desde 2026-10
+  coaching/                   Talk ratio e performance — fora do menu desde 2026-10
+  alertas/                    Caixa de entrada de risco: não tratados / tratados
+  validacao/                  Metodologia e métricas ao vivo — fora do menu desde 2026-10
   api/
     meetings/                 ingestão, reprocessamento, exportação CRM
+    alerts/[id]/              marca alerta como tratado (coluna `read`)
     batch/analyze/            throughput medido
     validation/run/           execução da validação
     corrections/              IH + IA
@@ -227,6 +228,8 @@ lib/
   validation/                 corpus e métricas
   supabase/                   servidor e persistência
   memory.ts  health.ts  value.ts  torre.ts  pains.ts  preparacao.ts
+  radar.ts                    radar de churn, puro e testado (__tests__/radar.test.ts)
+  radar-dados.ts              carga do banco para o radar
 ```
 
 ---
