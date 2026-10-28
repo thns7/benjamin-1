@@ -36,7 +36,7 @@ export default async function ReunioesPage() {
     );
   }
 
-  const sb = supabaseServer();
+  const sb = await supabaseServer();
   const { data, error } = await sb
     .from('meetings')
     .select('id, title, meeting_date, meeting_type, status')

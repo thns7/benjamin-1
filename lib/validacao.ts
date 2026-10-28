@@ -1,4 +1,4 @@
-import { supabaseServer } from './supabase/server';
+import { supabaseAdmin, supabaseServer } from './supabase/server';
 import type { CorrectionRow, Json, TranscriptRow, ValidationRunRow } from './supabase/database.types';
 import type { QualidadeTranscricao, Redacao } from './analysis';
 
@@ -52,12 +52,13 @@ export type VisaoValidacao = {
 };
 
 export async function carregarValidacao(): Promise<VisaoValidacao> {
-  const sb = supabaseServer();
+  const sb = await supabaseServer();
 
   const [transcriptsRes, correcoesRes, execucoesRes] = await Promise.all([
     sb.from('transcripts').select('word_count, turn_count, quality, redactions').limit(2000),
     sb.from('corrections').select('*').limit(2000),
-    sb.from('validation_runs').select('*').order('created_at', { ascending: false }).limit(10),
+    // Execuções de validação são globais (corpus do motor): service_role.
+    supabaseAdmin().from('validation_runs').select('*').order('created_at', { ascending: false }).limit(10),
   ]);
 
   if (transcriptsRes.error) throw new Error(`Falha ao carregar transcrições: ${transcriptsRes.error.message}`);

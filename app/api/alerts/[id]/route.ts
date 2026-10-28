@@ -7,8 +7,8 @@ import { supabaseConfigurado, supabaseServer } from '@/lib/supabase/server';
  * Usa a coluna `read` que já existe em `alerts`: tratado é lido e
  * encaminhado. Não precisou de migration.
  *
- * ⚠ Como as outras escritas, passa pela service_role e ainda não confere se o
- * alerta é da organização de quem pede (problema "Multiempresa" no cofre).
+ * Passa pelo login do usuário: o RLS (migration 002) só deixa alterar alerta
+ * da própria empresa. Alerta de outra empresa volta como "não encontrado".
  */
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -24,7 +24,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     return NextResponse.json({ erro: 'Envie { "tratado": true } ou { "tratado": false }.' }, { status: 400 });
   }
 
-  const { data, error } = await supabaseServer()
+  const sb = await supabaseServer();
+  const { data, error } = await sb
     .from('alerts')
     .update({ read: corpo.tratado })
     .eq('id', id)

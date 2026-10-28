@@ -248,6 +248,9 @@ scripts/        validação por linha de comando
 ## Segurança e LGPD
 
 - RLS habilitado em todas as tabelas; acesso ao banco **exclusivo do servidor**
+- **Isolamento por empresa:** o servidor lê e grava com o login de quem está
+  usando, e o banco só devolve o que é da empresa do convite (migration 002).
+  Esquecer um filtro no código não vaza dado de outra empresa
 - Anonimização automática de CPF, CNPJ, e-mail, telefone e cartão antes da
   análise — guarda-se tipo e posição, **nunca o valor**
 - O que é persistido e exibido é o texto já anonimizado

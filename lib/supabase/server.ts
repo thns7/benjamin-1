@@ -1,32 +1,64 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
+import { SUPABASE_CHAVE_PUBLICA, SUPABASE_URL } from '@/lib/auth/supabase-publico';
 import type { Database } from './database.types';
 
 /**
- * Cliente Supabase de servidor.
+ * Clientes Supabase de servidor.
  *
  * Regra inegociável do projeto (spec 5.2): o banco só é acessado pelo servidor.
  * A service_role key nunca vai para o bundle do cliente — por isso a variável
  * NÃO tem o prefixo NEXT_PUBLIC_ e este módulo carrega uma guarda em runtime.
  *
- * Com RLS habilitado e sem policy pública em nenhuma tabela, a anon key não lê
- * nem escreve nada. A service_role ignora RLS, então todo acesso legítimo passa
- * obrigatoriamente por aqui.
+ * Isolamento por empresa (migration 002): toda leitura e escrita de dado de
+ * cliente passa por `supabaseServer()`, que fala com o banco COMO o usuário
+ * logado. O RLS então só deixa passar o que é da empresa dele. Ninguém precisa
+ * lembrar de filtrar por org_id: esquecer o filtro não vaza nada.
+ *
+ * `supabaseAdmin()` usa a service_role e ignora o RLS. Fica restrito ao que é
+ * global de propósito — o corpus e as execuções de validação do motor.
  */
 
-let cached: SupabaseClient<Database> | null = null;
-
-export function supabaseServer(): SupabaseClient<Database> {
+function guardaServidor(nome: string) {
   if (typeof window !== 'undefined') {
-    throw new Error(
-      'supabaseServer() foi chamado no cliente. O acesso ao banco é exclusivo do servidor.',
-    );
+    throw new Error(`${nome}() foi chamado no cliente. O acesso ao banco é exclusivo do servidor.`);
   }
+}
 
-  if (cached) return cached;
+/** Cliente com o login de quem fez a requisição. Use este para todo dado de empresa. */
+export async function supabaseServer(): Promise<SupabaseClient<Database>> {
+  guardaServidor('supabaseServer');
+  const loja = await cookies();
+
+  return createServerClient<Database>(SUPABASE_URL, SUPABASE_CHAVE_PUBLICA, {
+    cookies: {
+      getAll: () => loja.getAll(),
+      setAll: (lista) => {
+        // Server Component não pode gravar cookie; quem renova o token é o
+        // middleware, a cada requisição. Em Route Handler a gravação funciona.
+        try {
+          lista.forEach(({ name, value, options }) => loja.set(name, value, options));
+        } catch {
+          /* renovado no middleware */
+        }
+      },
+    },
+  });
+}
+
+let admin: SupabaseClient<Database> | null = null;
+
+/**
+ * Cliente com a service_role: ignora o RLS e vê todas as empresas.
+ * Só para o que é global — corpus_samples e validation_runs.
+ */
+export function supabaseAdmin(): SupabaseClient<Database> {
+  guardaServidor('supabaseAdmin');
+  if (admin) return admin;
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
   if (!url || !serviceKey) {
     throw new Error(
       'Faltam NEXT_PUBLIC_SUPABASE_URL e/ou SUPABASE_SERVICE_ROLE_KEY no ambiente. ' +
@@ -34,12 +66,11 @@ export function supabaseServer(): SupabaseClient<Database> {
     );
   }
 
-  cached = createClient<Database>(url, serviceKey, {
+  admin = createClient<Database>(url, serviceKey, {
     auth: { persistSession: false, autoRefreshToken: false },
     db: { schema: 'public' },
   });
-
-  return cached;
+  return admin;
 }
 
 /** Diz se o ambiente está configurado, sem lançar — usado pelos estados vazios da UI. */

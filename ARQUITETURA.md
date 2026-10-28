@@ -98,6 +98,7 @@ auditabilidade nos campos que movem dinheiro.
 | Regra | Onde é garantida |
 |---|---|
 | Banco só pelo servidor | `lib/supabase/server.ts` lança se chamado no cliente; `service_role` sem prefixo `NEXT_PUBLIC_` |
+| Cada empresa só vê o que é dela | `supabaseServer()` lê e grava com o login do usuário; o RLS (`db/migrations/002`) filtra pela empresa do convite. `supabaseAdmin()` (service_role) só para o corpus de validação |
 | Núcleo isolado | `lib/analysis/` não importa Next nem Supabase |
 | Todo item tem evidência | Item sem citação não é retornado; teste de invariante sobre todo o corpus |
 | Texto não muda de comprimento | `redact.ts` lança se o comprimento mudar |
@@ -109,7 +110,9 @@ auditabilidade nos campos que movem dinheiro.
 ## 4. Modelo de dados
 
 12 tabelas em PostgreSQL (Supabase, região `sa-east-1`), com RLS habilitado em
-todas.
+todas. Desde a migration 002, as políticas isolam cada empresa: tabelas com
+`org_id` comparam com `org_do_usuario()` (a empresa do convite do login), e
+transcrições, análises e correções herdam a empresa da reunião.
 
 ```
 organizations ─┬─ app_users
