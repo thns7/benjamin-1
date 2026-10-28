@@ -24,12 +24,14 @@ Um **B geométrico em três peças**: a haste é uma pílula e as duas barrigas 
 
 ## Cores
 
+Todos os cinzas são **neutros** (sem fundo azulado): o preto da marca é carbono, `#161616`.
+
 | Token | Hex | Uso |
 | --- | --- | --- |
 | Papel (`canvas`) | `#FAFAFA` | Fundo |
-| Linha (`line`, `surface-3`) | `#E5E7EB` | Bordas e divisórias |
-| Cinza médio | `#9CA3AF` | Traço, ícone decorativo e texto secundário no tema escuro. **Nunca texto sobre o papel** (contraste 2,5:1). |
-| Tinta (`ink`, `accent`) | `#111827` | Texto, marca e ação primária |
+| Linha (`line`, `surface-3`) | `#E5E5E5` | Bordas e divisórias |
+| Cinza médio | `#A3A3A3` | Traço, ícone decorativo e texto secundário no tema escuro. **Nunca texto sobre o papel** (contraste 2,4:1). |
+| Carbono (`ink`, `accent`) | `#161616` | Texto, marca e ação primária |
 
 Cores **funcionais**, fora da paleta da marca, que só aparecem quando carregam decisão:
 
@@ -38,7 +40,7 @@ Cores **funcionais**, fora da paleta da marca, que só aparecem quando carregam 
 | `health` | `#2E7D5B` | Conta saudável |
 | `risk` | `#BE3F32` | Risco de churn e receita em risco |
 
-O cinza de texto mais claro é `ink-faint` (`#6B7280`, 4,6:1 sobre o papel, passa no WCAG AA).
+O cinza de texto mais claro é `ink-faint` (`#6F6F6F`, 4,8:1 sobre o papel, passa no WCAG AA).
 
 ## Tipografia
 
