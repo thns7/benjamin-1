@@ -2,7 +2,7 @@
   "name": "benjamin",
   "version": "0.1.0",
   "private": true,
-  "description": "Benjamin — o ouro invisível de cada conversa. Challenge FIAP x TOTVS 2026.",
+  "description": "Benjamin — conversas que viram retenção. Radar de churn para Customer Success.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

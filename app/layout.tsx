@@ -1,19 +1,21 @@
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
-import { Instrument_Sans, JetBrains_Mono } from 'next/font/google';
+import { Inter, JetBrains_Mono } from 'next/font/google';
 import { Shell } from '@/components/shell';
+import { TAGLINE } from '@/components/logo';
 import './globals.css';
 
 /*
-  Instrument Sans no lugar do Inter. O Inter é a fonte padrão de todo painel de
-  SaaS existente — correta e sem rosto. A Instrument tem terminais mais secos e
-  um "a" de dois andares mais estreito, que aguenta o tracking largo do wordmark
-  sem virar caricatura. O mono continua: este é um produto de números, e número
-  fora de tabular-nums dança na tela quando o valor muda.
+  Inter, como pede a identidade (`IDENTIDADE.md`). A versão anterior usava a
+  Instrument Sans justamente para fugir do Inter; a identidade nova troca
+  personalidade tipográfica por calma: o rosto da marca fica no B e no
+  wordmark espaçado em peso leve, e o texto corrido só precisa ser legível em
+  corpo pequeno, onde o Inter é dos melhores. O mono continua: este é um
+  produto de números, e número fora de tabular-nums dança na tela.
 */
-const instrument = Instrument_Sans({
+const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-instrument',
+  variable: '--font-inter',
   display: 'swap',
 });
 
@@ -25,11 +27,11 @@ const jetbrains = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Benjamin — o ouro invisível de cada conversa',
+    default: `Benjamin — ${TAGLINE.toLowerCase()}`,
     template: '%s · Benjamin',
   },
   description:
-    'Analisa transcrições de reuniões e extrai oportunidades de venda, riscos de churn e o ecossistema TOTVS do cliente.',
+    'Radar de churn para Customer Success: lê as reuniões com seus clientes e avisa quando uma conta está em risco, sempre com a citação que gerou o alerta.',
 };
 
 /**
@@ -68,7 +70,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_TEMA }} />
       </head>
-      <body className={`${instrument.variable} ${jetbrains.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} ${jetbrains.variable} font-sans antialiased`}>
         {semShell ? children : <Shell motor={motor}>{children}</Shell>}
       </body>
     </html>
