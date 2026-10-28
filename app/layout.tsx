@@ -68,7 +68,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
    * lê a URL.
    */
   const caminho = (await headers()).get('x-benjamin-caminho') ?? '';
-  const semShell = caminho.startsWith('/login');
+  // A landing (/apresentacao) também fica sem a navegação do produto.
+  const semShell = caminho.startsWith('/login') || caminho.startsWith('/apresentacao');
 
   // O motor de ANÁLISE é sempre determinístico — toda extração que carrega
   // evidência sai de regras, com ou sem chave de LLM. O que a chave liga é o
