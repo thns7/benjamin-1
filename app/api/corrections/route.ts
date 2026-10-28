@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { supabaseConfigurado, supabaseServer } from '@/lib/supabase/server';
-import { garantirOrgEUsuaria } from '@/lib/supabase/persistencia';
+import { contextoDoUsuario } from '@/lib/supabase/persistencia';
 import type { Json } from '@/lib/supabase/database.types';
 
 /**
@@ -49,8 +49,8 @@ export async function POST(req: Request) {
   const { analysis_id, field, action, before_value, after_value } = parsed.data;
 
   try {
-    const sb = supabaseServer();
-    const ctx = await garantirOrgEUsuaria();
+    const sb = await supabaseServer();
+    const ctx = await contextoDoUsuario();
 
     const ins = await sb
       .from('corrections')

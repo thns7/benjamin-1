@@ -52,7 +52,7 @@ export default async function CoachingPage() {
     );
   }
 
-  const sb = supabaseServer();
+  const sb = await supabaseServer();
 
   const [reunioesRes, analisesRes] = await Promise.all([
     sb

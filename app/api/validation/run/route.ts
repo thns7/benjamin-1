@@ -4,7 +4,7 @@ import { CORPUS_SINTETICO, coberturaCorpus } from '@/lib/validation/corpus-sinte
 import { CORPUS_REAL, CORPUS_REAL_PENDENTE } from '@/lib/validation/corpus-real';
 import { calcularMetricas, type ResultadoAmostra } from '@/lib/validation/metrics';
 import type { Amostra } from '@/lib/validation/tipos';
-import { supabaseConfigurado, supabaseServer } from '@/lib/supabase/server';
+import { supabaseConfigurado, supabaseAdmin } from '@/lib/supabase/server';
 import type { Json } from '@/lib/supabase/database.types';
 
 /**
@@ -90,7 +90,8 @@ export async function POST() {
   let erroGravacao: string | null = null;
   if (supabaseConfigurado()) {
     try {
-      const sb = supabaseServer();
+      // validation_runs é global (corpus do motor), por isso a service_role.
+      const sb = supabaseAdmin();
       const ins = await sb.from('validation_runs').insert({
         engine: 'rules',
         corpus: CORPUS_REAL.length > 0 ? 'todos' : 'sintetico',

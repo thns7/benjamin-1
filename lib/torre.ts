@@ -59,7 +59,7 @@ export type VisaoTorre = {
 };
 
 export async function carregarTorre(): Promise<VisaoTorre> {
-  const sb = supabaseServer();
+  const sb = await supabaseServer();
 
   const [clientesRes, reunioesRes, analisesRes, alertasRes, tarefasRes] = await Promise.all([
     sb.from('customers').select('*'),

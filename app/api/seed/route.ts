@@ -94,7 +94,7 @@ export async function POST() {
   }
 
   try {
-    const sb = supabaseServer();
+    const sb = await supabaseServer();
 
     // Parâmetros de negócio do cliente. Declarados aqui, exibidos como
     // premissa na UI — é a base do cálculo de receita em risco.

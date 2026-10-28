@@ -5,11 +5,11 @@ import { montarRadar, type Radar } from './radar';
  * Carrega do banco o que o radar precisa, numa ida só por tabela — nada de N+1
  * por conta. A montagem fica em `radar.ts`, que não conhece o Supabase.
  *
- * ⚠ Como o resto das leituras do produto, ainda não filtra por organização
- * (problema "Multiempresa" no cofre). Quando o isolamento entrar, entra aqui.
+ * Sem filtro por empresa aqui de propósito: `supabaseServer()` lê com o login
+ * do usuário, e o RLS (migration 002) só devolve o que é da empresa dele.
  */
 export async function carregarRadar(): Promise<Radar> {
-  const sb = supabaseServer();
+  const sb = await supabaseServer();
 
   const [clientesRes, reunioesRes, analisesRes, alertasRes] = await Promise.all([
     sb.from('customers').select('id, name, segment, contract_value'),

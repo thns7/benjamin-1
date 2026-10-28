@@ -35,60 +35,41 @@ import { carregarHistorico, consolidar, paraMemoriaDoMotor } from '@/lib/memory'
 const j = (v: unknown): Json => v as unknown as Json;
 
 /* ------------------------------------------------------------------ *
- * Bootstrap — a base começa vazia; toda reunião precisa de org e dono.
+ * Contexto — de quem é o que está sendo gravado
  * ------------------------------------------------------------------ */
-
-const ORG_SLUG = 'totvs';
-const ANA_EMAIL = 'ana.torres@totvs.example';
 
 export type Contexto = { orgId: string; userId: string };
 
+/** `%`, `_` e `\` são curingas no ilike; num e-mail eles são letras. */
+const literalIlike = (s: string) => s.replace(/[\\%_]/g, (c) => `\\${c}`);
+
 /**
- * Garante a organização TOTVS e a executiva de contas Ana Torres (a usuária
- * principal do produto, persona da Entrega 1). Idempotente: roda em toda
- * ingestão e nunca duplica.
+ * A empresa e a pessoa do login atual, pelo convite em app_users.
+ *
+ * Substitui a organização TOTVS e a persona "Ana Torres" que eram fixas no
+ * código: tudo o que é gravado passa a pertencer à empresa de quem gravou, e o
+ * RLS (migration 002) recusa gravar em qualquer outra.
  */
-export async function garantirOrgEUsuaria(): Promise<Contexto> {
-  const sb = supabaseServer();
+export async function contextoDoUsuario(): Promise<Contexto> {
+  const sb = await supabaseServer();
 
-  const existente = await sb
-    .from('organizations')
-    .select('id')
-    .eq('slug', ORG_SLUG)
-    .maybeSingle();
-  if (existente.error) throw new Error(`Falha ao ler organização: ${existente.error.message}`);
+  const {
+    data: { user },
+    error,
+  } = await sb.auth.getUser();
+  if (error || !user?.email) throw new Error('Sessão ausente ou expirada. Entre de novo.');
 
-  let orgId = existente.data?.id;
-  if (!orgId) {
-    const criada = await sb
-      .from('organizations')
-      .insert({ name: 'TOTVS', slug: ORG_SLUG })
-      .select('id')
-      .single();
-    if (criada.error) throw new Error(`Falha ao criar organização: ${criada.error.message}`);
-    orgId = criada.data.id;
-  }
-
-  const usuaria = await sb
+  // Desde a migration 002 a pessoa enxerga os colegas da empresa, então o
+  // filtro por e-mail é necessário para achar a própria linha.
+  const convite = await sb
     .from('app_users')
-    .select('id')
-    .eq('org_id', orgId)
-    .eq('email', ANA_EMAIL)
+    .select('id, org_id')
+    .ilike('email', literalIlike(user.email))
     .maybeSingle();
-  if (usuaria.error) throw new Error(`Falha ao ler usuária: ${usuaria.error.message}`);
+  if (convite.error) throw new Error(`Falha ao ler o convite: ${convite.error.message}`);
+  if (!convite.data) throw new Error('Usuário sem convite: peça para ser adicionado à empresa.');
 
-  let userId = usuaria.data?.id;
-  if (!userId) {
-    const criada = await sb
-      .from('app_users')
-      .insert({ org_id: orgId, name: 'Ana Torres', email: ANA_EMAIL, role: 'vendedor' })
-      .select('id')
-      .single();
-    if (criada.error) throw new Error(`Falha ao criar usuária: ${criada.error.message}`);
-    userId = criada.data.id;
-  }
-
-  return { orgId, userId };
+  return { orgId: convite.data.org_id, userId: convite.data.id };
 }
 
 /**
@@ -104,7 +85,7 @@ async function upsertCliente(
   const limpo = nome?.trim();
   if (!limpo) return null;
 
-  const sb = supabaseServer();
+  const sb = await supabaseServer();
   // ilike trata % e _ como curinga: "Agro_Norte" casaria "AgroXNorte", e com
   // dois casamentos o maybeSingle quebra toda ingestão futura daquele cliente.
   const padrao = limpo.replace(/[\\%_]/g, (c) => `\\${c}`);
@@ -267,7 +248,7 @@ function parseProblemas(problemas: Problema[]): Problema[] {
  * controle lerem sem recalcular tudo a cada request.
  */
 export async function recalcularCliente(customerId: string): Promise<void> {
-  const sb = supabaseServer();
+  const sb = await supabaseServer();
   const historico = await carregarHistorico(customerId);
   if (!historico) return;
 
@@ -328,8 +309,8 @@ export async function definirCliente(
   nome: string,
   dados: { segmento?: string; porte?: string; estagio?: string; valorContrato?: number },
 ): Promise<string> {
-  const sb = supabaseServer();
-  const ctx = await garantirOrgEUsuaria();
+  const sb = await supabaseServer();
+  const ctx = await contextoDoUsuario();
   const id = await upsertCliente(ctx, nome, ctx.userId);
   if (!id) throw new Error('Nome de cliente vazio.');
 
@@ -352,7 +333,7 @@ export async function definirCliente(
  * divergissem.
  */
 async function gravarAnalise(p: {
-  sb: ReturnType<typeof supabaseServer>;
+  sb: Awaited<ReturnType<typeof supabaseServer>>;
   meetingId: string;
   orgId: string;
   customerId: string | null;
@@ -460,8 +441,8 @@ async function gravarAnalise(p: {
  * redirecionar ao briefing. Em falha, marca a reunião como 'error' com a mensagem.
  */
 export async function criarReuniaoComAnalise(entrada: EntradaIngestao): Promise<string> {
-  const sb = supabaseServer();
-  const ctx = await garantirOrgEUsuaria();
+  const sb = await supabaseServer();
+  const ctx = await contextoDoUsuario();
   const customerId = await upsertCliente(ctx, entrada.clienteNome, ctx.userId);
 
   const inserir = (source: string) =>
@@ -586,8 +567,8 @@ export async function criarReuniaoComAnalise(entrada: EntradaIngestao): Promise<
  * filtro: um .eq() com 34 mil caracteres viraria uma URL que o gateway recusa.
  */
 export async function buscarReuniaoIdentica(entrada: Pick<EntradaIngestao, 'titulo' | 'data' | 'texto'>): Promise<string | null> {
-  const sb = supabaseServer();
-  const ctx = await garantirOrgEUsuaria();
+  const sb = await supabaseServer();
+  const ctx = await contextoDoUsuario();
   const candidatas = await sb
     .from('meetings')
     .select('id')
@@ -612,7 +593,7 @@ export async function buscarReuniaoIdentica(entrada: Pick<EntradaIngestao, 'titu
 }
 
 export async function reanalisarReuniao(meetingId: string): Promise<void> {
-  const sb = supabaseServer();
+  const sb = await supabaseServer();
 
   const reuniao = await sb
     .from('meetings')
@@ -760,7 +741,7 @@ function linhaParaAnalise(
 }
 
 export async function carregarBriefing(meetingId: string): Promise<DadosBriefing | null> {
-  const sb = supabaseServer();
+  const sb = await supabaseServer();
 
   const reuniao = await sb
     .from('meetings')

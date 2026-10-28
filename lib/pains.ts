@@ -109,7 +109,7 @@ const diasAtras = (n: number): string => {
 };
 
 export async function carregarRadar(filtros: FiltrosRadar = {}): Promise<VisaoRadar> {
-  const sb = supabaseServer();
+  const sb = await supabaseServer();
 
   const [sinaisRes, clientesRes, reunioesRes] = await Promise.all([
     sb.from('pain_signals').select('*').order('created_at', { ascending: false }).limit(3000),

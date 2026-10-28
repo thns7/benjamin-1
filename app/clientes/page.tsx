@@ -43,7 +43,7 @@ export default async function ClientesPage() {
     );
   }
 
-  const sb = supabaseServer();
+  const sb = await supabaseServer();
 
   const [clientesRes, reunioesRes] = await Promise.all([
     sb

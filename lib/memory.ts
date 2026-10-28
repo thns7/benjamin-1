@@ -77,7 +77,7 @@ export type Historico = {
 
 /** Carrega cliente, reuniões (mais antiga → mais nova), análises e tarefas. */
 export async function carregarHistorico(customerId: string): Promise<Historico | null> {
-  const sb = supabaseServer();
+  const sb = await supabaseServer();
 
   const cliente = await sb.from('customers').select('*').eq('id', customerId).maybeSingle();
   if (cliente.error) throw new Error(`Falha ao carregar cliente: ${cliente.error.message}`);

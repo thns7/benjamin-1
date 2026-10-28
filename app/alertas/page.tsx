@@ -94,7 +94,7 @@ export default async function AlertasPage({
   const { sev = 'todas', estado = 'abertos' } = await searchParams;
   const verTratados = estado === 'tratados';
 
-  const sb = supabaseServer();
+  const sb = await supabaseServer();
   const [alertasRes, clientesRes] = await Promise.all([
     sb
       .from('alerts')
