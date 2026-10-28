@@ -1,24 +1,16 @@
 import Link from 'next/link';
-import {
-  AlarmClock,
-  BellRing,
-  Building2,
-  CalendarClock,
-  MessagesSquare,
-  TrendingUp,
-  TriangleAlert,
-} from 'lucide-react';
-import { Badge, BotaoLink, Card, EmptyState, FaixaDeMetricas, Mono, PageHeader, StatTile } from '@/components/ui';
-import { tomChurn, tomHealth } from '@/components/cliente-ui';
-import { supabaseConfigurado, supabaseServer } from '@/lib/supabase/server';
+import { Bell, Building2, Clock, MessagesSquare, Swords } from 'lucide-react';
+import { Badge, BotaoLink, EmptyState, FaixaDeMetricas, Mono, PageHeader, StatTile } from '@/components/ui';
+import { tomChurn } from '@/components/cliente-ui';
+import { Motivo, ROTULO_FAIXA, Tendencia } from '@/components/radar-ui';
+import { supabaseConfigurado } from '@/lib/supabase/server';
 import { SemBanco } from '@/components/sem-banco';
-import { carregarTorre } from '@/lib/torre';
-import { diasEntre } from '@/lib/memory';
-import type { ActionItemRow, AlertRow, MeetingRow } from '@/lib/supabase/database.types';
+import { carregarRadar } from '@/lib/radar-dados';
+import { DIAS_SEM_CONTATO, type ContaRadar, type FaixaRisco } from '@/lib/radar';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata = { title: 'Dashboard' };
+export const metadata = { title: 'Radar de churn' };
 
 const BRL = new Intl.NumberFormat('pt-BR', {
   style: 'currency',
@@ -26,299 +18,202 @@ const BRL = new Intl.NumberFormat('pt-BR', {
   maximumFractionDigits: 0,
 });
 const fmtBRL = (n: number | null) => (n == null ? '—' : BRL.format(n));
-const fmtData = (iso: string) => new Date(`${iso}T00:00:00`).toLocaleDateString('pt-BR');
 
-export default async function DashboardPage() {
+const DESCRICAO =
+  'Quais contas podem cancelar, quanto isso custa e por quê. Ordenado por receita em risco: contrato × risco de churn.';
+
+const FILTROS: { valor: 'todas' | FaixaRisco; rotulo: string }[] = [
+  { valor: 'todas', rotulo: 'Todas' },
+  { valor: 'alto', rotulo: 'Risco alto' },
+  { valor: 'medio', rotulo: 'Risco médio' },
+  { valor: 'baixo', rotulo: 'Risco baixo' },
+  { valor: 'sem_leitura', rotulo: 'Sem leitura' },
+];
+
+function Chip({ ativo, href, children }: { ativo: boolean; href: string; children: React.ReactNode }) {
+  return (
+    <Link
+      href={href}
+      className={`rounded-md border px-2.5 py-1 text-[11.5px] font-medium transition-colors ${
+        ativo
+          ? 'border-accent/40 bg-accent-soft text-accent'
+          : 'border-line bg-surface-2 text-ink-dim hover:border-line-strong hover:text-ink'
+      }`}
+    >
+      {children}
+    </Link>
+  );
+}
+
+/** Uma conta no radar: quem, quanto, quão grave e a fala que explica. */
+function LinhaConta({ c }: { c: ContaRadar }) {
+  return (
+    <li className="grid gap-x-6 gap-y-3 py-4 md:grid-cols-[minmax(150px,200px)_1fr_auto] md:items-start">
+      <div className="min-w-0">
+        <Link href={`/clientes/${c.id}`} className="text-[13px] font-semibold text-ink hover:underline">
+          {c.nome}
+        </Link>
+        {c.segmento ? <p className="mt-0.5 text-[11px] text-ink-faint">{c.segmento}</p> : null}
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {c.alertasAbertos > 0 ? (
+            <Badge tom="risk">
+              <Bell size={10} />
+              {c.alertasAbertos} alerta{c.alertasAbertos > 1 ? 's' : ''}
+            </Badge>
+          ) : null}
+          {c.concorrentes.map((k) => (
+            <Badge key={k} tom="warn">
+              <Swords size={10} />
+              {k}
+            </Badge>
+          ))}
+        </div>
+      </div>
+
+      <div className="min-w-0">
+        {c.motivo ? (
+          <Motivo motivo={c.motivo} compacto />
+        ) : (
+          <p className="text-[12px] text-ink-faint">
+            {c.faixa === 'sem_leitura'
+              ? 'Nenhuma leitura de risco ainda: falta reunião analisada ou o motor não conseguiu separar quem falou.'
+              : 'Nenhum sinal de risco com citação na última reunião.'}
+          </p>
+        )}
+      </div>
+
+      <div className="flex items-start gap-5 md:flex-col md:items-end md:gap-1.5 md:text-right">
+        <div className="flex items-baseline gap-1.5">
+          {c.churn == null ? (
+            <Badge tom="neutro">{ROTULO_FAIXA[c.faixa]}</Badge>
+          ) : (
+            <>
+              <Mono tom={tomChurn(c.churn)} className="text-[22px] leading-none">
+                {c.churn}
+              </Mono>
+              <Tendencia valor={c.tendencia} />
+            </>
+          )}
+        </div>
+        <div className="text-[11px] text-ink-faint">
+          <span className="font-mono tabular-nums text-ink-dim">{fmtBRL(c.contrato)}</span>
+          {c.contrato == null ? ' sem contrato' : ' contrato'}
+        </div>
+        {c.diasSemContato != null ? (
+          <div
+            className={`inline-flex items-center gap-1 text-[11px] ${c.diasSemContato > DIAS_SEM_CONTATO ? 'text-warn' : 'text-ink-faint'}`}
+          >
+            <Clock size={10} />
+            {c.diasSemContato === 0 ? 'contato hoje' : `${c.diasSemContato} dias sem contato`}
+          </div>
+        ) : null}
+      </div>
+    </li>
+  );
+}
+
+export default async function RadarPage({ searchParams }: { searchParams: Promise<{ faixa?: string }> }) {
   if (!supabaseConfigurado()) {
     return (
       <>
-        <PageHeader
-          titulo="Dashboard"
-          descricao="Suas reuniões, suas contas e o que precisa da sua atenção hoje."
-        />
-        <SemBanco oQueApareceAqui="Aqui ficam seus indicadores da semana, as contas por health score, as tarefas atrasadas e os alertas dos seus clientes." />
+        <PageHeader titulo="Radar de churn" descricao={DESCRICAO} />
+        <SemBanco oQueApareceAqui="Aqui fica o radar: as contas que podem cancelar, ordenadas pela receita em risco, cada uma com a fala do cliente que gerou o alerta." />
       </>
     );
   }
 
-  const sb = supabaseServer();
-  const t = await carregarTorre();
+  const { faixa = 'todas' } = await searchParams;
+  const { contas, resumo } = await carregarRadar();
 
-  const [reunioesRes, tarefasRes, alertasRes] = await Promise.all([
-    sb
-      .from('meetings')
-      .select('id, title, meeting_date, meeting_type, status, customer_id')
-      .order('meeting_date', { ascending: false })
-      .limit(8),
-    sb.from('action_items').select('*').eq('done', false).order('due_date').limit(50),
-    sb.from('alerts').select('*').order('created_at', { ascending: false }).limit(6),
-  ]);
+  const acoes = (
+    <BotaoLink href="/reunioes/nova" variante="primario">
+      Analisar reunião
+    </BotaoLink>
+  );
 
-  if (reunioesRes.error) throw new Error(`Falha ao carregar reuniões: ${reunioesRes.error.message}`);
-  if (tarefasRes.error) throw new Error(`Falha ao carregar tarefas: ${tarefasRes.error.message}`);
-  if (alertasRes.error) throw new Error(`Falha ao carregar alertas: ${alertasRes.error.message}`);
-
-  const reunioes = (reunioesRes.data ?? []) as Pick<
-    MeetingRow,
-    'id' | 'title' | 'meeting_date' | 'meeting_type' | 'status' | 'customer_id'
-  >[];
-  const tarefas = (tarefasRes.data ?? []) as ActionItemRow[];
-  const alertas = (alertasRes.data ?? []) as AlertRow[];
-
-  const nomeConta = new Map(t.contas.map((c) => [c.id, c.nome]));
-
-  const atrasadas = tarefas
-    .filter((t2) => t2.due_date != null && diasEntre(t2.due_date) > 0)
-    .map((t2) => ({ ...t2, atraso: diasEntre(t2.due_date as string) }))
-    .sort((a, b) => b.atraso - a.atraso);
-
-  const contasPorSaude = [...t.contas].sort((a, b) => a.health - b.health).slice(0, 6);
-
-  if (t.totalAnalises === 0) {
+  if (contas.length === 0) {
     return (
       <>
-        <PageHeader
-          titulo="Dashboard"
-          descricao="Suas reuniões, suas contas e o que precisa da sua atenção hoje."
-          acoes={
-            <BotaoLink href="/reunioes/nova" variante="primario">
-              Analisar reunião
-            </BotaoLink>
-          }
-        />
+        <PageHeader titulo="Radar de churn" descricao={DESCRICAO} acoes={acoes} />
         <EmptyState
           icone={<MessagesSquare size={18} />}
-          titulo="Nenhuma reunião analisada ainda"
-          descricao="Assim que você analisar a primeira transcrição, aparecem aqui seus indicadores da semana, as contas por health score, as tarefas atrasadas e os alertas dos seus clientes."
-          acao={
-            <BotaoLink href="/reunioes/nova" variante="primario">
-              Analisar a primeira reunião
-            </BotaoLink>
-          }
+          titulo="Nenhuma conta ainda"
+          descricao="O radar se forma a partir das reuniões com seus clientes. Analise a primeira transcrição informando o cliente, e a conta aparece aqui com o risco de churn e a fala que o explica."
+          acao={acoes}
         />
       </>
     );
   }
+
+  const contagem = (f: FaixaRisco) => contas.filter((c) => c.faixa === f).length;
+  const visiveis = faixa === 'todas' ? contas : contas.filter((c) => c.faixa === faixa);
 
   return (
     <>
-      <PageHeader
-        titulo="Dashboard"
-        descricao="Suas reuniões, suas contas e o que precisa da sua atenção hoje."
-        acoes={
-          <BotaoLink href="/reunioes/nova" variante="primario">
-            Analisar reunião
-          </BotaoLink>
-        }
-      />
+      <PageHeader titulo="Radar de churn" descricao={DESCRICAO} acoes={acoes} />
 
       <FaixaDeMetricas>
         <StatTile
-          rotulo="Reuniões analisadas"
-          valor={String(t.totalAnalises)}
-          detalhe={`${t.produtividade.horasEconomizadas}h de pós-reunião evitadas`}
-        />
-        <StatTile
-          rotulo="Pipeline identificado"
-          valor={fmtBRL(t.pipeline.total)}
-          detalhe="ponderado por probabilidade"
-          tom={t.pipeline.total > 0 ? 'health' : 'neutro'}
-        />
-        <StatTile
           rotulo="Receita em risco"
-          valor={fmtBRL(t.receita.total)}
-          detalhe={`${t.receita.contas.length} conta(s) em churn alto`}
-          tom={t.receita.total > 0 ? 'risk' : 'neutro'}
+          valor={fmtBRL(resumo.receitaEmRisco)}
+          tom={resumo.receitaEmRisco > 0 ? 'risk' : 'neutro'}
+          detalhe={
+            resumo.emRiscoSemContrato > 0
+              ? `Contratos das contas em risco alto. ${resumo.emRiscoSemContrato} sem contrato cadastrado ficaram fora.`
+              : 'Soma dos contratos das contas em risco alto.'
+          }
         />
         <StatTile
-          rotulo="Tarefas atrasadas"
-          valor={String(atrasadas.length)}
-          detalhe={`${tarefas.length} em aberto no total`}
-          tom={atrasadas.length > 0 ? 'warn' : 'neutro'}
+          rotulo="Contas em risco alto"
+          valor={String(resumo.contasEmRiscoAlto)}
+          tom={resumo.contasEmRiscoAlto > 0 ? 'risk' : 'neutro'}
+          detalhe={`de ${contas.length} conta${contas.length > 1 ? 's' : ''} monitorada${contas.length > 1 ? 's' : ''}`}
+        />
+        <StatTile
+          rotulo="Alertas não tratados"
+          valor={String(resumo.alertasAbertos)}
+          tom={resumo.alertasAbertos > 0 ? 'warn' : 'neutro'}
+          detalhe="Abra Alertas para tratar um por um."
+        />
+        <StatTile
+          rotulo={`Sem contato há +${DIAS_SEM_CONTATO} dias`}
+          valor={String(resumo.contasSemContato)}
+          tom={resumo.contasSemContato > 0 ? 'warn' : 'neutro'}
+          detalhe="Conta que não conversa não dá sinal, nem de risco."
         />
       </FaixaDeMetricas>
 
-      <div className="mt-4 grid gap-4 lg:grid-cols-2">
-        <Card
-          titulo="Reuniões recentes"
-          legenda="As últimas transcrições analisadas"
-          acoes={
-            <Link href="/reunioes" className="text-[11.5px] text-accent hover:underline">
-              ver todas
-            </Link>
-          }
-        >
-          <ul className="space-y-1.5">
-            {reunioes.map((r) => (
-              <li key={r.id}>
-                <Link
-                  href={`/reunioes/${r.id}`}
-                  className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-md border border-line bg-surface-2 px-3 py-2 transition-colors hover:border-line-strong"
-                >
-                  <span className="font-mono text-[11px] tabular-nums text-ink-faint">
-                    {fmtData(r.meeting_date)}
-                  </span>
-                  <span className="min-w-0 flex-1 truncate text-[12.5px] text-ink">{r.title}</span>
-                  {r.customer_id && nomeConta.get(r.customer_id) ? (
-                    <span className="text-[11px] text-ink-faint">{nomeConta.get(r.customer_id)}</span>
-                  ) : null}
-                  {r.status !== 'analyzed' ? <Badge tom="warn">{r.status}</Badge> : null}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </Card>
-
-        <Card
-          titulo="Minhas contas por health score"
-          legenda="As que mais precisam de atenção primeiro"
-          acoes={
-            <Link href="/clientes" className="text-[11.5px] text-accent hover:underline">
-              ver todas
-            </Link>
-          }
-        >
-          <ul className="space-y-1.5">
-            {contasPorSaude.map((c) => (
-              <li key={c.id}>
-                <Link
-                  href={`/clientes/${c.id}`}
-                  className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-md border border-line bg-surface-2 px-3 py-2 transition-colors hover:border-line-strong"
-                >
-                  <Badge tom={tomHealth(c.banda)}>{c.health}</Badge>
-                  <span className="min-w-0 flex-1 truncate text-[12.5px] text-ink">{c.nome}</span>
-                  {c.churn != null ? (
-                    <span className="inline-flex items-center gap-1 text-[11px] text-ink-faint">
-                      churn <Mono tom={tomChurn(c.churn)}>{c.churn}</Mono>
-                    </span>
-                  ) : null}
-                  <span className="inline-flex items-center gap-1 text-[11px] text-ink-faint">
-                    <TrendingUp size={11} />
-                    {fmtBRL(c.upsell)}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </Card>
-
-        <Card
-          titulo="Tarefas atrasadas"
-          legenda="Compromissos vencidos, dos dois lados"
-          acoes={<AlarmClock size={14} className="text-ink-faint" />}
-        >
-          {atrasadas.length === 0 ? (
-            <p className="text-[12px] text-ink-faint">
-              Nenhum compromisso atrasado. {tarefas.length} tarefa(s) em aberto dentro do prazo.
-            </p>
-          ) : (
-            <ul className="space-y-1.5">
-              {atrasadas.slice(0, 6).map((t2) => (
-                <li
-                  key={t2.id}
-                  className="rounded-md border border-risk/30 bg-risk-soft/20 px-3 py-2"
-                >
-                  <div className="flex flex-wrap items-center gap-2">
-                    <Badge tom={t2.side === 'interno' ? 'accent' : 'neutro'}>
-                      {t2.side === 'interno' ? 'nosso' : 'cliente'}
-                    </Badge>
-                    <span className="min-w-0 flex-1 text-[12px] text-ink">{t2.description}</span>
-                    <Mono tom="risk" className="text-[11px]">
-                      {t2.atraso}d
-                    </Mono>
-                  </div>
-                  {t2.customer_id && nomeConta.get(t2.customer_id) ? (
-                    <Link
-                      href={`/clientes/${t2.customer_id}`}
-                      className="mt-0.5 inline-block text-[11px] text-ink-faint hover:text-accent"
-                    >
-                      {nomeConta.get(t2.customer_id)}
-                    </Link>
-                  ) : null}
-                </li>
-              ))}
-            </ul>
-          )}
-        </Card>
-
-        <Card
-          titulo="Alertas recentes"
-          legenda="O que o motor encontrou nas suas contas"
-          acoes={
-            <Link href="/alertas" className="text-[11.5px] text-accent hover:underline">
-              ver todos
-            </Link>
-          }
-        >
-          {alertas.length === 0 ? (
-            <p className="text-[12px] text-ink-faint">Nenhum alerta gerado até agora.</p>
-          ) : (
-            <ul className="space-y-1.5">
-              {alertas.map((a) => (
-                <li
-                  key={a.id}
-                  className="flex flex-wrap items-center gap-2 rounded-md border border-line bg-surface-2 px-3 py-2"
-                >
-                  <Badge tom={a.severity === 'alta' ? 'risk' : a.severity === 'media' ? 'warn' : 'neutro'}>
-                    {a.kind}
-                  </Badge>
-                  <span className="min-w-0 flex-1 truncate text-[12px] text-ink">{a.title}</span>
-                  {a.value_at_stake ? (
-                    <Mono tom={a.kind === 'oportunidade' ? 'health' : 'risk'} className="text-[11px]">
-                      {fmtBRL(a.value_at_stake)}
-                    </Mono>
-                  ) : null}
-                </li>
-              ))}
-            </ul>
-          )}
-        </Card>
+      <div className="mb-3 mt-8 flex flex-wrap items-center gap-1.5">
+        {FILTROS.map((f) => (
+          <Chip key={f.valor} ativo={faixa === f.valor} href={f.valor === 'todas' ? '/' : `/?faixa=${f.valor}`}>
+            {f.rotulo} ({f.valor === 'todas' ? contas.length : contagem(f.valor)})
+          </Chip>
+        ))}
       </div>
 
-      {/* Próximas ações sugeridas: preparar reunião das contas que mais precisam */}
-      <div className="mt-4">
-        <Card
-          titulo="Prepare a próxima conversa"
-          legenda="O briefing de 5 minutos das contas com menor health score"
-          acoes={<CalendarClock size={14} className="text-ink-faint" />}
-        >
-          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {contasPorSaude.slice(0, 3).map((c) => (
-              <Link
-                key={c.id}
-                href={`/clientes/${c.id}/preparar`}
-                className="rounded-md border border-line bg-surface-2 px-3 py-2.5 transition-colors hover:border-accent/40"
-              >
-                <div className="flex items-center gap-2">
-                  <Building2 size={12} className="shrink-0 text-ink-faint" />
-                  <span className="min-w-0 truncate text-[12.5px] font-medium text-ink">{c.nome}</span>
-                </div>
-                <div className="mt-1 flex flex-wrap items-center gap-2 text-[11px] text-ink-faint">
-                  <Badge tom={tomHealth(c.banda)}>{c.health}</Badge>
-                  {c.diasDesdeContato != null ? <span>há {c.diasDesdeContato}d</span> : null}
-                  {c.concorrentesAtivos.length > 0 ? (
-                    <span className="inline-flex items-center gap-1 text-risk">
-                      <TriangleAlert size={10} />
-                      {c.concorrentesAtivos[0]}
-                    </span>
-                  ) : null}
-                </div>
-                <p className="mt-1.5 text-[11px] text-accent">preparar briefing →</p>
-              </Link>
+      {visiveis.length === 0 ? (
+        <div className="vidro-sutil rounded-xl border border-dashed border-line-strong px-6 py-10 text-center">
+          <p className="text-[13px] font-semibold text-ink">Nenhuma conta nesta faixa</p>
+          <p className="mt-1 text-[12px] text-ink-dim">
+            <Link href="/" className="text-accent hover:underline">
+              Ver todas as contas
+            </Link>
+          </p>
+        </div>
+      ) : (
+        <section className="vidro rounded-xl px-5">
+          <ul className="divide-y divide-line">
+            {visiveis.map((c) => (
+              <LinhaConta key={c.id} c={c} />
             ))}
-          </div>
-        </Card>
-      </div>
+          </ul>
+        </section>
+      )}
 
-      {t.alertasAltos.length > 0 ? (
-        <p className="mt-3 flex items-center gap-1.5 text-[11.5px] text-risk">
-          <BellRing size={12} />
-          {t.alertasAltos.length} alerta(s) de alta severidade exigem decisão —{' '}
-          <Link href="/torre" className="underline">
-            ver na torre de controle
-          </Link>
-        </p>
-      ) : null}
+      <p className="mt-3 inline-flex items-center gap-1.5 text-[11px] text-ink-faint">
+        <Building2 size={11} />
+        Risco de churn da reunião analisada mais recente. A seta compara com a leitura anterior.
+      </p>
     </>
   );
 }

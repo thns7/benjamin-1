@@ -1,6 +1,7 @@
 import { supabaseServer } from './supabase/server';
 import type { ActionItemRow, AnalysisRow, CustomerRow, Json, MeetingRow } from './supabase/database.types';
 import { calcularHealth, type ResultadoHealth } from './health';
+import { motivosDaConta, type MotivoRisco } from './radar';
 import type {
   Bant,
   BusinessUnit,
@@ -176,6 +177,8 @@ export type VisaoCliente = {
   budgetMaisRecente: number | null;
   /** BANT de cada reunião analisada — a preparação acumula os quatro pilares. */
   bantPorReuniao: (Bant | null)[];
+  /** Por que a conta está em risco: motivos com citação, do mais recente ao mais antigo. */
+  motivosRisco: (MotivoRisco & { vezes: number })[];
 };
 
 /** Ordem de força: um produto em uso não regride para "mencionado". */
@@ -361,6 +364,7 @@ export function consolidar(h: Historico): VisaoCliente {
     personaTopo,
     budgetMaisRecente,
     bantPorReuniao,
+    motivosRisco: motivosDaConta(analisadas.map((r) => ({ reuniao: r, analise: r.analise as AnalysisRow }))),
   };
 }
 
