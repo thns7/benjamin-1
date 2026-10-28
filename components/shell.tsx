@@ -18,7 +18,7 @@ import {
   Sun,
   type LucideIcon,
 } from 'lucide-react';
-import { Logo, Wordmark } from './logo';
+import { Logo, TAGLINE, Wordmark } from './logo';
 
 type Item = { href: string; rotulo: string; icone: LucideIcon };
 type Grupo = { titulo: string; itens: Item[] };
@@ -101,7 +101,7 @@ function AlternadorTema() {
 
 /**
  * Botão de ação primária. É o único bloco de tinta chapada da interface — numa
- * tela feita de vidro translúcido, opacidade total é o destaque mais forte
+ * tela de papel e tinta, um bloco chapado de tinta é o destaque mais forte
  * disponível, e ele fica reservado para a única coisa que o usuário SEMPRE pode
  * fazer: trazer uma reunião nova para dentro.
  */
@@ -136,7 +136,7 @@ export function Shell({ children, motor }: { children: ReactNode; motor: string 
               uma promessa pela metade é pior que promessa nenhuma.
             */}
             <p className="mt-1.5 text-[10px] leading-[1.35] text-ink-faint">
-              O ouro invisível de cada conversa
+              {TAGLINE}
             </p>
           </div>
         </div>
