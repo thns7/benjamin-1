@@ -411,7 +411,7 @@ export function GravacaoReuniao({ onTexto }: { onTexto: (t: string) => void }) {
       ) : (
         <div className="space-y-4">
           <fieldset className="grid gap-2 sm:grid-cols-2">
-            <legend className="mb-2 text-[11px] font-medium uppercase tracking-wide text-ink-faint">Onde é a reunião</legend>
+            <legend className="mb-2 text-[11px] font-medium text-ink-faint">Onde é a reunião</legend>
             <OpcaoModo
               ativo={modo === 'online'}
               desabilitado={!online}
@@ -435,7 +435,7 @@ export function GravacaoReuniao({ onTexto }: { onTexto: (t: string) => void }) {
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1 block text-[11px] font-medium uppercase tracking-wide text-ink-faint" htmlFor="nome-vendedor">
+              <label className="mb-1 block text-[11px] font-medium text-ink-faint" htmlFor="nome-vendedor">
                 Seu nome
               </label>
               <input id="nome-vendedor" className={CAMPO} placeholder="Ex.: Ana Torres" value={nome} maxLength={40} onChange={(e) => setNome(e.target.value)} />

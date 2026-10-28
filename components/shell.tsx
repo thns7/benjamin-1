@@ -138,10 +138,9 @@ export function Shell({ children, motor }: { children: ReactNode; motor: string 
 
         <nav className="flex-1 overflow-y-auto px-3 pb-4">
           {GRUPOS.map((grupo) => (
-            <div key={grupo.titulo} className="mb-5">
-              <p className="px-2 pb-2 text-[9.5px] font-semibold uppercase tracking-[0.16em] text-ink-faint">
-                {grupo.titulo}
-              </p>
+            // Cinco itens não precisam de título de grupo: o que separa retenção de
+            // reuniões é um respiro e uma linha fina.
+            <div key={grupo.titulo} className="mb-3 border-b border-line pb-3 last:border-0">
               <ul className="space-y-0.5">
                 {grupo.itens.map((item) => {
                   const ativo = ehAtivo(pathname, item.href);

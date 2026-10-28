@@ -296,3 +296,72 @@ export function motivosDaConta(
   }
   return [...porChave.values()];
 }
+
+/* ------------------------------------------------------------------ *
+ * Mapa de risco
+ * ------------------------------------------------------------------ */
+
+export type PontoMapa = {
+  id: string;
+  nome: string;
+  /** Posição horizontal, 0–100: o próprio risco de churn. */
+  x: number;
+  /** Faixa vertical (0 = a mais próxima do eixo), para pontos não se cobrirem. */
+  faixaVertical: number;
+  /** 0–1, proporcional à raiz do contrato (área ∝ valor). null sem contrato. */
+  tamanho: number | null;
+  faixa: FaixaRisco;
+  /** Nome escrito ao lado do ponto: só onde ajuda a ler o mapa. */
+  rotulado: boolean;
+};
+
+/**
+ * Posiciona as contas numa régua de risco. Contas sem leitura ficam fora: no
+ * eixo de risco elas não têm lugar, e pô-las no zero diria "risco nenhum".
+ *
+ * Pontos próximos sobem de faixa para não se cobrirem (um enxame simples).
+ * Recebem nome as contas em risco alto e as cinco de maior prioridade — o
+ * resto aparece no título do ponto, para o mapa não virar uma nuvem de texto.
+ */
+export function posicionarNoMapa(contas: ContaRadar[], faixasMax = 5): PontoMapa[] {
+  const comLeitura = contas.filter((c) => c.churn != null);
+  const maiorContrato = Math.max(0, ...comLeitura.map((c) => c.contrato ?? 0));
+  const prioritarias = new Set(
+    [...comLeitura]
+      .filter((c) => c.prioridade != null)
+      .sort((a, b) => (b.prioridade as number) - (a.prioridade as number))
+      .slice(0, 5)
+      .map((c) => c.id),
+  );
+
+  // Cada faixa guarda os trechos da régua já ocupados — o ponto E o nome dele.
+  // Um nome de 16 letras ocupa uns 12% da largura num painel de desktop.
+  const ocupado: [number, number][][] = [];
+  const cabe = (faixa: [number, number][], [a, b]: [number, number]) => faixa.every(([x, y]) => b <= x || a >= y);
+
+  return [...comLeitura]
+    .sort((a, b) => (a.churn as number) - (b.churn as number))
+    .map((c) => {
+      const x = c.churn as number;
+      const rotulado = c.faixa === 'alto' || prioritarias.has(c.id);
+      const nome = rotulado ? c.nome.length * 0.75 + 2 : 0;
+      const trecho: [number, number] = x < 78 ? [x - 2, x + 2 + nome] : [x - 2 - nome, x + 2];
+
+      let faixaVertical = ocupado.findIndex((f) => cabe(f, trecho));
+      if (faixaVertical === -1) {
+        faixaVertical = ocupado.length < faixasMax ? ocupado.length : ocupado.length - 1;
+        ocupado[faixaVertical] ??= [];
+      }
+      ocupado[faixaVertical]!.push(trecho);
+
+      return {
+        id: c.id,
+        nome: c.nome,
+        x,
+        faixaVertical,
+        tamanho: c.contrato != null && maiorContrato > 0 ? Math.sqrt(c.contrato / maiorContrato) : null,
+        faixa: c.faixa,
+        rotulado,
+      };
+    });
+}

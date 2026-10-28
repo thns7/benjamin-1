@@ -324,7 +324,7 @@ function Secao({
     <section>
       <div className="mb-2.5 flex items-center gap-2">
         {icone ? <span className="text-ink-faint">{icone}</span> : null}
-        <h2 className="text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-dim">
+        <h2 className="text-[11px] font-semibold text-ink-dim">
           {titulo}
         </h2>
         {contador != null ? (
@@ -394,7 +394,7 @@ function ItemEv({
         {campo ? <ControleCorrecao campo={campo} valor={valor ?? ev?.quote ?? null} /> : null}
       </div>
       {ev?.quote ? (
-        <p className="mt-1 line-clamp-2 font-mono text-[11px] italic leading-snug text-ink-faint">
+        <p className="mt-1 line-clamp-2 font-fala text-[13.5px] italic leading-snug text-ink-faint">
           “{ev.quote}”
         </p>
       ) : null}
@@ -432,7 +432,7 @@ function Fato({
   const clicavel = Boolean(ev?.quote && onSelect);
   const corpo = (
     <>
-      <span className="block text-[10px] font-semibold uppercase tracking-[0.09em] text-ink-faint">
+      <span className="block text-[11.5px] font-semibold text-ink-faint">
         {rotulo}
       </span>
       <span className="mt-1 block text-[13px] leading-snug text-ink">{children}</span>
@@ -448,7 +448,7 @@ function Fato({
       title="Ver o trecho que originou este item"
       className="group min-w-0 rounded-md text-left transition-colors hover:text-ink"
     >
-      <span className="block text-[10px] font-semibold uppercase tracking-[0.09em] text-ink-faint transition-colors group-hover:text-ink-dim">
+      <span className="block text-[11.5px] font-semibold text-ink-faint transition-colors group-hover:text-ink-dim">
         {rotulo}
       </span>
       <span className="mt-1 flex items-center gap-1.5 text-[13px] leading-snug text-ink">
@@ -582,7 +582,7 @@ function Acoes({
     <section className="vidro rounded-xl p-5">
       <div className="mb-3 flex items-center gap-2">
         <Target size={14} className="text-ink-faint" />
-        <h2 className="text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-dim">
+        <h2 className="text-[11px] font-semibold text-ink-dim">
           O que fazer
         </h2>
       </div>
@@ -732,7 +732,7 @@ function ScoreCard({
       <section>
         <div className="flex items-center gap-1.5 text-ink-dim">
           {icone}
-          <h3 className="text-[12px] font-semibold uppercase tracking-wide">{titulo}</h3>
+          <h3 className="text-[12px] font-semibold">{titulo}</h3>
         </div>
         <div className="mt-2 flex items-baseline gap-1">
           <Mono tom="neutro" className="text-3xl text-ink-faint">
@@ -751,7 +751,7 @@ function ScoreCard({
     <section>
       <div className="flex items-center gap-1.5 text-ink-dim">
         {icone}
-        <h3 className="text-[12px] font-semibold uppercase tracking-wide">{titulo}</h3>
+        <h3 className="text-[12px] font-semibold">{titulo}</h3>
       </div>
       <div className="mt-2 flex items-baseline gap-1">
         <Mono tom={tom} className="text-3xl">
@@ -900,7 +900,7 @@ function Persona({
           </Badge>
         </div>
         {p.evidence?.quote ? (
-          <p className="mt-1 font-mono text-[11px] italic text-ink-faint">“{p.evidence.quote}”</p>
+          <p className="mt-1 font-fala text-[13.5px] italic text-ink-faint">“{p.evidence.quote}”</p>
         ) : null}
       </button>
     </Secao>
@@ -1030,7 +1030,7 @@ function ListaSinais({
 }) {
   return (
     <div>
-      <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wide text-ink-faint">{titulo}</p>
+      <p className="mb-1.5 text-[11px] font-semibold text-ink-faint">{titulo}</p>
       {sinais.length > 0 ? (
         <div className="space-y-1.5">
           {sinais.map((s, i) => (
@@ -1086,7 +1086,7 @@ function GrupoTexto({
   if (itens.length === 0) return null;
   return (
     <div>
-      <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wide text-ink-faint">
+      <p className="mb-1.5 text-[11px] font-semibold text-ink-faint">
         {titulo} <span className="text-ink-faint">· {itens.length}</span>
       </p>
       <div className="space-y-1.5">
@@ -1140,7 +1140,7 @@ function Extracoes({
               return (
                 <span className="flex items-center justify-between gap-2">
                   <span>{item.text}</span>
-                  <span className="shrink-0 rounded bg-surface-3 px-1.5 py-0.5 text-[10px] uppercase text-ink-faint">
+                  <span className="shrink-0 rounded bg-surface-3 px-1.5 py-0.5 text-[11.5px] text-ink-faint">
                     {item.category}
                   </span>
                 </span>
@@ -1294,7 +1294,7 @@ function Voz({
 function Metrica({ rotulo, valor }: { rotulo: string; valor: ReactNode }) {
   return (
     <div className="rounded-md border border-line bg-surface-2 px-3 py-2">
-      <p className="text-[10px] uppercase tracking-wide text-ink-faint">{rotulo}</p>
+      <p className="text-[11.5px] text-ink-faint">{rotulo}</p>
       <p className="mt-1 font-mono text-[15px] tabular-nums text-ink">{valor}</p>
     </div>
   );
@@ -1323,7 +1323,7 @@ function Conversa({ analise }: { analise: AnalysisResult }) {
         </div>
       )}
       <div className="mt-3 flex flex-wrap items-center gap-2">
-        <span className="text-[11px] font-semibold uppercase tracking-wide text-ink-faint">BANT</span>
+        <span className="text-[11px] font-semibold text-ink-faint">BANT</span>
         <Mono tom={b.score >= 3 ? 'health' : b.score >= 2 ? 'warn' : 'risk'}>{b.score}/4</Mono>
         {(['budget', 'authority', 'need', 'timeline'] as const).map((k) => (
           <Badge key={k} tom={b[k] ? 'health' : 'neutro'}>

@@ -44,8 +44,19 @@ O cinza de texto mais claro é `ink-faint` (`#6F6F6F`, 4,8:1 sobre o papel, pass
 
 ## Tipografia
 
-- **Inter** para toda a interface.
-- **JetBrains Mono** para números que mudam (com `tabular-nums`).
+Duas vozes, com papéis que não se misturam:
+
+- **Inter** é a voz do sistema: navegação, títulos, números e leituras. Números usam algarismos tabulares (`tabular-nums`), não fonte mono.
+- **Newsreader itálico** é a voz do cliente: **só** as citações literais das reuniões (componente `<Citacao>`). Dá para ver de longe o que é leitura do sistema e o que é fala de gente.
+- JetBrains Mono ficou só para o que é código ou identificador técnico (ex.: o selo do motor).
+
+Rótulos em frase normal, sem caixa alta espaçada; o wordmark é a única palavra em caixa alta.
+
+## Marcas próprias da interface
+
+- **Aspas do Benjamin:** a barriga de baixo do B, usada no lugar das aspas tipográficas em toda citação.
+- **Mapa de risco:** a carteira numa régua de 0 a 100; cada conta é um ponto do tamanho do contrato, e só a zona de risco alto tem cor de fundo.
+- **Manchete com dados:** o Radar abre com uma frase ("R$ 276 mil em contratos podem cancelar."), não com uma fileira de indicadores.
 
 ## Material
 

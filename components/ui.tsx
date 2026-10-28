@@ -39,13 +39,13 @@ export function PageHeader({
   acoes?: ReactNode;
 }) {
   return (
-    <header className="mb-8 flex flex-wrap items-start justify-between gap-4 border-b border-line pb-6">
+    <header className="mb-8 flex flex-wrap items-end justify-between gap-4">
       <div className="min-w-0">
-        <h1 className="text-[26px] font-semibold leading-tight tracking-[-0.02em] text-ink">
+        <h1 className="text-[30px] font-semibold leading-[1.1] tracking-[-0.03em] text-ink">
           {titulo}
         </h1>
         {descricao ? (
-          <p className="mt-2 max-w-2xl text-[13px] leading-relaxed text-ink-dim">{descricao}</p>
+          <p className="mt-2.5 max-w-[60ch] text-[13.5px] leading-relaxed text-ink-dim">{descricao}</p>
         ) : null}
       </div>
       {acoes ? <div className="flex shrink-0 items-center gap-2">{acoes}</div> : null}
@@ -97,10 +97,8 @@ export function Card({
         {titulo ? (
           <div className="mb-3 flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <h2 className="text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-dim">
-                {titulo}
-              </h2>
-              {legenda ? <p className="mt-1 text-[11px] text-ink-faint">{legenda}</p> : null}
+              <h2 className="text-[13.5px] font-semibold tracking-[-0.01em] text-ink">{titulo}</h2>
+              {legenda ? <p className="mt-0.5 text-[12px] text-ink-faint">{legenda}</p> : null}
             </div>
             {acoes ? <div className="shrink-0">{acoes}</div> : null}
           </div>
@@ -115,8 +113,8 @@ export function Card({
       {titulo ? (
         <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
           <div className="min-w-0">
-            <h2 className="text-[12.5px] font-semibold tracking-[-0.01em] text-ink">{titulo}</h2>
-            {legenda ? <p className="mt-0.5 text-[11px] text-ink-faint">{legenda}</p> : null}
+            <h2 className="text-[13.5px] font-semibold tracking-[-0.01em] text-ink">{titulo}</h2>
+            {legenda ? <p className="mt-0.5 text-[12px] text-ink-faint">{legenda}</p> : null}
           </div>
           {acoes ? <div className="shrink-0">{acoes}</div> : null}
         </div>
@@ -142,7 +140,11 @@ export function Badge({
   );
 }
 
-/** Números, scores, valores e trechos de transcrição sempre em mono. */
+/**
+ * Números, scores e valores: Inter com algarismos tabulares, para o valor não
+ * dançar quando muda. O nome ficou de quando era fonte mono; a fala do cliente
+ * não usa este componente, usa a serifa de `<Citacao>` (radar-ui.tsx).
+ */
 export function Mono({
   children,
   tom = 'neutro',
@@ -153,7 +155,7 @@ export function Mono({
   className?: string;
 }) {
   return (
-    <span className={`font-mono tabular-nums ${TOM_TEXTO[tom]} ${className}`}>{children}</span>
+    <span className={`tabular-nums ${TOM_TEXTO[tom]} ${className}`}>{children}</span>
   );
 }
 
@@ -216,10 +218,8 @@ export function StatTile({
 }) {
   return (
     <div className="min-w-0">
-      <p className="text-[9.5px] font-semibold uppercase tracking-[0.16em] text-ink-faint">
-        {rotulo}
-      </p>
-      <p className={`mt-2 font-mono text-[26px] leading-none tabular-nums ${TOM_TEXTO[tom]}`}>
+      <p className="text-[12px] font-medium text-ink-dim">{rotulo}</p>
+      <p className={`mt-1.5 text-[28px] font-semibold leading-none tracking-[-0.03em] tabular-nums ${TOM_TEXTO[tom]}`}>
         {valor}
       </p>
       {detalhe ? <p className="mt-2 text-[11px] leading-snug text-ink-faint">{detalhe}</p> : null}

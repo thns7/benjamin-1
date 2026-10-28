@@ -1,10 +1,11 @@
 import Link from 'next/link';
-import { Bell, Building2, MessagesSquare } from 'lucide-react';
-import { Badge, BotaoLink, EmptyState, Mono, PageHeader, type Tom } from '@/components/ui';
+import { Bell, MessagesSquare } from 'lucide-react';
+import { Badge, BotaoLink, EmptyState, PageHeader, type Tom } from '@/components/ui';
 import { supabaseConfigurado, supabaseServer } from '@/lib/supabase/server';
 import { SemBanco } from '@/components/sem-banco';
 import type { AlertRow, CustomerRow } from '@/lib/supabase/database.types';
 import { BotaoTratar } from './tratar';
+import { Citacao } from '@/components/radar-ui';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,6 +18,7 @@ const BRL = new Intl.NumberFormat('pt-BR', {
 });
 
 const TOM_SEVERIDADE: Record<string, Tom> = { alta: 'risk', media: 'warn', baixa: 'neutro' };
+const SEVERIDADE: Record<string, string> = { alta: 'Alta', media: 'Média', baixa: 'Baixa' };
 
 const TIPO: Record<string, string> = {
   churn: 'Churn',
@@ -62,10 +64,9 @@ function Chip({
   return (
     <Link
       href={href}
-      className={`rounded-md border px-2.5 py-1 text-[11.5px] font-medium transition-colors ${
-        ativo
-          ? 'border-accent/40 bg-accent-soft text-accent'
-          : 'border-line bg-surface-2 text-ink-dim hover:border-line-strong hover:text-ink'
+      aria-current={ativo ? 'page' : undefined}
+      className={`rounded-full px-3 py-1 text-[12px] font-medium transition-colors ${
+        ativo ? 'bg-ink text-canvas' : 'text-ink-dim hover:bg-surface-3 hover:text-ink'
       }`}
     >
       {children}
@@ -152,19 +153,19 @@ export default async function AlertasPage({
           <div className="mb-4 flex flex-wrap items-center gap-4">
             <div className="flex flex-wrap items-center gap-1.5">
               <Chip ativo={!verTratados} href={url({ estado: 'abertos' })}>
-                Não tratados ({abertos.length})
+                Não tratados {abertos.length}
               </Chip>
               <Chip ativo={verTratados} href={url({ estado: 'tratados' })}>
-                Tratados ({tratados.length})
+                Tratados {tratados.length}
               </Chip>
             </div>
             <div className="flex flex-wrap items-center gap-1.5">
-              <span className="text-[11px] font-semibold uppercase tracking-wide text-ink-faint">
+              <span className="text-[11px] font-semibold text-ink-faint">
                 Severidade
               </span>
               {FILTROS_SEVERIDADE.map((s) => (
                 <Chip key={s} ativo={sev === s} href={url({ sev: s })}>
-                  {s === 'todas' ? `todas (${daAba.length})` : `${s} (${contagem[s]})`}
+                  {s === 'todas' ? `Todas ${daAba.length}` : `${SEVERIDADE[s]} ${contagem[s]}`}
                 </Chip>
               ))}
             </div>
@@ -191,71 +192,61 @@ export default async function AlertasPage({
               </p>
             </div>
           ) : (
-            <ul className="space-y-2">
+            <ul className="divide-y divide-line border-y border-line">
               {alertas.map((a) => {
                 const cliente = a.customer_id ? nomeCliente.get(a.customer_id) : null;
                 const tom = TOM_SEVERIDADE[a.severity] ?? 'neutro';
                 return (
                   <li
                     key={a.id}
-                    className={`vidro rounded-xl p-4 ${a.severity === 'alta' && !a.read ? '!border-risk/40' : ''} ${
-                      a.read ? 'opacity-75' : ''
-                    }`}
+                    className={`grid gap-x-8 gap-y-3 py-5 md:grid-cols-[minmax(180px,230px)_1fr] ${a.read ? 'opacity-70' : ''}`}
                   >
-                    <div className="flex flex-wrap items-center gap-2">
-                      <Badge tom={tom}>{a.severity}</Badge>
-                      <Badge tom="neutro">{TIPO[a.kind] ?? a.kind}</Badge>
-                      <span className="text-[12.5px] font-semibold text-ink">{a.title}</span>
-                      <span className="ml-auto text-[10.5px] text-ink-faint">
-                        {new Date(a.created_at).toLocaleDateString('pt-BR')}
-                      </span>
-                    </div>
-
-                    <p className="mt-1.5 text-[12.5px] leading-relaxed text-ink-dim">{a.message}</p>
-
-                    {a.evidence ? (
-                      <p className="mt-2 border-l-2 border-line pl-2.5 font-mono text-[11.5px] italic leading-relaxed text-ink-faint">
-                        “{a.evidence}”
-                      </p>
-                    ) : null}
-
-                    <div className="mt-2.5 rounded-md border border-accent/25 bg-accent-soft/25 px-3 py-2">
-                      <p className="text-[10.5px] font-semibold uppercase tracking-wide text-accent">
-                        Ação sugerida
-                      </p>
-                      <p className="mt-0.5 text-[12px] leading-relaxed text-ink-dim">
-                        {ACAO_SUGERIDA[a.kind] ?? 'Revise a evidência e registre o encaminhamento na conta.'}
-                      </p>
-                    </div>
-
-                    <div className="mt-3 flex flex-wrap items-center gap-3 text-[11.5px]">
-                      <BotaoTratar alertaId={a.id} tratado={a.read} />
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        <Badge tom={tom}>{SEVERIDADE[a.severity] ?? a.severity}</Badge>
+                        <Badge tom="neutro">{TIPO[a.kind] ?? a.kind}</Badge>
+                      </div>
                       {cliente && a.customer_id ? (
                         <Link
                           href={`/clientes/${a.customer_id}`}
-                          className="inline-flex items-center gap-1 text-ink-dim hover:text-accent"
+                          className="mt-2 block text-[14.5px] font-semibold tracking-[-0.01em] text-ink hover:underline"
                         >
-                          <Building2 size={11} />
                           {cliente}
                         </Link>
                       ) : null}
-                      {a.meeting_id ? (
-                        <Link
-                          href={`/reunioes/${a.meeting_id}`}
-                          className="inline-flex items-center gap-1 text-ink-dim hover:text-accent"
-                        >
-                          <MessagesSquare size={11} />
-                          abrir briefing
-                        </Link>
-                      ) : null}
-                      {a.value_at_stake ? (
-                        <span className="ml-auto inline-flex items-center gap-1">
-                          <span className="text-ink-faint">valor em jogo</span>
-                          <Mono tom={a.kind === 'oportunidade' ? 'health' : 'risk'}>
-                            {BRL.format(a.value_at_stake)}
-                          </Mono>
-                        </span>
-                      ) : null}
+                      <p className="mt-1 text-[12px] leading-snug text-ink-faint">
+                        {new Date(a.created_at).toLocaleDateString('pt-BR')}
+                        {a.value_at_stake ? (
+                          <>
+                            <br />
+                            <span className={a.kind === 'oportunidade' ? 'text-health' : 'font-medium text-risk'}>
+                              {BRL.format(a.value_at_stake)} em jogo
+                            </span>
+                          </>
+                        ) : null}
+                      </p>
+                    </div>
+
+                    <div className="min-w-0">
+                      <p className="text-[14px] font-semibold text-ink">{a.title}</p>
+                      <p className="mt-0.5 text-[13px] leading-relaxed text-ink-dim">{a.message}</p>
+                      {a.evidence ? <Citacao texto={a.evidence} className="mt-3" /> : null}
+                      <p className="mt-3 max-w-[70ch] text-[13px] leading-relaxed text-ink-dim">
+                        <span className="font-semibold text-ink">O que fazer: </span>
+                        {ACAO_SUGERIDA[a.kind] ?? 'Revise a evidência e registre o encaminhamento na conta.'}
+                      </p>
+                      <div className="mt-3 flex flex-wrap items-center gap-4 text-[12px]">
+                        <BotaoTratar alertaId={a.id} tratado={a.read} />
+                        {a.meeting_id ? (
+                          <Link
+                            href={`/reunioes/${a.meeting_id}`}
+                            className="inline-flex items-center gap-1 text-ink-dim underline decoration-line-strong underline-offset-2 hover:text-ink"
+                          >
+                            <MessagesSquare size={12} />
+                            Abrir a reunião
+                          </Link>
+                        ) : null}
+                      </div>
                     </div>
                   </li>
                 );

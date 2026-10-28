@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import { Inter, JetBrains_Mono, Newsreader } from 'next/font/google';
 import { Shell } from '@/components/shell';
 import { TAGLINE } from '@/components/logo';
 import './globals.css';
@@ -16,6 +16,20 @@ import './globals.css';
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
+  display: 'swap',
+});
+
+/*
+  A segunda voz da interface. O sistema fala em Inter; o CLIENTE fala em
+  Newsreader itálico. Toda citação literal de uma reunião — o motivo de um
+  alerta, um sinal de churn — aparece nesta serifa, e só ela. É o princípio do
+  produto (nenhuma afirmação sem a fala que a sustenta) virando tipografia:
+  dá para ver de longe o que é leitura do sistema e o que é fala de gente.
+*/
+const newsreader = Newsreader({
+  subsets: ['latin'],
+  style: ['italic'],
+  variable: '--font-newsreader',
   display: 'swap',
 });
 
@@ -70,7 +84,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_TEMA }} />
       </head>
-      <body className={`${inter.variable} ${jetbrains.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} ${newsreader.variable} ${jetbrains.variable} font-sans antialiased`}>
         {semShell ? children : <Shell motor={motor}>{children}</Shell>}
       </body>
     </html>

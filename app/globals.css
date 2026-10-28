@@ -151,6 +151,7 @@
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+  --font-fala: var(--font-newsreader), ui-serif, Georgia, serif;
 
   --shadow-panel: var(--shadow);
   --shadow-lift: var(--shadow-lift);

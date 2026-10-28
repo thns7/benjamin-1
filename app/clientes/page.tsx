@@ -111,7 +111,7 @@ export default async function ClientesPage() {
       ) : (
         <div className="overflow-x-auto vidro rounded-xl">
           <table className="w-full text-[12.5px]">
-            <thead className="border-b border-line text-left text-[11px] uppercase tracking-wide text-ink-faint">
+            <thead className="border-b border-line text-left text-[11px] text-ink-faint">
               <tr>
                 <th className="px-4 py-2.5 font-medium">Cliente</th>
                 <th className="px-4 py-2.5 font-medium">Health</th>

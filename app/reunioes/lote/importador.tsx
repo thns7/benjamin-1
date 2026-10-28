@@ -503,7 +503,7 @@ export function Importador() {
         <div className="overflow-x-auto">
           <table className="w-full min-w-[860px] border-collapse text-left text-[12.5px]">
             <thead>
-              <tr className="border-b border-line text-[9.5px] font-semibold uppercase tracking-[0.14em] text-ink-faint">
+              <tr className="border-b border-line text-[11.5px] font-semibold text-ink-faint">
                 <th className="w-10 px-3 py-2.5">
                   {fase === 'revisao' ? (
                     <input
@@ -580,7 +580,7 @@ function Numero({ rotulo, valor, detalhe, tom }: { rotulo: string; valor: number
   const cor = tom === 'health' ? 'text-health' : tom === 'risk' ? 'text-risk' : 'text-ink';
   return (
     <div className="min-w-0">
-      <p className="text-[9.5px] font-semibold uppercase tracking-[0.16em] text-ink-faint">{rotulo}</p>
+      <p className="text-[11.5px] font-semibold text-ink-faint">{rotulo}</p>
       <p className={`mt-2 font-mono text-[24px] leading-none tabular-nums ${cor}`}>{valor}</p>
       <p className="mt-2 truncate text-[11px] text-ink-faint" title={detalhe}>
         {detalhe}
@@ -758,7 +758,7 @@ function EdicaoEmMassa({
         ) : null}
       </p>
       <label className="grid gap-1" htmlFor="massa-cliente">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-ink-faint">Cliente</span>
+        <span className="text-[11.5px] font-semibold text-ink-faint">Cliente</span>
         <div className="flex gap-1.5">
           <input id="massa-cliente" list="clientes-do-lote" className={`${CAMPO} w-48`} value={cliente} onChange={(e) => setCliente(e.target.value)} placeholder={clientes[0] ?? 'Nome da conta'} />
           <button type="button" className={BOTAO} disabled={!cliente.trim()} onClick={() => aoAplicar({ cliente: cliente.trim() })}>
@@ -767,7 +767,7 @@ function EdicaoEmMassa({
         </div>
       </label>
       <label className="grid gap-1" htmlFor="massa-data">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-ink-faint">Data</span>
+        <span className="text-[11.5px] font-semibold text-ink-faint">Data</span>
         <div className="flex gap-1.5">
           <input id="massa-data" type="date" className={`${CAMPO} w-40`} value={data} onChange={(e) => setData(e.target.value)} />
           <button type="button" className={BOTAO} disabled={!data} onClick={() => aoAplicar({ data })}>
@@ -776,7 +776,7 @@ function EdicaoEmMassa({
         </div>
       </label>
       <label className="grid gap-1" htmlFor="massa-tipo">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-ink-faint">Tipo</span>
+        <span className="text-[11.5px] font-semibold text-ink-faint">Tipo</span>
         <div className="flex gap-1.5">
           <select id="massa-tipo" className={`${CAMPO} w-44`} value={tipo} onChange={(e) => setTipo(e.target.value as TipoReuniao | '')}>
             <option value="">—</option>

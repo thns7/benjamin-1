@@ -95,7 +95,7 @@ export default async function RadarPage({
           {/* Filtros */}
           <div className="mb-4 flex flex-wrap items-center gap-x-5 gap-y-2">
             <div className="flex flex-wrap items-center gap-1.5">
-              <span className="text-[11px] font-semibold uppercase tracking-wide text-ink-faint">
+              <span className="text-[11px] font-semibold text-ink-faint">
                 Unidade
               </span>
               <Chip ativo={r.filtros.unidade === 'todas'} href={url({ uni: 'todas' })}>
@@ -109,7 +109,7 @@ export default async function RadarPage({
             </div>
 
             <div className="flex flex-wrap items-center gap-1.5">
-              <span className="text-[11px] font-semibold uppercase tracking-wide text-ink-faint">
+              <span className="text-[11px] font-semibold text-ink-faint">
                 Período
               </span>
               {PERIODOS.map((p) => (
@@ -121,7 +121,7 @@ export default async function RadarPage({
 
             {r.segmentos.length > 0 ? (
               <div className="flex flex-wrap items-center gap-1.5">
-                <span className="text-[11px] font-semibold uppercase tracking-wide text-ink-faint">
+                <span className="text-[11px] font-semibold text-ink-faint">
                   Segmento
                 </span>
                 <Chip ativo={r.filtros.segmento === 'todos'} href={url({ seg: 'todos' })}>
@@ -140,19 +140,19 @@ export default async function RadarPage({
           <section className="vidro rounded-xl px-5 py-4">
             <div className="grid gap-x-8 gap-y-6 sm:grid-cols-3 sm:[&>*+*]:border-l sm:[&>*+*]:border-line sm:[&>*+*]:pl-8">
               <div className="min-w-0">
-                <p className="text-[11px] font-medium uppercase tracking-wide text-ink-faint">
+                <p className="text-[11px] font-medium text-ink-faint">
                   Sinais de dor
                 </p>
                 <p className="mt-2 font-mono text-2xl tabular-nums text-ink">{r.totalSinais}</p>
               </div>
               <div className="min-w-0">
-                <p className="text-[11px] font-medium uppercase tracking-wide text-ink-faint">
+                <p className="text-[11px] font-medium text-ink-faint">
                   Tópicos distintos
                 </p>
                 <p className="mt-2 font-mono text-2xl tabular-nums text-ink">{r.clusters.length}</p>
               </div>
               <div className="min-w-0">
-                <p className="text-[11px] font-medium uppercase tracking-wide text-ink-faint">
+                <p className="text-[11px] font-medium text-ink-faint">
                   Contas afetadas
                 </p>
                 <p className="mt-2 font-mono text-2xl tabular-nums text-ink">{r.totalClientes}</p>
@@ -238,7 +238,7 @@ export default async function RadarPage({
                     </div>
 
                     <div className="p-4">
-                      <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wide text-ink-faint">
+                      <p className="mb-1.5 text-[11px] font-semibold text-ink-faint">
                         Onde apareceu
                       </p>
                       <ul className="space-y-1.5">
@@ -262,7 +262,7 @@ export default async function RadarPage({
                               </span>
                             </div>
                             {e.citacao ? (
-                              <p className="mt-1 font-mono text-[11px] italic leading-relaxed text-ink-faint">
+                              <p className="mt-1 font-fala text-[13.5px] italic leading-relaxed text-ink-faint">
                                 “{e.citacao}”
                               </p>
                             ) : null}
