@@ -50,14 +50,14 @@ export function Entrada({ destino, motivo }: { destino: string; motivo?: string 
     'mt-2 flex items-center gap-2 rounded-lg border border-line bg-surface-2 px-3 focus-within:border-line-strong';
   const input =
     'w-full bg-transparent py-2.5 text-[13px] text-ink outline-none placeholder:text-ink-faint disabled:cursor-not-allowed';
-  const rotulo = 'block text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-dim';
+  const rotulo = 'block text-[11px] font-semibold text-ink-dim';
 
   return (
     <div className="w-full max-w-[380px]">
       <div className="mb-8 flex flex-col items-center text-center">
         <Logo size={44} />
         <Wordmark className="mt-5 !text-[15px] !tracking-[0.5em] pl-[0.5em]" />
-        <p className="mt-3 text-[10.5px] uppercase tracking-[0.28em] text-ink-faint">{TAGLINE}</p>
+        <p className="mt-3 text-[11.5px] text-ink-faint">{TAGLINE}</p>
         <p className="mt-6 text-[12.5px] leading-relaxed text-ink-dim">
           Esta base guarda transcrição de conversa com cliente. O acesso é só por convite.
         </p>

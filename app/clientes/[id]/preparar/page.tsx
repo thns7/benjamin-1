@@ -37,7 +37,7 @@ function Linha({
 }) {
   return (
     <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-line/60 py-2 last:border-0">
-      <span className="inline-flex w-[168px] shrink-0 items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-ink-faint">
+      <span className="inline-flex w-[168px] shrink-0 items-center gap-1.5 text-[11px] font-semibold text-ink-faint">
         {icone}
         {rotulo}
       </span>
@@ -193,7 +193,7 @@ export default async function PrepararPage({ params }: { params: Promise<{ id: s
             <div className="vidro rounded-xl p-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <p className="text-[10.5px] font-semibold uppercase tracking-wide text-ink-faint">
+                  <p className="text-[11.5px] font-semibold text-ink-faint">
                     Interesse
                   </p>
                   {p.interesse ? (
@@ -227,7 +227,7 @@ export default async function PrepararPage({ params }: { params: Promise<{ id: s
                 </div>
 
                 <div>
-                  <p className="text-[10.5px] font-semibold uppercase tracking-wide text-ink-faint">
+                  <p className="text-[11.5px] font-semibold text-ink-faint">
                     Confiança
                   </p>
                   {p.confianca ? (
@@ -250,7 +250,7 @@ export default async function PrepararPage({ params }: { params: Promise<{ id: s
 
               {p.bant ? (
                 <div className="mt-4 border-t border-line pt-3">
-                  <p className="mb-1.5 text-[10.5px] font-semibold uppercase tracking-wide text-ink-faint">
+                  <p className="mb-1.5 text-[11.5px] font-semibold text-ink-faint">
                     Cobertura BANT do ciclo
                   </p>
                   <div className="flex flex-wrap items-center gap-1.5">

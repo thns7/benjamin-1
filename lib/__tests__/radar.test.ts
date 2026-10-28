@@ -1,6 +1,6 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { faixaRisco, montarRadar, motivosDaConta, type AnaliseRadar, type EntradaRadar } from '../radar';
+import { faixaRisco, montarRadar, motivosDaConta, posicionarNoMapa, type AnaliseRadar, type EntradaRadar } from '../radar';
 
 /**
  * Radar de churn: ordem das contas, abstenção e motivo com citação.
@@ -214,5 +214,50 @@ describe('motivosDaConta', () => {
     assert.equal(motivos[0]?.vezes, 2);
     assert.equal(motivos[0]?.citacao, 'continua caro');
     assert.equal(motivos[0]?.reuniaoId, 'nova');
+  });
+});
+
+describe('posicionarNoMapa', () => {
+  const conta = (id: string, churn: number | null, contrato: number | null) => ({
+    id,
+    nome: id,
+    segmento: null,
+    contrato,
+    churn,
+    tendencia: null,
+    faixa: faixaRisco(churn),
+    prioridade: churn != null && contrato != null ? (contrato * churn) / 100 : null,
+    diasSemContato: null,
+    motivo: null,
+    concorrentes: [],
+    alertasAbertos: 0,
+  });
+
+  test('conta sem leitura fica fora do mapa, em vez de aparecer no risco zero', () => {
+    const pontos = posicionarNoMapa([conta('a', 50, 10), conta('b', null, 10)]);
+    assert.deepEqual(pontos.map((p) => p.id), ['a']);
+  });
+
+  test('ponto ou nome que se cobririam sobem de faixa; distantes ficam na primeira', () => {
+    // 'c' fica longe e sem nome; 'a' e 'b' estão em risco alto, então têm nome.
+    const pontos = posicionarNoMapa([conta('a', 80, 10), conta('b', 82, 10), conta('c', 20, null)]);
+    const faixa = Object.fromEntries(pontos.map((p) => [p.id, p.faixaVertical]));
+    assert.equal(faixa.c, 0);
+    assert.equal(faixa.a, 0);
+    assert.equal(faixa.b, 1);
+  });
+
+  test('o nome conta como espaço ocupado: dois rótulos longos não dividem a faixa', () => {
+    const longo = (id: string, churn: number) => ({ ...conta(id, churn, 10), nome: 'Conta de nome bem comprido' });
+    const pontos = posicionarNoMapa([longo('a', 70), longo('b', 90)]);
+    assert.notEqual(pontos[0]?.faixaVertical, pontos[1]?.faixaVertical);
+  });
+
+  test('tamanho segue a raiz do contrato; sem contrato não tem tamanho', () => {
+    const pontos = posicionarNoMapa([conta('grande', 50, 400), conta('pequena', 60, 100), conta('sem', 70, null)]);
+    const t = Object.fromEntries(pontos.map((p) => [p.id, p.tamanho]));
+    assert.equal(t.grande, 1);
+    assert.equal(t.pequena, 0.5);
+    assert.equal(t.sem, null);
   });
 });

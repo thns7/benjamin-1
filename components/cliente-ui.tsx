@@ -137,10 +137,10 @@ export function Medidor({
   return (
     <div>
       {rotulo ? (
-        <p className="text-[11px] font-medium uppercase tracking-wide text-ink-faint">{rotulo}</p>
+        <p className="text-[12px] font-medium text-ink-dim">{rotulo}</p>
       ) : null}
       <div className="mt-1 flex items-baseline gap-1">
-        <span className={`font-mono text-4xl tabular-nums ${texto[tom]}`}>{valor}</span>
+        <span className={`text-[40px] font-semibold leading-none tracking-[-0.04em] tabular-nums ${texto[tom]}`}>{valor}</span>
         <span className="text-[12px] text-ink-faint">{sufixo}</span>
       </div>
       <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-surface-3">
@@ -170,7 +170,7 @@ export function ListaFatores({
             <p className="text-[12px] leading-snug text-ink-dim">{f.label}</p>
             {f.detalhe ? <p className="text-[11px] text-ink-faint">{f.detalhe}</p> : null}
           </div>
-          <span className="shrink-0 font-mono text-[12px] tabular-nums text-ink">
+          <span className="shrink-0 text-[12px] font-medium tabular-nums text-ink">
             {f.delta >= 0 ? '+' : ''}
             {f.delta}
           </span>
@@ -182,6 +182,6 @@ export function ListaFatores({
 
 export function Rotulo({ children }: { children: ReactNode }) {
   return (
-    <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wide text-ink-faint">{children}</p>
+    <p className="mb-1.5 text-[12px] font-semibold text-ink-dim">{children}</p>
   );
 }

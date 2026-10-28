@@ -105,7 +105,7 @@ export function PainelEnriquecimento({
         <div className="mt-4 space-y-3 border-t border-ai/20 pt-3">
           {dados.resumo ? (
             <div>
-              <p className="mb-1 text-[10.5px] font-semibold uppercase tracking-wide text-ink-faint">
+              <p className="mb-1 text-[11.5px] font-semibold text-ink-faint">
                 Resumo gerado
               </p>
               <p className="text-[13px] leading-relaxed text-ink-dim">{dados.resumo}</p>
@@ -118,7 +118,7 @@ export function PainelEnriquecimento({
 
           {dados.nuance.length > 0 ? (
             <div>
-              <p className="mb-1.5 text-[10.5px] font-semibold uppercase tracking-wide text-ink-faint">
+              <p className="mb-1.5 text-[11.5px] font-semibold text-ink-faint">
                 Nuance
               </p>
               <ul className="space-y-2">
@@ -141,7 +141,7 @@ export function PainelEnriquecimento({
 
           {dados.proxima_acao ? (
             <div>
-              <p className="mb-1.5 text-[10.5px] font-semibold uppercase tracking-wide text-ink-faint">
+              <p className="mb-1.5 text-[11.5px] font-semibold text-ink-faint">
                 Próxima ação sugerida
               </p>
               <p className="text-[12.5px] leading-relaxed text-ink">{dados.proxima_acao.texto}</p>

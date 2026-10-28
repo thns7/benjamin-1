@@ -52,7 +52,7 @@ function Tabela({ titulo, legenda, r }: { titulo: string; legenda: string; r: Re
       </div>
       <div className="overflow-x-auto p-4">
         <table className="w-full text-[12px]">
-          <thead className="text-left text-[10.5px] uppercase tracking-wide text-ink-faint">
+          <thead className="text-left text-[11.5px] text-ink-faint">
             <tr>
               <th className="pb-1.5 pr-3 font-medium">Campo</th>
               <th className="pb-1.5 pr-3 text-right font-medium">Precisão</th>
@@ -61,7 +61,7 @@ function Tabela({ titulo, legenda, r }: { titulo: string; legenda: string; r: Re
               <th className="pb-1.5 text-right font-medium">Suporte</th>
             </tr>
           </thead>
-          <tbody className="font-mono tabular-nums">
+          <tbody className="tabular-nums">
             {Object.entries(r.campos).map(([campo, v]) => (
               <tr key={campo} className="border-t border-line/60">
                 <td className="py-1.5 pr-3 font-sans text-ink-dim">{campo}</td>
@@ -82,14 +82,14 @@ function Tabela({ titulo, legenda, r }: { titulo: string; legenda: string; r: Re
 
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <div>
-            <p className="mb-1 text-[10.5px] font-semibold uppercase tracking-wide text-ink-faint">
+            <p className="mb-1 text-[11.5px] font-semibold text-ink-faint">
               Acurácia
             </p>
             <ul className="space-y-0.5 text-[11.5px]">
               {Object.entries(r.acuracias).map(([nome, a]) => (
                 <li key={nome} className="flex justify-between gap-3">
                   <span className="text-ink-dim">{nome}</span>
-                  <span className="font-mono tabular-nums text-ink">
+                  <span className="tabular-nums text-ink">
                     {n3(a.taxa)}{' '}
                     <span className="text-ink-faint">
                       ({a.acertos}/{a.total})
@@ -100,20 +100,20 @@ function Tabela({ titulo, legenda, r }: { titulo: string; legenda: string; r: Re
             </ul>
           </div>
           <div>
-            <p className="mb-1 text-[10.5px] font-semibold uppercase tracking-wide text-ink-faint">
+            <p className="mb-1 text-[11.5px] font-semibold text-ink-faint">
               Erro e desempenho
             </p>
             <ul className="space-y-0.5 text-[11.5px]">
               {Object.entries(r.mae).map(([nome, v]) => (
                 <li key={nome} className="flex justify-between gap-3">
                   <span className="text-ink-dim">MAE {nome}</span>
-                  <span className="font-mono tabular-nums text-ink">{v}</span>
+                  <span className="tabular-nums text-ink">{v}</span>
                 </li>
               ))}
               <li className="flex justify-between gap-3">
                 <span className="text-ink-dim">cobertura de evidência</span>
                 <span
-                  className={`font-mono tabular-nums ${
+                  className={`tabular-nums ${
                     r.cobertura_evidencia >= 0.999 ? 'text-health' : 'text-warn'
                   }`}
                 >
@@ -122,13 +122,13 @@ function Tabela({ titulo, legenda, r }: { titulo: string; legenda: string; r: Re
               </li>
               <li className="flex justify-between gap-3">
                 <span className="text-ink-dim">latência p50 / p95</span>
-                <span className="font-mono tabular-nums text-ink">
+                <span className="tabular-nums text-ink">
                   {r.latencia.p50} / {r.latencia.p95} ms
                 </span>
               </li>
               <li className="flex justify-between gap-3">
                 <span className="text-ink-dim">throughput</span>
-                <span className="font-mono tabular-nums text-ink">
+                <span className="tabular-nums text-ink">
                   {r.throughput_por_min.toLocaleString('pt-BR')}/min
                 </span>
               </li>
@@ -137,7 +137,7 @@ function Tabela({ titulo, legenda, r }: { titulo: string; legenda: string; r: Re
         </div>
 
         <div className="mt-3 border-t border-line pt-2">
-          <p className="text-[10.5px] font-semibold uppercase tracking-wide text-ink-faint">
+          <p className="text-[11.5px] font-semibold text-ink-faint">
             Falso positivo nas amostras sem sinal comercial
           </p>
           <p className="mt-0.5 font-mono text-[11.5px] text-ink-dim">
@@ -246,7 +246,7 @@ export function MetricasAoVivo() {
             ) : null}
             <div className="mt-2 overflow-x-auto">
               <table className="w-full text-[11.5px]">
-                <thead className="text-left text-[10.5px] uppercase tracking-wide text-ink-faint">
+                <thead className="text-left text-[11.5px] text-ink-faint">
                   <tr>
                     <th className="pb-1 pr-3 font-medium">Campo</th>
                     <th className="pb-1 pr-3 text-right font-medium">F1 dev</th>
@@ -254,7 +254,7 @@ export function MetricasAoVivo() {
                     <th className="pb-1 text-right font-medium">Delta</th>
                   </tr>
                 </thead>
-                <tbody className="font-mono tabular-nums">
+                <tbody className="tabular-nums">
                   {r.overfitting.por_campo.map((c) => (
                     <tr key={c.campo} className="border-t border-line/60">
                       <td className="py-1 pr-3 font-sans text-ink-dim">{c.campo}</td>

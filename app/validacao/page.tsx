@@ -153,7 +153,7 @@ export default async function ValidacaoPage() {
               item, senão a métrica vira propaganda.
             </p>
             <div className="mt-3 border-t border-line pt-2">
-              <p className="mb-1.5 text-[10.5px] font-semibold uppercase tracking-wide text-ink-faint">
+              <p className="mb-1.5 text-[11.5px] font-semibold text-ink-faint">
                 Cobertura de sinais
               </p>
               <ul className="grid grid-cols-2 gap-x-4 gap-y-1 text-[11.5px]">
@@ -211,7 +211,7 @@ export default async function ValidacaoPage() {
 
             <div className="mt-4 grid gap-4 lg:grid-cols-2">
               <div>
-                <p className="mb-1.5 text-[10.5px] font-semibold uppercase tracking-wide text-ink-faint">
+                <p className="mb-1.5 text-[11.5px] font-semibold text-ink-faint">
                   Anonimização LGPD, por tipo
                 </p>
                 {t.redacoesPorTipo.length === 0 ? (
@@ -237,7 +237,7 @@ export default async function ValidacaoPage() {
               </div>
 
               <div>
-                <p className="mb-1.5 text-[10.5px] font-semibold uppercase tracking-wide text-ink-faint">
+                <p className="mb-1.5 text-[11.5px] font-semibold text-ink-faint">
                   Distribuição do Índice de Confiabilidade
                 </p>
                 <div className="mb-2 flex items-baseline gap-2">
@@ -283,7 +283,7 @@ export default async function ValidacaoPage() {
 
             {t.avisosMaisComuns.length > 0 ? (
               <div className="mt-4 border-t border-line pt-3">
-                <p className="mb-1.5 text-[10.5px] font-semibold uppercase tracking-wide text-ink-faint">
+                <p className="mb-1.5 text-[11.5px] font-semibold text-ink-faint">
                   Avisos de qualidade mais frequentes
                 </p>
                 <ul className="space-y-1">
@@ -373,7 +373,7 @@ export default async function ValidacaoPage() {
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-[12px]">
-                  <thead className="text-left text-[10.5px] uppercase tracking-wide text-ink-faint">
+                  <thead className="text-left text-[11.5px] text-ink-faint">
                     <tr>
                       <th className="pb-1.5 pr-3 font-medium">Campo</th>
                       <th className="pb-1.5 pr-3 text-right font-medium">Confirmações</th>
@@ -381,7 +381,7 @@ export default async function ValidacaoPage() {
                       <th className="pb-1.5 text-right font-medium">Taxa de correção</th>
                     </tr>
                   </thead>
-                  <tbody className="font-mono tabular-nums">
+                  <tbody className="tabular-nums">
                     {v.correcoes.porCampo.map((c) => (
                       <tr key={c.campo} className="border-t border-line/60">
                         <td className="py-1.5 pr-3 font-sans text-ink-dim">{c.campo}</td>
@@ -428,7 +428,7 @@ export default async function ValidacaoPage() {
             >
               <div className="overflow-x-auto">
                 <table className="w-full text-[12px]">
-                  <thead className="text-left text-[10.5px] uppercase tracking-wide text-ink-faint">
+                  <thead className="text-left text-[11.5px] text-ink-faint">
                     <tr>
                       <th className="pb-1.5 pr-3 font-medium">Quando</th>
                       <th className="pb-1.5 pr-3 font-medium">Motor</th>
@@ -439,7 +439,7 @@ export default async function ValidacaoPage() {
                       <th className="pb-1.5 text-right font-medium">Throughput</th>
                     </tr>
                   </thead>
-                  <tbody className="font-mono tabular-nums">
+                  <tbody className="tabular-nums">
                     {v.execucoes.map((e) => (
                       <tr key={e.id} className="border-t border-line/60">
                         <td className="py-1.5 pr-3 text-ink-dim">

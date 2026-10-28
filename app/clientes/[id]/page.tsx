@@ -105,9 +105,9 @@ export default async function ClientePage({ params }: { params: Promise<{ id: st
 
       <PageHeader
         titulo={c.name}
-        descricao={[c.segment, c.size, `${analisadas.length} reunião(ões) analisada(s)`]
-          .filter(Boolean)
-          .join(' · ')}
+        descricao={`${[c.segment, c.size].filter(Boolean).join(', ')}${c.segment || c.size ? '. ' : ''}${
+          analisadas.length === 1 ? '1 reunião analisada' : `${analisadas.length} reuniões analisadas`
+        }.`}
         acoes={
           <BotaoLink href={`/clientes/${c.id}/preparar`} variante="primario">
             Preparar próxima reunião

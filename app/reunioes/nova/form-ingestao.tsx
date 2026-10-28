@@ -38,7 +38,7 @@ const hoje = () => new Date().toISOString().slice(0, 10);
 
 const CAMPO =
   'w-full rounded-md border border-line bg-surface-2 px-3 py-2 text-[13px] text-ink placeholder:text-ink-faint transition-colors focus:border-accent focus:outline-none';
-const ROTULO = 'mb-1 block text-[11px] font-medium uppercase tracking-wide text-ink-faint';
+const ROTULO = 'mb-1 block text-[11px] font-medium text-ink-faint';
 
 export function FormIngestao() {
   const router = useRouter();
@@ -305,7 +305,7 @@ function BotaoAba({
       {icone}
       {children}
       {beta ? (
-        <span className="rounded bg-warn-soft px-1 py-px text-[9px] font-semibold uppercase text-warn">beta</span>
+        <span className="rounded bg-warn-soft px-1 py-px text-[11.5px] font-semibold text-warn">beta</span>
       ) : null}
     </button>
   );
