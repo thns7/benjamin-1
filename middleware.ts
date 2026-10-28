@@ -20,6 +20,7 @@ import { SUPABASE_CHAVE_PUBLICA, SUPABASE_URL } from '@/lib/auth/supabase-public
 
 const LIVRE = [
   '/login',
+  '/apresentacao',
   '/_next',
   '/favicon',
   '/icon',
@@ -85,7 +86,18 @@ export async function middleware(req: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user?.email) return barrar(req);
+  if (!user?.email) {
+    // Visitante sem login em "/" vê a landing, não a tela de entrada. A URL
+    // continua "/"; o cabeçalho de caminho diz ao layout para não pôr o Shell.
+    if (pathname === '/') {
+      const destino = req.nextUrl.clone();
+      destino.pathname = '/apresentacao';
+      const h = new Headers(req.headers);
+      h.set(CABECALHO_CAMINHO, '/apresentacao');
+      return NextResponse.rewrite(destino, { request: { headers: h } });
+    }
+    return barrar(req);
+  }
 
   const { data: convite } = await supabase.from('app_users').select('id').limit(1).maybeSingle();
   if (!convite) return barrar(req, 'convite');

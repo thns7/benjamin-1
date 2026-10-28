@@ -47,9 +47,10 @@ export function Entrada({ destino, motivo }: { destino: string; motivo?: string 
   }
 
   const campo =
-    'mt-2 flex items-center gap-2 rounded-lg border border-line bg-surface-2 px-3 focus-within:border-line-strong';
+    'mt-2 flex items-center gap-2 rounded-lg border border-line bg-surface-2 px-3 focus-within:border-ink focus-within:ring-2 focus-within:ring-ink/10';
   const input =
-    'w-full bg-transparent py-2.5 text-[13px] text-ink outline-none placeholder:text-ink-faint disabled:cursor-not-allowed';
+    // O foco aparece no contorno do campo inteiro (focus-within), não no input.
+    'w-full bg-transparent py-2.5 text-[13px] text-ink outline-none focus-visible:outline-none placeholder:text-ink-faint disabled:cursor-not-allowed';
   const rotulo = 'block text-[11px] font-semibold text-ink-dim';
 
   return (
@@ -117,6 +118,13 @@ export function Entrada({ destino, motivo }: { destino: string; motivo?: string 
           </p>
         ) : null}
       </form>
+
+      <p className="mt-6 text-center text-[12.5px] text-ink-dim">
+        Ainda não usa o Benjamin?{' '}
+        <a href="/apresentacao" className="font-medium text-ink underline decoration-line-strong underline-offset-4 hover:decoration-ink">
+          Conheça o produto
+        </a>
+      </p>
     </div>
   );
 }
