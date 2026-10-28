@@ -2,135 +2,124 @@
 
 /*
   Benjamin — sistema de cor.
-  Toda cor tem significado. Nada aqui é decorativo.
+  Toda cor tem significado. Nada aqui é decorativo. A referência completa da
+  identidade (marca, paleta, tipografia, tom) está em `IDENTIDADE.md`.
 
-    ink     preto/branco → navegação, foco, ação primária, marca, saída do motor
-    health  verde        → saúde da conta e pipeline, dessaturado
-    risk    vermelho     → churn e receita em risco, dessaturado
-    warn    grafite      → atenção e baixa confiabilidade — peso, não cor
+    ink     carbono #161616 → texto, navegação, foco, ação primária, marca
+    health  verde         → saúde da conta, dessaturado
+    risk    vermelho      → churn e receita em risco, dessaturado
+    warn    grafite       → atenção e baixa confiabilidade — peso, não cor
 
-  A INTERFACE NÃO TEM COR. Botão, item ativo, foco, marca e número em destaque
-  são preto no claro e branco no escuro. A única cor do produto vive ATRÁS do
-  vidro: uma atmosfera fria e difusa que o `backdrop-filter` captura e devolve
-  borrada na borda dos painéis.
+  A INTERFACE É PAPEL E CARBONO. Quatro tons neutros — #FAFAFA (papel),
+  #E5E5E5 (linha), #A3A3A3 (cinza médio) e #161616 (carbono) — fazem toda a
+  estrutura. Nenhum cinza puxa para o azul: o preto da marca é carbono. O interesse visual vem de espaço, peso e alinhamento, não de cor.
 
-  Isso inverte de onde vem o interesse visual. Num tema com acento cromático, o
-  vidro é moldura e a cor é o assunto. Aqui o vidro É o assunto: ele só se
-  distingue do fundo porque há luz colorida para ele filtrar. Tirar a atmosfera
-  não deixa o tema mais sóbrio — deixa o vidro invisível.
+  Verde e vermelho sobrevivem porque carregam decisão, não estilo: o produto é
+  um radar de churn, e "esta conta está em risco" precisa saltar da tela. Por
+  isso são as únicas cores, e por isso nada mais pode competir com elas.
+  `warn` é grafite: "dado de baixa confiabilidade" é ressalva, e gastar alarme
+  nela é gastar o alarme que o churn precisa.
 
-  Verde e vermelho sobrevivem porque carregam decisão, não estilo: health score,
-  pipeline, churn, receita em risco. `warn` não é cor, é grafite — "dado de
-  baixa confiabilidade" é ressalva, e gastar alarme nela é gastar o alarme que
-  o churn precisa.
+  Texto nunca usa #A3A3A3 sobre o papel: o contraste é de 2,4:1 e não passa no
+  WCAG AA. O cinza de texto mais claro é `ink-faint` (#6F6F6F, 4,8:1). O
+  #A3A3A3 fica para traço, ícone decorativo e borda forte.
 
-  O tema claro é o padrão: o vidro precisa de luz atrás dele. O escuro é opt-in
-  e troca só os valores abaixo — nenhum componente conhece o tema, todos leem as
-  variáveis.
+  Antes a identidade era vidro sobre uma atmosfera azul e lilás. Saiu: a nova é
+  plana, como papel, e o painel se separa do fundo por linha fina e sombra
+  curta. As classes `.vidro*` continuam com o mesmo nome porque dezenas de
+  telas as usam — mudou o material, não o contrato.
 
   `accent` e `accent-vivid` continuam existindo como dois tokens porque cerca de
-  mil usos no código apontam para eles. Agora ambos são tinta neutra: `accent` é
-  a cor de texto e preenchimento, `accent-vivid` é a de aresta e foco. Manter os
-  nomes é o que permite trocar a paleta inteira sem editar tela por tela.
+  mil usos no código apontam para eles. Ambos são tinta: `accent` é a cor de
+  texto e preenchimento, `accent-vivid` é a de aresta e foco.
+
+  O tema claro é o padrão. O escuro é opt-in e troca só os valores abaixo —
+  nenhum componente conhece o tema, todos leem as variáveis.
 */
 
 :root,
 [data-theme='light'] {
-  --canvas: #f3f4f8;
-  --canvas-deep: #e9ebf1;
-  --surface: rgb(255 255 255 / 0.76);
+  --canvas: #fafafa;
+  --canvas-deep: #f4f4f4;
+  --surface: #ffffff;
   --surface-solid: #ffffff;
-  --surface-2: rgb(244 245 248 / 0.82);
-  --surface-3: #e9ebf0;
-  --line: rgb(12 14 22 / 0.09);
-  --line-strong: rgb(12 14 22 / 0.18);
+  --surface-2: #f4f4f4;
+  --surface-3: #e5e5e5;
+  --line: #e5e5e5;
+  --line-strong: #d4d4d4;
 
-  --ink: #0a0a0b;
-  --ink-dim: #4e525c;
-  --ink-faint: #686d7a;
+  --ink: #161616;
+  --ink-dim: #525252;
+  --ink-faint: #6f6f6f;
 
-  --accent: #0a0a0b;
-  --accent-vivid: #0a0a0b;
-  --accent-soft: rgb(12 14 22 / 0.06);
-  --ai: #0a0a0b;
-  --ai-soft: rgb(12 14 22 / 0.06);
+  --accent: #161616;
+  --accent-vivid: #161616;
+  --accent-soft: rgb(22 22 22 / 0.06);
+  --ai: #161616;
+  --ai-soft: rgb(22 22 22 / 0.06);
   --health: #2e7d5b;
-  --health-soft: #e3f3eb;
-  --warn: #52565f;
-  --warn-soft: #edeef2;
+  --health-soft: #e6f2ec;
+  --warn: #525252;
+  --warn-soft: #f4f4f4;
   --risk: #be3f32;
-  --risk-soft: #fce9e6;
-  --gold: #0a0a0b;
+  --risk-soft: #fbeae7;
+  --gold: #161616;
 
-  --glass-highlight: rgb(255 255 255 / 0.9);
-  --glass-blur: blur(22px) saturate(180%);
+  /* Barras fixas (lateral e mobile) passam por cima do conteúdo ao rolar. */
+  --barra: rgb(250 250 250 / 0.86);
+  --barra-blur: blur(14px) saturate(140%);
 
-  /*
-    Três camadas: contato, elevação e — a última — uma difusa fria, que faz o
-    painel parecer apoiado sobre a atmosfera em vez de recortado sobre ela.
-  */
+  /* Sombra curta e neutra: o painel apoiado no papel, não flutuando. */
   --shadow:
-    0 1px 2px rgb(12 14 22 / 0.05),
-    0 12px 32px -14px rgb(12 14 22 / 0.15),
-    0 28px 64px -32px rgb(64 84 170 / 0.24);
+    0 1px 2px rgb(22 22 22 / 0.04),
+    0 8px 24px -14px rgb(22 22 22 / 0.12);
   --shadow-lift:
-    0 2px 4px rgb(12 14 22 / 0.06),
-    0 18px 44px -16px rgb(12 14 22 / 0.19),
-    0 36px 84px -36px rgb(64 84 170 / 0.34);
-  --glow: 0 6px 22px -6px rgb(12 14 22 / 0.34);
+    0 2px 4px rgb(22 22 22 / 0.05),
+    0 16px 36px -16px rgb(22 22 22 / 0.18);
+  --glow: 0 6px 20px -6px rgb(22 22 22 / 0.32);
 
-  /* A única cor do produto. Fria, diluída, e só no fundo. */
-  --atmosfera-1: rgb(99 132 255 / 0.24);
-  --atmosfera-2: rgb(164 128 255 / 0.19);
-  --atmosfera-3: rgb(70 200 220 / 0.15);
-  --grao: 0.028;
+  --grao: 0.02;
 }
 
 [data-theme='dark'] {
-  --canvas: #08090c;
-  --canvas-deep: #050609;
-  --surface: rgb(255 255 255 / 0.05);
-  --surface-solid: #121318;
-  --surface-2: rgb(255 255 255 / 0.075);
-  --surface-3: rgb(255 255 255 / 0.115);
-  --line: rgb(255 255 255 / 0.1);
-  --line-strong: rgb(255 255 255 / 0.2);
+  --canvas: #0f0f0f;
+  --canvas-deep: #0a0a0a;
+  --surface: #161616;
+  --surface-solid: #161616;
+  --surface-2: #1c1c1c;
+  --surface-3: #262626;
+  --line: rgb(255 255 255 / 0.08);
+  --line-strong: rgb(255 255 255 / 0.16);
 
-  --ink: #f2f3f5;
-  --ink-dim: #a3a7b2;
-  --ink-faint: #767b87;
+  --ink: #fafafa;
+  --ink-dim: #d4d4d4;
+  --ink-faint: #a3a3a3;
 
-  --accent: #f2f3f5;
+  --accent: #fafafa;
   --accent-vivid: #ffffff;
-  --accent-soft: rgb(255 255 255 / 0.1);
-  --ai: #f2f3f5;
-  --ai-soft: rgb(255 255 255 / 0.1);
+  --accent-soft: rgb(255 255 255 / 0.08);
+  --ai: #fafafa;
+  --ai-soft: rgb(255 255 255 / 0.08);
   --health: #5fbf8b;
   --health-soft: rgb(95 191 139 / 0.14);
-  --warn: #a0a4ae;
-  --warn-soft: rgb(255 255 255 / 0.08);
+  --warn: #a3a3a3;
+  --warn-soft: rgb(255 255 255 / 0.06);
   --risk: #f0736a;
   --risk-soft: rgb(240 115 106 / 0.14);
-  --gold: #f2f3f5;
+  --gold: #fafafa;
 
-  --glass-highlight: rgb(255 255 255 / 0.08);
-  --glass-blur: blur(24px) saturate(150%);
+  --barra: rgb(15 15 15 / 0.86);
+  --barra-blur: blur(14px) saturate(120%);
 
   --shadow:
-    0 1px 2px rgb(0 0 0 / 0.5),
-    0 14px 36px -16px rgb(0 0 0 / 0.7),
-    0 30px 72px -34px rgb(64 84 170 / 0.3);
+    0 1px 2px rgb(0 0 0 / 0.4),
+    0 10px 28px -14px rgb(0 0 0 / 0.6);
   --shadow-lift:
-    0 2px 6px rgb(0 0 0 / 0.55),
-    0 20px 48px -18px rgb(0 0 0 / 0.75),
-    0 38px 92px -38px rgb(64 84 170 / 0.42);
-  --glow: 0 6px 26px -6px rgb(255 255 255 / 0.26);
+    0 2px 6px rgb(0 0 0 / 0.45),
+    0 18px 40px -16px rgb(0 0 0 / 0.7);
+  --glow: 0 6px 22px -6px rgb(255 255 255 / 0.22);
 
-  /* No escuro a atmosfera precisa de mais corpo: o preto engole gradiente fraco. */
-  --atmosfera-1: rgb(99 132 255 / 0.2);
-  --atmosfera-2: rgb(164 128 255 / 0.16);
-  --atmosfera-3: rgb(70 200 220 / 0.12);
-  --grao: 0.045;
+  --grao: 0.035;
 }
 
 @theme inline {
@@ -160,7 +149,7 @@
   --color-risk-soft: var(--risk-soft);
   --color-gold: var(--gold);
 
-  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 
   --shadow-panel: var(--shadow);
@@ -176,25 +165,16 @@ html {
   color-scheme: dark;
 }
 
-/*
-  Atmosfera. O vidro só existe se houver algo atrás dele: sobre um fundo chapado
-  o blur não tem o que borrar e o painel vira um retângulo branco com sombra.
-  Três halos frios fixos dão ao blur matéria-prima para trabalhar.
-*/
 body {
   background-color: var(--canvas);
-  background-image:
-    radial-gradient(58rem 40rem at 86% -10%, var(--atmosfera-1), transparent 62%),
-    radial-gradient(52rem 38rem at 4% 106%, var(--atmosfera-2), transparent 64%),
-    radial-gradient(40rem 34rem at 50% 42%, var(--atmosfera-3), transparent 68%);
-  background-attachment: fixed;
   color: var(--ink);
-  font-feature-settings: 'ss01', 'cv11';
+  /* cv11: "a" de um andar e ss03: vírgula e aspas mais redondas no Inter. */
+  font-feature-settings: 'cv11', 'ss03';
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
-/* Grão: tira o aspecto de plástico do gradiente e dá textura ao papel. */
+/* Grão quase invisível: o papel da identidade, não plástico chapado. */
 body::after {
   content: '';
   position: fixed;
@@ -206,22 +186,20 @@ body::after {
 }
 
 /*
-  Vidro. Um só lugar define o material — borda hairline, blur, sombra longa e o
-  brilho interno na aresta superior, que é o detalhe que separa vidro de
-  "div branca com opacidade".
+  Painel. Um só lugar define o material: papel branco, linha fina e sombra
+  curta. O nome `.vidro` é herança da identidade anterior — ver o topo.
 */
 .vidro {
   background: var(--surface);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--line);
-  box-shadow: var(--shadow), inset 0 1px 0 var(--glass-highlight);
+  box-shadow: var(--shadow);
 }
 
+/* Barras fixas: precisam de leve transparência para o conteúdo passar por baixo. */
 .vidro-sutil {
-  background: var(--surface);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
+  background: var(--barra);
+  backdrop-filter: var(--barra-blur);
+  -webkit-backdrop-filter: var(--barra-blur);
 }
 
 /* Elevação no hover — só onde o card é clicável. */
@@ -235,7 +213,7 @@ body::after {
 .vidro-hover:hover {
   transform: translateY(-2px);
   border-color: var(--line-strong);
-  box-shadow: var(--shadow-lift), inset 0 1px 0 var(--glass-highlight);
+  box-shadow: var(--shadow-lift);
 }
 
 /* Entrada: uma orquestração no carregamento vale mais que dez microinterações. */
@@ -327,7 +305,6 @@ body::after {
     --shadow: none;
     --shadow-lift: none;
     --glow: none;
-    --glass-highlight: transparent;
   }
 
   body {

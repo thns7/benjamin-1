@@ -9,7 +9,7 @@ import type { CustomerRow, MeetingRow } from '@/lib/supabase/database.types';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata = { title: 'Clientes' };
+export const metadata = { title: 'Contas' };
 
 const BRL = new Intl.NumberFormat('pt-BR', {
   style: 'currency',
@@ -35,7 +35,7 @@ export default async function ClientesPage() {
     return (
       <>
         <PageHeader
-          titulo="Clientes"
+          titulo="Contas"
           descricao="A memória de cada conta: health score, estágio, objeções em aberto e valor de contrato."
         />
         <SemBanco oQueApareceAqui="Aqui fica a lista de contas com health score colorido, estágio no funil, número de reuniões, último contato, objeções abertas e valor de contrato." />
@@ -88,7 +88,7 @@ export default async function ClientesPage() {
   return (
     <>
       <PageHeader
-        titulo="Clientes"
+        titulo="Contas"
         descricao="A memória de cada conta: health score, estágio, objeções em aberto e valor de contrato."
         acoes={
           <BotaoLink href="/reunioes/nova" variante="primario">

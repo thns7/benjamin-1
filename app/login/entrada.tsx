@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { createBrowserClient } from '@supabase/ssr';
 import { Loader2, Lock, Mail, TriangleAlert } from 'lucide-react';
-import { Logo } from '@/components/logo';
+import { Logo, TAGLINE, Wordmark } from '@/components/logo';
 import { SUPABASE_CHAVE_PUBLICA, SUPABASE_URL } from '@/lib/auth/supabase-publico';
 
 export function Entrada({ destino, motivo }: { destino: string; motivo?: string }) {
@@ -54,9 +54,11 @@ export function Entrada({ destino, motivo }: { destino: string; motivo?: string 
 
   return (
     <div className="w-full max-w-[380px]">
-      <div className="mb-6 flex flex-col items-center gap-3 text-center">
-        <Logo />
-        <p className="text-[12.5px] leading-relaxed text-ink-dim">
+      <div className="mb-8 flex flex-col items-center text-center">
+        <Logo size={44} />
+        <Wordmark className="mt-5 !text-[15px] !tracking-[0.5em] pl-[0.5em]" />
+        <p className="mt-3 text-[10.5px] uppercase tracking-[0.28em] text-ink-faint">{TAGLINE}</p>
+        <p className="mt-6 text-[12.5px] leading-relaxed text-ink-dim">
           Esta base guarda transcrição de conversa com cliente. O acesso é só por convite.
         </p>
       </div>
@@ -77,7 +79,7 @@ export function Entrada({ destino, motivo }: { destino: string; motivo?: string 
             onChange={(e) => setEmail(e.target.value)}
             disabled={enviando}
             className={input}
-            placeholder="voce@totvs.com.br"
+            placeholder="voce@empresa.com.br"
           />
         </div>
 
