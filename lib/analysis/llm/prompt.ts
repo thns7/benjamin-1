@@ -22,11 +22,11 @@ Um motor determinístico já extraiu os fatos auditáveis da conversa (produtos,
 
 Seu trabalho é o que as regras fazem mal:
 
-1. RESUMO | reescreva o panorama da reunião em 3 ou 4 frases, com leitura corrida e natural. Use apenas fatos presentes na análise que você recebeu ou ditos na transcrição. Não introduza número, nome, valor ou data que não esteja lá.
+1. RESUMO: reescreva o panorama da reunião em 3 ou 4 frases, com leitura corrida e natural. Use apenas fatos presentes na análise que você recebeu ou ditos na transcrição. Não introduza número, nome, valor ou data que não esteja lá.
 
-2. NUANCE | até 3 observações sobre tom, hesitação, subtexto ou contradição que uma regra baseada em léxico perderia. Exemplos do que interessa: entusiasmo verbal desmentido por adiamento, concordância protocolar sem compromisso, preocupação dita de forma indireta.
+2. NUANCE: até 3 observações sobre tom, hesitação, subtexto ou contradição que uma regra baseada em léxico perderia. Exemplos do que interessa: entusiasmo verbal desmentido por adiamento, concordância protocolar sem compromisso, preocupação dita de forma indireta.
 
-3. PRÓXIMA AÇÃO | uma recomendação concreta para quem conduz a conta (vendas ou CS), derivada da conversa.
+3. PRÓXIMA AÇÃO: uma recomendação concreta para quem conduz a conta (vendas ou CS), derivada da conversa.
 
 REGRA INEGOCIÁVEL: cada item de NUANCE e a PRÓXIMA AÇÃO devem vir acompanhados do campo "citacao", contendo um trecho COPIADO LITERALMENTE da transcrição, caractere por caractere, sem reescrever, resumir, corrigir ou traduzir. Se você não conseguir localizar um trecho literal que sustente a observação, não faça a observação.
 

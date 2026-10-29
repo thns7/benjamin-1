@@ -87,7 +87,7 @@ export async function GET(
   }
   if (!dados.analise) {
     return NextResponse.json(
-      { erro: 'Esta reunião ainda não tem análise | não há o que exportar.' },
+      { erro: 'Esta reunião ainda não tem análise, então não há o que exportar.' },
       { status: 409 },
     );
   }

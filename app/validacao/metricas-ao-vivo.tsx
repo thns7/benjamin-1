@@ -240,7 +240,7 @@ export function MetricasAoVivo() {
             {r.overfitting.suspeitos.length > 0 ? (
               <p className="mt-1 text-[11.5px] leading-relaxed text-warn">
                 Campos com delta acima de 0,15: {r.overfitting.suspeitos.join(', ')}. O ganho veio de
-                amostras lidas durante o ajuste e o holdout não acompanhou | o gap fica reportado em vez
+                amostras lidas durante o ajuste e o holdout não acompanhou: o gap fica reportado em vez
                 de ser escondido.
               </p>
             ) : null}

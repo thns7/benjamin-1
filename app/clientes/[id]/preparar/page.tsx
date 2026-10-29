@@ -84,7 +84,7 @@ export default async function PrepararPage({ params }: { params: Promise<{ id: s
 
       <PageHeader
         titulo="Briefing pré-reunião"
-        descricao={`${v.cliente.name} | leitura de 5 minutos antes da call, montada a partir do histórico analisado.`}
+        descricao={`${v.cliente.name}: leitura de 5 minutos antes da call, montada a partir do histórico analisado.`}
         acoes={<AcoesPreparacao texto={texto} />}
       />
 
@@ -112,7 +112,7 @@ export default async function PrepararPage({ params }: { params: Promise<{ id: s
           <section className="vidro rounded-xl p-4">
             <h2 className="mb-1 text-[13px] font-semibold text-ink">Onde a conta está</h2>
             <p className="mb-3 text-[11px] text-ink-faint">
-              Cada linha vem de reuniões analisadas | nada aqui foi digitado à mão.
+              Cada linha vem de reuniões analisadas. Nada aqui foi digitado à mão.
             </p>
 
             {p.ultimaConversa ? (
@@ -121,7 +121,7 @@ export default async function PrepararPage({ params }: { params: Promise<{ id: s
                 <span className={p.ultimaConversa.dias > 30 ? 'text-warn' : 'text-ink-dim'}>
                   (há {p.ultimaConversa.dias} dia{p.ultimaConversa.dias === 1 ? '' : 's'})
                 </span>
-                <span className="text-ink-dim"> | {p.ultimaConversa.titulo}</span>
+                <span className="text-ink-dim">, {p.ultimaConversa.titulo}</span>
               </Linha>
             ) : null}
 
@@ -183,7 +183,7 @@ export default async function PrepararPage({ params }: { params: Promise<{ id: s
             {p.ameacas.map((a) => (
               <Linha key={a.nome} rotulo="Ameaça ativa" icone={<Swords size={11} />}>
                 <span className="font-medium text-risk">{a.nome}</span>{' '}
-                <span className="text-ink-dim">| mencionada {a.mencoes}×</span>
+                <span className="text-ink-dim">(mencionada {a.mencoes}×)</span>
               </Linha>
             ))}
           </section>
@@ -222,7 +222,7 @@ export default async function PrepararPage({ params }: { params: Promise<{ id: s
                       ) : null}
                     </>
                   ) : (
-                    <p className="mt-1 text-[12px] text-ink-faint">|</p>
+                    <p className="mt-1 text-[12px] text-ink-faint">n/d</p>
                   )}
                 </div>
 
@@ -243,7 +243,7 @@ export default async function PrepararPage({ params }: { params: Promise<{ id: s
                       </div>
                     </>
                   ) : (
-                    <p className="mt-1 text-[12px] text-ink-faint">|</p>
+                    <p className="mt-1 text-[12px] text-ink-faint">n/d</p>
                   )}
                 </div>
               </div>
@@ -278,7 +278,7 @@ export default async function PrepararPage({ params }: { params: Promise<{ id: s
               Recomendações para esta conversa
             </h2>
             <p className="mb-3 text-[11px] text-ink-faint">
-              Priorizadas pelo que trava o negócio. Cada uma mostra o dado do histórico que a originou | a
+              Priorizadas pelo que trava o negócio. Cada uma mostra o dado do histórico que a originou. A
               decisão continua sendo sua.
             </p>
 

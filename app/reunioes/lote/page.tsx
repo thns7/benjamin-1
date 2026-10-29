@@ -8,7 +8,7 @@ export default function ImportarEmLotePage() {
     <>
       <PageHeader
         titulo="Importar em lote"
-        descricao="Solte uma pasta, um zip ou dezenas de arquivos de uma vez | transcrições em texto, legendas, planilhas ou o próprio áudio das reuniões. Tudo é revisado antes de processar, e reuniões de clientes diferentes são analisadas em paralelo."
+        descricao="Solte uma pasta, um zip ou dezenas de arquivos de uma vez: transcrições em texto, legendas, planilhas ou o próprio áudio das reuniões. Tudo é revisado antes de processar, e reuniões de clientes diferentes são analisadas em paralelo."
       />
       <Importador />
     </>

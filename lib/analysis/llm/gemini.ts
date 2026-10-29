@@ -91,7 +91,7 @@ async function tentar(
   if (resp.status === 429) {
     return {
       motivo: 'limite_excedido',
-      detalhe: 'Limite de requisições da camada gratuita atingido. Aguarde um minuto e tente de novo | o briefing determinístico não depende disto.',
+      detalhe: 'Limite de requisições da camada gratuita atingido. Aguarde um minuto e tente de novo. O briefing determinístico não depende disto.',
     };
   }
 

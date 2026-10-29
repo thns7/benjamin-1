@@ -88,7 +88,7 @@ export default async function ValidacaoPage() {
     <>
       <PageHeader
         titulo="Validação"
-        descricao="Como os dados foram coletados, tratados e analisados | e o que o motor acerta e erra, medido na hora."
+        descricao="Como os dados foram coletados, tratados e analisados, e o que o motor acerta e erra, medido na hora."
       />
 
       {/* a) COLETA */}
@@ -129,7 +129,7 @@ export default async function ValidacaoPage() {
             )}
             <ul className="mt-3 space-y-1 border-t border-line pt-2 text-[11.5px] leading-relaxed text-ink-dim">
               <li>Google Meet com legenda ativada, 8 a 12 minutos por reunião.</li>
-              <li>Transcrição por legenda nativa, Whisper local ou API | a ferramenta é registrada.</li>
+              <li>Transcrição por legenda nativa, Whisper local ou API. A ferramenta é registrada.</li>
               <li>Transcrição não é limpa: erro de ASR e trecho inaudível são dado, não defeito.</li>
               <li>Gabarito anotado por dois integrantes independentes, com um terceiro desempatando.</li>
               <li>Índice de concordância entre anotadores registrado por amostra.</li>
@@ -232,7 +232,7 @@ export default async function ValidacaoPage() {
                 <p className="mt-2 rounded-md border border-line bg-surface-2 px-3 py-2 text-[11px] leading-relaxed text-ink-faint">
                   A máscara tem exatamente o mesmo comprimento do trecho mascarado. Sem isso, todo offset
                   depois do primeiro CPF andaria e a evidência apontaria para o lugar errado da
-                  transcrição. O valor original nunca é gravado | só o tipo e a posição.
+                  transcrição. O valor original nunca é gravado, só o tipo e a posição.
                 </p>
               </div>
 
@@ -275,7 +275,7 @@ export default async function ValidacaoPage() {
                 </ul>
                 <p className="mt-2 text-[11px] leading-relaxed text-ink-faint">
                   {t.comDiarizacao} transcrição(ões) com marcação de falante e {t.semDiarizacao} sem. Onde
-                  não há marcação, as métricas de conversa ficam nulas | o sistema não inventa turno para
+                  não há marcação, as métricas de conversa ficam nulas: o sistema não inventa turno para
                   preencher gráfico.
                 </p>
               </div>
@@ -313,7 +313,7 @@ export default async function ValidacaoPage() {
           <div className="grid gap-x-8 gap-y-7 lg:grid-cols-3 lg:[&>*+*]:border-l lg:[&>*+*]:border-line lg:[&>*+*]:pl-8">
           <Card plano titulo="Motor determinístico" legenda="Regras em PT-BR, sem chamada de API">
             <ul className="space-y-1.5 text-[11.5px] leading-relaxed text-ink-dim">
-              <li>Mesma entrada produz sempre a mesma saída | a demonstração não depende de sorte.</li>
+              <li>Mesma entrada produz sempre a mesma saída: a demonstração não depende de sorte.</li>
               <li>Custo de API por análise: R$ 0,00.</li>
               <li>Cada campo é auditável até a regra que o produziu.</li>
               <li>
@@ -339,7 +339,7 @@ export default async function ValidacaoPage() {
           <Card plano titulo="Contrato de saída" legenda="TypeScript puro, sem I/O">
             <p className="text-[11.5px] leading-relaxed text-ink-dim">
               O motor recebe <span className="font-mono">(texto, memória do cliente)</span> e devolve um
-              objeto tipado. Não conhece Next, não conhece Supabase, não faz rede | é isso que permite
+              objeto tipado. Não conhece Next, não conhece Supabase, não faz rede. É isso que permite
               rodá-lo sobre o corpus inteiro nesta tela e medir latência de verdade.
             </p>
             <p className="mt-2 text-[11px] leading-relaxed text-ink-faint">
@@ -361,12 +361,12 @@ export default async function ValidacaoPage() {
               <p className="text-[11.5px] leading-relaxed text-ink-dim">
                 As intervenções humanas ficam gravadas no Postgres, e sem banco configurado não há o que
                 ler. Com as variáveis no ambiente, esta tabela mostra por campo quantas vezes o humano
-                confirmou e quantas corrigiu o que o motor propôs | a medida da própria falibilidade.
+                confirmou e quantas corrigiu o que o motor propôs: a medida da própria falibilidade.
               </p>
             ) : v.correcoes.total === 0 ? (
               <p className="text-[11.5px] leading-relaxed text-ink-dim">
                 Nenhuma correção registrada ainda. Quando o vendedor confirma ou corrige um campo do
-                briefing, a intervenção entra aqui e a taxa de correção por campo passa a ser exibida |
+                briefing, a intervenção entra aqui e a taxa de correção por campo passa a ser exibida:
                 a IA propõe com a evidência, o humano decide, e o erro do sistema vira número visível em
                 vez de suposição.
               </p>
@@ -400,7 +400,7 @@ export default async function ValidacaoPage() {
                 </table>
                 <p className="mt-2 text-[11px] text-ink-faint">
                   {v.correcoes.total} intervenção(ões) humana(s) registrada(s). Taxa alta num campo indica
-                  onde o motor precisa melhorar | é o mapa de trabalho, não um defeito escondido.
+                  onde o motor precisa melhorar. É o mapa de trabalho, não um defeito escondido.
                 </p>
               </div>
             )}
@@ -451,7 +451,7 @@ export default async function ValidacaoPage() {
                         <td className="py-1.5 pr-3 text-right text-ink-dim">{e.avg_latency_ms} ms</td>
                         <td className="py-1.5 pr-3 text-right text-ink-dim">{e.p95_latency_ms} ms</td>
                         <td className="py-1.5 text-right text-ink">
-                          {e.throughput_per_min?.toLocaleString('pt-BR') ?? '|'}/min
+                          {e.throughput_per_min?.toLocaleString('pt-BR') ?? 'n/d'}/min
                         </td>
                       </tr>
                     ))}
@@ -466,7 +466,7 @@ export default async function ValidacaoPage() {
       <p className="mt-6 flex items-start gap-2 rounded-lg border border-line bg-surface-2 px-4 py-3 text-[11.5px] leading-relaxed text-ink-dim">
         <ShieldCheck size={14} className="mt-0.5 shrink-0 text-ink-faint" />
         Todos os números desta tela vêm de execução real sobre o corpus e de leitura do Postgres. Nenhum
-        valor foi digitado à mão, e as duas bases | real e sintética | são reportadas separadamente,
+        valor foi digitado à mão, e as duas bases (real e sintética) são reportadas separadamente,
         cada uma declarada pelo que é.
       </p>
     </>

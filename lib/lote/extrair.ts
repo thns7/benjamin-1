@@ -163,7 +163,7 @@ export function deRtf(rtf: string): string {
 /** ODT (LibreOffice): zip com content.xml, parágrafos em text:p e text:h. */
 export function deOdt(bytes: Uint8Array): string {
   const xml = unzipSync(bytes, { filter: (f) => f.name === 'content.xml' })['content.xml'];
-  if (!xml) throw new Error('ODT sem content.xml | o arquivo pode estar corrompido.');
+  if (!xml) throw new Error('ODT sem content.xml. O arquivo pode estar corrompido.');
   return strFromU8(xml)
     .split(/<\/text:(?:p|h)>/)
     .map((p) => desescaparXml(p.replace(/<text:tab\/>/g, '\t').replace(/<text:line-break\/>/g, '\n').replace(/<[^>]+>/g, '')).trim())
@@ -189,7 +189,7 @@ function itemTexto(
     return { tipo: 'ignorado', caminho: exibido, motivo: `Texto curto demais (${texto.length} caracteres; mínimo ${MIN_CARACTERES}).` };
   }
   if (texto.length > MAX_CARACTERES) {
-    return { tipo: 'ignorado', caminho: exibido, motivo: `Texto grande demais (${(texto.length / 1e6).toFixed(1)} milhões de caracteres) | não parece uma reunião.` };
+    return { tipo: 'ignorado', caminho: exibido, motivo: `Texto grande demais (${(texto.length / 1e6).toFixed(1)} milhões de caracteres): não parece uma reunião.` };
   }
   const base = metadadosDoCaminho(caminho, pastas);
   const meta: Metadados = {
@@ -383,7 +383,7 @@ export async function extrair(
     if (item.tipo !== 'texto') return item;
     const h = hashConteudo(item.texto);
     const primeiro = vistos.get(h);
-    if (primeiro) return { tipo: 'ignorado', caminho: item.caminho, motivo: `Conteúdo idêntico a ${nomeBase(primeiro)} | importado uma vez só.` };
+    if (primeiro) return { tipo: 'ignorado', caminho: item.caminho, motivo: `Conteúdo idêntico a ${nomeBase(primeiro)}, importado uma vez só.` };
     vistos.set(h, item.caminho);
     return item;
   });

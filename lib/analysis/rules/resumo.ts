@@ -96,7 +96,7 @@ export function montarResumo(d: DadosResumo): string {
   const ativo = d.concorrentes.find((c) => c.active);
   if (ativo) {
     frases.push(
-      `${ativo.name} está na mesa com ameaça ${AMEACA_ESCRITA[ativo.threat]} | precisa ser endereçado antes do próximo passo.`,
+      `${ativo.name} está na mesa com ameaça ${AMEACA_ESCRITA[ativo.threat]} e precisa ser endereçado antes do próximo passo.`,
     );
   }
 

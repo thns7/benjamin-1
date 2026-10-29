@@ -128,7 +128,7 @@ export function CapturaPorAudio({ onTexto }: { onTexto: (t: string) => void }) {
       <p className="flex items-start gap-1.5 text-[11px] leading-relaxed text-ink-faint">
         <AudioLines size={12} className="mt-0.5 shrink-0" />O áudio é enviado ao provedor de
         transcrição e não fica armazenado. Sem credencial de STT configurada, o sistema mostra o erro
-        real em vez de simular uma transcrição | texto inventado aqui contaminaria todo o resto da
+        real em vez de simular uma transcrição: texto inventado aqui contaminaria todo o resto da
         análise.
       </p>
     </div>
@@ -157,14 +157,14 @@ function SemRotuloDeFalante() {
       <p className="mt-1.5 text-[11.5px] leading-relaxed text-ink-dim">
         Continuam saindo iguais: produtos, concorrentes, budget, objeções e tarefas.{' '}
         <strong className="font-medium text-ink">Ficam indisponíveis</strong> o talk ratio e as
-        métricas de conversa, o interesse e o risco de churn | sem saber de quem é a fala, o motor
+        métricas de conversa, o interesse e o risco de churn: sem saber de quem é a fala, o motor
         não tem como atribuir os sinais, e prefere não responder a responder errado. As dores ainda
         aparecem, mas sem a garantia de que foi o cliente quem as disse.
       </p>
       <p className="mt-2 text-[11.5px] leading-relaxed text-ink-dim">
-        Para recuperar tudo isso, prefixe cada fala com o nome de quem fala no texto transcrito |{' '}
+        Para recuperar tudo isso, prefixe cada fala com o nome de quem fala no texto transcrito (
         <code className="rounded bg-surface-3 px-1 py-0.5 font-mono text-[10.5px]">Ana:</code> e{' '}
-        <code className="rounded bg-surface-3 px-1 py-0.5 font-mono text-[10.5px]">João:</code> |
+        <code className="rounded bg-surface-3 px-1 py-0.5 font-mono text-[10.5px]">João:</code>)
         antes de analisar. É o que Meet, Teams e Zoom já entregam quando a legenda é exportada por
         lá.
       </p>

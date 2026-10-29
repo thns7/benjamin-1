@@ -48,7 +48,7 @@ export default async function RadarPage({
       <>
         <PageHeader
           titulo="Radar de dores"
-          descricao="Quais dores estão surgindo com mais frequência em toda a base | a pergunta que nenhuma reunião isolada responde."
+          descricao="Quais dores estão surgindo com mais frequência em toda a base: a pergunta que nenhuma reunião isolada responde."
         />
         <SemBanco oQueApareceAqui="Aqui as dores ditas pelos clientes aparecem agrupadas por tópico e ranqueadas por frequência, com filtro por segmento, unidade de negócio e período." />
       </>
@@ -75,7 +75,7 @@ export default async function RadarPage({
     <>
       <PageHeader
         titulo="Radar de dores"
-        descricao="Quais dores estão surgindo com mais frequência em toda a base | a pergunta que nenhuma reunião isolada responde."
+        descricao="Quais dores estão surgindo com mais frequência em toda a base: a pergunta que nenhuma reunião isolada responde."
         acoes={<BotaoLink href="/torre">Torre de controle</BotaoLink>}
       />
 
@@ -83,7 +83,7 @@ export default async function RadarPage({
         <EmptyState
           icone={<Radar size={18} />}
           titulo="Nenhuma dor mapeada ainda"
-          descricao="Cada dor dita pelo cliente vira um sinal com a citação que a originou. Aqui elas aparecem agrupadas por tópico e ranqueadas por frequência, com filtro por segmento, unidade de negócio e período | é o que mostra onde o mercado está apertando."
+          descricao="Cada dor dita pelo cliente vira um sinal com a citação que a originou. Aqui elas aparecem agrupadas por tópico e ranqueadas por frequência, com filtro por segmento, unidade de negócio e período. É o que mostra onde o mercado está apertando."
           acao={
             <BotaoLink href="/reunioes/nova" variante="primario">
               Analisar uma reunião
@@ -165,7 +165,7 @@ export default async function RadarPage({
             <div className="mt-4">
               <Card
                 titulo="Dores por unidade de negócio"
-                legenda="Fluxo de caixa é Techfin; previsibilidade de pipeline é RD Station | não é tudo ERP"
+                legenda="Fluxo de caixa é Techfin; previsibilidade de pipeline é RD Station. Não é tudo ERP"
               >
                 <ul className="flex flex-wrap gap-2">
                   {r.porUnidade.map((u) => (

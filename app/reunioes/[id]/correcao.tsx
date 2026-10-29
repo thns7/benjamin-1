@@ -71,7 +71,7 @@ export function ControleCorrecao({ campo, valor }: { campo: string; valor: unkno
     return (
       <span
         className="inline-flex shrink-0 items-center gap-1 rounded border border-warn/40 bg-warn-soft px-1.5 py-0.5 text-[10px] font-medium text-warn"
-        title="Marcado como incorreto | a taxa de correção deste campo sobe na tela de Validação"
+        title="Marcado como incorreto. A taxa de correção deste campo sobe na tela de Validação"
       >
         <X size={10} />
         marcado como incorreto

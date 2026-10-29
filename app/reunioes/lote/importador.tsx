@@ -360,7 +360,7 @@ export function Importador() {
               <Numero
                 rotulo="Tempo"
                 valor={formatarTempo(decorrido)}
-                detalhe={restante !== null ? `~${formatarTempo(restante)} restantes · ${porMinuto.toFixed(1)}/min` : porMinuto ? `${porMinuto.toFixed(1)} reuniões/min` : '|'}
+                detalhe={restante !== null ? `~${formatarTempo(restante)} restantes · ${porMinuto.toFixed(1)}/min` : porMinuto ? `${porMinuto.toFixed(1)} reuniões/min` : 'calculando'}
               />
             </>
           )}
@@ -375,7 +375,7 @@ export function Importador() {
       {/* ---------- avisos ---------- */}
       {pausa ? (
         <Aviso tom="risk" icone={<Pause size={14} />}>
-          <strong className="font-semibold">Lote pausado: {pausa}</strong> Entre de novo em outra aba | o que já foi processado está salvo | e depois clique em{' '}
+          <strong className="font-semibold">Lote pausado: {pausa}</strong> Entre de novo em outra aba (o que já foi processado está salvo) e depois clique em{' '}
           <button type="button" className="font-semibold underline underline-offset-2" onClick={() => { setPausa(null); agenda.current?.retomar(); }}>
             retomar
           </button>
@@ -395,7 +395,7 @@ export function Importador() {
       {fase === 'revisao' && semFalante ? (
         <Aviso tom="neutro" icone={<CircleAlert size={14} />}>
           {semFalante} {semFalante === 1 ? 'reunião não tem' : 'reuniões não têm'} rótulo de quem falou (formato <code className="font-mono text-[11px]">Nome: fala</code>). Elas
-          são analisadas, mas talk ratio, voz do cliente e os escores que dependem de separar vendedor e cliente ficam em branco | o motor se abstém em vez de chutar.
+          são analisadas, mas talk ratio, voz do cliente e os escores que dependem de separar vendedor e cliente ficam em branco: o motor se abstém em vez de chutar.
           {audiosIncluidos ? ' Áudio transcrito também chega sem rótulo.' : ''}
         </Aviso>
       ) : null}
@@ -405,7 +405,7 @@ export function Importador() {
           Manifesto lido: {manifesto.linhas} {manifesto.linhas === 1 ? 'linha' : 'linhas'}, {manifesto.aplicadas}{' '}
           {manifesto.aplicadas === 1 ? 'arquivo recebeu' : 'arquivos receberam'} título, cliente, data ou tipo dele.
           {manifesto.aplicadas > manifesto.linhas
-            ? ' Uma linha com nome de arquivo que se repete em várias pastas vale para todas | para ser específico, escreva o caminho (Cliente/arquivo.vtt).'
+            ? ' Uma linha com nome de arquivo que se repete em várias pastas vale para todas. Para ser específico, escreva o caminho (Cliente/arquivo.vtt).'
             : manifesto.aplicadas < manifesto.linhas
               ? ' As demais linhas não casaram com nenhum arquivo do lote.'
               : ''}
@@ -546,7 +546,7 @@ export function Importador() {
       {ignorados.length ? (
         <details className="vidro rounded-xl px-5 py-4 text-[12.5px]">
           <summary className="cursor-pointer font-medium text-ink">
-            {ignorados.length} {ignorados.length === 1 ? 'arquivo ignorado' : 'arquivos ignorados'} | ver motivos
+            {ignorados.length} {ignorados.length === 1 ? 'arquivo ignorado' : 'arquivos ignorados'} (ver motivos)
           </summary>
           <ul className="mt-3 divide-y divide-line">
             {ignorados.map((i) => (
@@ -569,7 +569,7 @@ export function Importador() {
  * ------------------------------------------------------------------ */
 
 function formatarTempo(segundos: number): string {
-  if (!Number.isFinite(segundos) || segundos < 0) return '|';
+  if (!Number.isFinite(segundos) || segundos < 0) return 'n/d';
   if (segundos < 60) return `${Math.round(segundos)} s`;
   const m = Math.floor(segundos / 60);
   if (m < 60) return `${m} min ${Math.round(segundos % 60)} s`;
@@ -702,7 +702,7 @@ function Soltar({
             AssemblyAI, Deepgram e Fireflies, planilhas .csv e .xlsx.
           </p>
           <p className="mt-1.5">
-            <strong className="font-medium text-ink">Áudio e vídeo:</strong> .mp3, .m4a, .wav, .ogg, .webm, .mp4, .mov e outros | de qualquer duração.
+            <strong className="font-medium text-ink">Áudio e vídeo:</strong> .mp3, .m4a, .wav, .ogg, .webm, .mp4, .mov e outros, de qualquer duração.
           </p>
           <p className="mt-1.5">
             <strong className="font-medium text-ink">Pacotes:</strong> pastas e .zip, inclusive zip dentro de zip.
@@ -779,7 +779,7 @@ function EdicaoEmMassa({
         <span className="text-[11.5px] font-semibold text-ink-faint">Tipo</span>
         <div className="flex gap-1.5">
           <select id="massa-tipo" className={`${CAMPO} w-44`} value={tipo} onChange={(e) => setTipo(e.target.value as TipoReuniao | '')}>
-            <option value="">|</option>
+            <option value="">Escolha</option>
             {Object.entries(ROTULO_TIPO).map(([v, r]) => (
               <option key={v} value={v}>
                 {r}
@@ -846,7 +846,7 @@ function LinhaTabela({
         {editavel ? (
           <input id={`cliente-${l.id}`} aria-label="Cliente" list="clientes-do-lote" className={CAMPO} value={l.cliente} maxLength={120} placeholder="sem cliente" onChange={(e) => aoEditar({ cliente: e.target.value })} />
         ) : (
-          <p className={`py-1.5 ${l.cliente ? 'text-ink' : 'text-ink-faint'}`}>{l.cliente || '|'}</p>
+          <p className={`py-1.5 ${l.cliente ? 'text-ink' : 'text-ink-faint'}`}>{l.cliente || 'Sem cliente'}</p>
         )}
       </td>
       <td className="px-2 py-2">
@@ -905,7 +905,7 @@ function Situacao({ estado }: { estado?: Estado }) {
       return (
         <Link href={`/reunioes/${estado.meetingId}`} className="inline-flex items-center gap-1.5 text-[11.5px] font-medium text-health underline-offset-2 hover:underline">
           <Check size={12} />
-          {estado.jaExistia ? 'Já importada | abrir' : 'Abrir briefing'}
+          {estado.jaExistia ? 'Já importada: abrir' : 'Abrir briefing'}
         </Link>
       );
     case 'erro':

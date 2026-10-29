@@ -161,7 +161,7 @@ export function GravacaoReuniao({ onTexto }: { onTexto: (t: string) => void }) {
               ? 'O compartilhamento da aba foi encerrado: o som da reunião parou de ser gravado. O microfone continua.'
               : e.tipo === 'microfone-encerrado'
                 ? 'O microfone foi desconectado: sua voz parou de ser gravada.'
-                : `Não foi possível salvar a gravação neste navegador (${e.mensagem}). Ela continua em memória | não feche esta aba até terminar.`;
+                : `Não foi possível salvar a gravação neste navegador (${e.mensagem}). Ela continua em memória. Não feche esta aba até terminar.`;
           setAvisosAoVivo((a) => (a.includes(msg) ? a : [...a, msg]));
         },
       });
@@ -197,7 +197,7 @@ export function GravacaoReuniao({ onTexto }: { onTexto: (t: string) => void }) {
     } catch (e) {
       setErro({
         titulo: e instanceof Error ? e.message : 'Não foi possível transcrever a gravação.',
-        instrucao: 'A gravação continua salva neste navegador | dá para tentar de novo sem gravar outra vez.',
+        instrucao: 'A gravação continua salva neste navegador, e dá para tentar de novo sem gravar outra vez.',
       });
       setFase('preparo');
     }
@@ -274,8 +274,8 @@ export function GravacaoReuniao({ onTexto }: { onTexto: (t: string) => void }) {
 
         {mudo.cliente ? (
           <Alerta>
-            Não chega som da aba da reunião há mais de {ALERTA_MUDO_S} s. Se o cliente está falando, o áudio da aba não está sendo capturado |
-            pare, e grave de novo escolhendo a aba da reunião com “Compartilhar áudio da guia” ligado.
+            Não chega som da aba da reunião há mais de {ALERTA_MUDO_S} s. Se o cliente está falando, o áudio da aba não está sendo capturado:
+            pare e grave de novo escolhendo a aba da reunião com “Compartilhar áudio da guia” ligado.
           </Alerta>
         ) : null}
         {mudo.vendedor ? <Alerta>Seu microfone não capta som há mais de {ALERTA_MUDO_S} s. Confira se ele não está no mudo.</Alerta> : null}
@@ -330,7 +330,7 @@ export function GravacaoReuniao({ onTexto }: { onTexto: (t: string) => void }) {
             {(Object.entries(ultima.canais) as [Canal, Blob][]).map(([canal, blob]) => (
               <button key={canal} type="button" className={BOTAO} onClick={() => baixarAudio(ultima.meta, canal, blob)}>
                 <Download size={13} />
-                Baixar áudio | {canal === 'vendedor' ? 'microfone' : 'reunião'}
+                Baixar áudio do {canal === 'vendedor' ? 'microfone' : 'reunião'}
               </button>
             ))}
             <button type="button" className={BOTAO} onClick={() => setFase('preparo')}>
@@ -395,7 +395,7 @@ export function GravacaoReuniao({ onTexto }: { onTexto: (t: string) => void }) {
         <div className="rounded-md border border-warn/40 bg-warn-soft/25 px-4 py-3">
           <p className="text-[12.5px] font-semibold text-warn">Antes de gravar</p>
           <p className="mt-1 text-[12px] leading-relaxed text-ink-dim">
-            Avise todos os participantes de que a reunião será gravada | gravar alguém sem ciência é ilegal e destrói a confiança que o produto existe
+            Avise todos os participantes de que a reunião será gravada: gravar alguém sem ciência é ilegal e destrói a confiança que o produto existe
             para medir. O áudio fica salvo neste computador e é enviado ao provedor de transcrição (OpenAI) para virar texto; o texto é anonimizado
             antes da análise, e o áudio salvo aqui é apagado sozinho sete dias depois de transcrito.
           </p>
@@ -421,7 +421,7 @@ export function GravacaoReuniao({ onTexto }: { onTexto: (t: string) => void }) {
               texto={
                 online
                   ? 'Grava seu microfone e o som da aba da reunião separados: a transcrição sai com quem falou o quê.'
-                  : 'Precisa do Chrome ou do Edge no computador | outros navegadores não compartilham o som de uma aba.'
+                  : 'Precisa do Chrome ou do Edge no computador: outros navegadores não compartilham o som de uma aba.'
               }
             />
             <OpcaoModo
@@ -466,7 +466,7 @@ export function GravacaoReuniao({ onTexto }: { onTexto: (t: string) => void }) {
               {modo === 'online' ? 'Escolher a aba e gravar' : 'Gravar'}
             </button>
             {transcricao && !transcricao.disponivel ? (
-              <span className="text-[11.5px] text-warn">Transcrição indisponível agora | a gravação fica salva para transcrever depois.</span>
+              <span className="text-[11.5px] text-warn">Transcrição indisponível agora. A gravação fica salva para transcrever depois.</span>
             ) : (
               <span className="text-[11.5px] text-ink-faint">Sem limite de duração · transcrito ao parar</span>
             )}
