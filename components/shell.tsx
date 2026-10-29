@@ -15,6 +15,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { Logo, TAGLINE, Wordmark } from './logo';
+import { BotaoSair } from './sair';
 
 type Item = { href: string; rotulo: string; icone: LucideIcon };
 type Grupo = { titulo: string; itens: Item[] };
@@ -181,7 +182,10 @@ export function Shell({ children, motor }: { children: ReactNode; motor: string 
           >
             motor: {motor}
           </span>
-          <AlternadorTema />
+          <div className="flex items-center gap-1.5">
+            <AlternadorTema />
+            <BotaoSair />
+          </div>
         </div>
       </aside>
 
@@ -194,6 +198,7 @@ export function Shell({ children, motor }: { children: ReactNode; motor: string 
         <div className="flex items-center gap-2">
           <BotaoNova compacto />
           <AlternadorTema />
+          <BotaoSair compacto />
         </div>
       </header>
 
