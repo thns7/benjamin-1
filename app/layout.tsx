@@ -42,7 +42,7 @@ const jetbrains = JetBrains_Mono({
 export const metadata: Metadata = {
   title: {
     default: `Benjamin | ${TAGLINE.toLowerCase()}`,
-    template: '%s · Benjamin',
+    template: '%s | Benjamin',
   },
   description:
     'Radar de churn para Customer Success: lê as reuniões com seus clientes e avisa quando uma conta está em risco, sempre com a citação que gerou o alerta.',
