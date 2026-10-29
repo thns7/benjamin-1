@@ -61,7 +61,7 @@ export function FormIngestao() {
     setTexto(EXEMPLO_CANONICO);
     setCliente('João Silva');
     setTipo('descoberta');
-    if (!titulo.trim()) setTitulo('Exemplo canônico TOTVS');
+    if (!titulo.trim()) setTitulo('Reunião de exemplo');
     setErro(null);
   }
 
@@ -213,7 +213,7 @@ export function FormIngestao() {
                     className="inline-flex items-center gap-1 rounded border border-ai/30 bg-ai-soft px-2 py-1 text-[11px] font-medium text-ai transition-colors hover:border-ai/60"
                   >
                     <Sparkles size={12} />
-                    usar exemplo TOTVS
+                    usar uma reunião de exemplo
                   </button>
                 </div>
                 <textarea

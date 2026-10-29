@@ -99,6 +99,7 @@ auditabilidade nos campos que movem dinheiro.
 |---|---|
 | Banco só pelo servidor | `lib/supabase/server.ts` lança se chamado no cliente; `service_role` sem prefixo `NEXT_PUBLIC_` |
 | Cada empresa só vê o que é dela | `supabaseServer()` lê e grava com o login do usuário; o RLS (`db/migrations/002`) filtra pela empresa do convite. `supabaseAdmin()` (service_role) só para o corpus de validação |
+| O motor procura o que a empresa vende | `lib/analysis/rules/catalogo.ts` monta produtos e concorrentes a partir do catálogo da empresa (`catalogo_itens`, migration 004, tela `/catalogo`); sem catálogo (testes, corpus) vale a lista da TOTVS em `lexicons.ts`, e a organização TOTVS mantém essa lista via `organizations.catalogo_base` |
 | Núcleo isolado | `lib/analysis/` não importa Next nem Supabase |
 | Todo item tem evidência | Item sem citação não é retornado; teste de invariante sobre todo o corpus |
 | Texto não muda de comprimento | `redact.ts` lança se o comprimento mudar |
@@ -214,6 +215,8 @@ app/
   radar/                      Radar de dores agregado — fora do menu desde 2026-10
   coaching/                   Talk ratio e performance — fora do menu desde 2026-10
   alertas/                    Caixa de entrada de risco: não tratados / tratados
+  catalogo/                   Produtos e concorrentes da empresa (o que o motor procura)
+  cadastro/  comecar/         Cadastro aberto e criação da empresa
   validacao/                  Metodologia e métricas ao vivo — fora do menu desde 2026-10
   api/
     meetings/                 ingestão, reprocessamento, exportação CRM

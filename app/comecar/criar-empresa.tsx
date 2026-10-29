@@ -25,7 +25,7 @@ export function CriarEmpresa({ nomeInicial, empresaInicial }: { nomeInicial: str
       setEnviando(false);
       return;
     }
-    window.location.replace('/');
+    window.location.replace('/catalogo?novo=1');
   }
 
   return (

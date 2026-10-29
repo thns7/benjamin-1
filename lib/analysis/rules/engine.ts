@@ -1,3 +1,4 @@
+import { montarLexico } from './catalogo';
 import type { AnalysisResult, EntradaAnalise, ProdutoTotvs } from '../types';
 import { preparar } from './segment';
 import {
@@ -43,12 +44,14 @@ export function analisarComRegras(entrada: EntradaAnalise): AnalysisResult {
   const dataReuniao = entrada.dataReuniao ?? new Date().toISOString().slice(0, 10);
 
   // --- Extração ---
-  const diretos = extrairProdutos(prep);
-  const cross = extrairCrossBu(prep);
+  // Produtos e concorrentes da empresa; sem catálogo, a lista da TOTVS.
+  const lexico = montarLexico(entrada.catalogo);
+  const diretos = extrairProdutos(prep, lexico.produtos);
+  const cross = extrairCrossBu(prep, lexico.crossBu);
   const nomes = new Set(diretos.map((p) => p.name));
   const totvs_products: ProdutoTotvs[] = [...diretos, ...cross.filter((c) => !nomes.has(c.name))];
 
-  const competitors = extrairConcorrentes(prep);
+  const competitors = extrairConcorrentes(prep, lexico.concorrentes);
   const budget = extrairBudget(prep);
   const persona = extrairPersona(prep);
   const problems = extrairProblemas(prep);

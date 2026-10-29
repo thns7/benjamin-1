@@ -70,7 +70,7 @@ export function Cadastro() {
       window.location.replace('/comecar');
       return;
     }
-    window.location.replace('/');
+    window.location.replace('/catalogo?novo=1');
   }
 
   if (confirmar) {
