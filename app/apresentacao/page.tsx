@@ -1,8 +1,19 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowUpRight, Check, FileAudio, FolderUp, Mic, ShieldCheck } from 'lucide-react';
+import { ArrowUpRight, ShieldCheck } from 'lucide-react';
 import { Logo, TAGLINE, Wordmark } from '@/components/logo';
-import { Citacao } from '@/components/radar-ui';
+import {
+  Citacao,
+  Constelacao,
+  FaixaDeFalas,
+  ItemGarantia,
+  LinhaDoTempo,
+  ReuniaoSendoLida,
+  TelaCanais,
+  TelaLeitura,
+  TelaRadar,
+} from './pecas';
+import './landing.css';
 
 /*
  * Landing pública do Benjamin — o que um visitante sem login vê em "/".
@@ -11,8 +22,12 @@ import { Citacao } from '@/components/radar-ui';
  * vai direto ao Radar. Esta página não usa o Shell (ver app/layout.tsx).
  *
  * Regra de conteúdo: nada inventado. Sem depoimento, logo de cliente ou
- * número de uso que não exista. A confiança vem do que é verdade no produto:
- * evidência literal, abstenção, anonimização e dados no Brasil.
+ * número de uso que não exista. As ilustrações usam dados fictícios e dizem
+ * isso na tela. A confiança vem do que é verdade no produto: evidência
+ * literal, abstenção, anonimização e dados no Brasil.
+ *
+ * Cor: a escala de risco (verde, âmbar, vermelho) é a paleta da landing.
+ * Animações e as regras de movimento reduzido estão em landing.css.
  */
 
 const TITULO = 'Saiba quais clientes vão cancelar antes da renovação';
@@ -37,66 +52,15 @@ function BotaoDemo({ invertido = false }: { invertido?: boolean }) {
       href={CONTATO}
       target="_blank"
       rel="noopener noreferrer"
-      className={`inline-flex min-h-11 items-center gap-1.5 rounded-full px-5 text-[14px] font-semibold transition-shadow ${
-        invertido ? 'bg-canvas text-ink hover:shadow-[0_6px_20px_-6px_rgb(255_255_255/0.35)]' : 'bg-ink text-canvas hover:shadow-glow'
+      className={`group inline-flex min-h-12 items-center gap-2 rounded-full px-6 text-[14.5px] font-semibold transition-all ${
+        invertido
+          ? 'bg-canvas text-ink hover:shadow-[0_8px_28px_-6px_rgb(255_255_255/0.4)]'
+          : 'bg-ink text-canvas hover:shadow-[0_10px_30px_-10px_rgb(22_22_22/0.6)]'
       }`}
     >
       Pedir uma demonstração
-      <ArrowUpRight size={15} aria-hidden />
+      <ArrowUpRight size={16} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
     </a>
-  );
-}
-
-/**
- * O cartão do topo: uma conta, a fala que a pôs em risco e o ponto deslizando
- * para a zona vermelha. É o produto inteiro em um quadro, e a única animação
- * da página (desligada para quem pede menos movimento).
- */
-function CartaoConta() {
-  return (
-    <figure
-      aria-label="Exemplo: uma conta em risco no Benjamin"
-      className="relative rounded-2xl border border-line bg-surface p-6 shadow-lift sm:p-7"
-    >
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-[15px] font-semibold tracking-[-0.01em] text-ink">Logística Ventura</p>
-          <p className="mt-0.5 text-[12.5px] text-ink-faint">Contrato de R$ 240.000, renova em janeiro</p>
-        </div>
-        <div className="text-right">
-          <p className="text-[40px] font-semibold leading-none tracking-[-0.04em] text-risk tabular-nums">81</p>
-          <p className="mt-1 text-[11.5px] font-medium text-risk">subiu 39 desde o último QBR</p>
-        </div>
-      </div>
-
-      <Citacao
-        texto="a diretoria pediu para a gente olhar outras opções antes de renovar"
-        tamanho="grande"
-        tom="risk"
-        className="mt-6"
-      />
-      <p className="mt-2 pl-[22px] text-[12px] text-ink-faint">
-        <span className="text-ink-dim">Renata, gerente de operações</span>, na reunião de renovação
-      </p>
-
-      {/* Régua de risco: o ponto sai do médio e entra na zona alta. */}
-      <div className="mt-7" aria-hidden>
-        <div className="relative h-7">
-          <div className="absolute inset-y-0 left-[67%] right-0 rounded-r-md bg-risk-soft" />
-          <div className="absolute inset-y-0 left-[34%] border-l border-dashed border-line-strong" />
-          <div className="absolute bottom-0 left-0 right-0 border-t border-ink/60" />
-          <span className="landing-ponto absolute bottom-0 block size-4 -translate-x-1/2 translate-y-1/2 rounded-full bg-risk ring-4 ring-surface" />
-        </div>
-        <div className="mt-2 flex justify-between text-[11px] text-ink-faint">
-          <span>risco baixo</span>
-          <span className="font-medium text-risk">alto</span>
-        </div>
-      </div>
-
-      <figcaption className="mt-5 border-t border-line pt-3 text-[11.5px] text-ink-faint">
-        Exemplo ilustrativo com dados fictícios.
-      </figcaption>
-    </figure>
   );
 }
 
@@ -104,20 +68,20 @@ const PASSOS = [
   {
     titulo: 'Traga as reuniões',
     texto:
-      'Cole a transcrição que o Meet, o Teams ou o Zoom já geram, envie o áudio ou grave a call pelo navegador. Dá para importar dezenas de uma vez.',
-    icones: [FolderUp, FileAudio, Mic],
+      'Cole a transcrição que o Meet, o Teams ou o Zoom já geram, envie o áudio ou grave a call pelo navegador: o microfone vira a fala do seu time e o som da aba vira a fala do cliente.',
+    tela: <TelaCanais />,
   },
   {
     titulo: 'O Benjamin lê cada conversa',
     texto:
-      'Separa o que o cliente disse do que o seu time disse, mede o risco de churn de 0 a 100 e marca sinais como insatisfação, troca de patrocinador e concorrente citado.',
-    icones: [],
+      'Mede o risco de churn de 0 a 100 e marca sinais como insatisfação, troca de patrocinador e concorrente citado, sempre com a frase que gerou cada um.',
+    tela: <TelaLeitura />,
   },
   {
     titulo: 'Seu time age na conta certa',
     texto:
       'O radar ordena a carteira pela receita em risco. Cada alerta chega com a fala do cliente e uma sugestão do que fazer; tratou, ele sai da lista.',
-    icones: [],
+    tela: <TelaRadar />,
   },
 ];
 
@@ -132,7 +96,7 @@ const PERGUNTAS = [
   },
   {
     p: 'Onde ficam os dados das minhas reuniões?',
-    r: 'Num banco de dados em São Paulo. CPF, CNPJ, e-mail, telefone e cartão são anonimizados antes da análise, e o que fica guardado é o texto já anonimizado. Cada empresa só enxerga as próprias contas.',
+    r: 'Num banco de dados em São Paulo. CPF, CNPJ, e-mail, telefone e cartão são anonimizados antes da análise, e o que fica guardado é o texto já anonimizado. O acesso é só por convite.',
   },
   {
     p: 'O Benjamin usa inteligência artificial?',
@@ -146,114 +110,181 @@ const PERGUNTAS = [
 
 export default function ApresentacaoPage() {
   return (
-    <div className="min-h-dvh bg-canvas text-ink">
-      <header className="mx-auto flex max-w-[1180px] items-center justify-between px-5 py-5 sm:px-8">
-        <Link href="/apresentacao" className="flex items-center gap-2.5" aria-label="Benjamin, página inicial">
-          <Logo size={28} />
-          <Wordmark />
-        </Link>
-        <Link
-          href="/login"
-          className="inline-flex min-h-10 items-center rounded-full border border-line-strong px-4 text-[13px] font-semibold text-ink transition-colors hover:border-ink"
-        >
-          Entrar
-        </Link>
+    <div className="landing min-h-dvh overflow-x-clip bg-canvas text-ink">
+      <header className="sticky top-0 z-30 bg-canvas/80 backdrop-blur-md">
+        <div className="mx-auto flex max-w-[1180px] items-center justify-between px-5 py-4 sm:px-8">
+          <Link href="/apresentacao" className="flex items-center gap-2.5" aria-label="Benjamin, página inicial">
+            <Logo size={28} />
+            <Wordmark />
+          </Link>
+          <nav className="flex items-center gap-2">
+            <a
+              href={CONTATO}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden min-h-10 items-center rounded-full px-4 text-[13px] font-medium text-ink-dim transition-colors hover:text-ink sm:inline-flex"
+            >
+              Falar com a gente
+            </a>
+            <Link
+              href="/login"
+              className="inline-flex min-h-10 items-center rounded-full border border-line-strong bg-surface px-4 text-[13px] font-semibold text-ink transition-colors hover:border-ink"
+            >
+              Entrar
+            </Link>
+          </nav>
+        </div>
       </header>
 
       <main>
-        {/* Topo */}
-        <section className="mx-auto grid max-w-[1180px] items-center gap-12 px-5 pb-20 pt-10 sm:px-8 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:pb-28 lg:pt-16">
-          <div>
-            <p className="text-[13px] font-medium text-ink-dim">Radar de churn para times de Customer Success</p>
-            <h1 className="mt-4 max-w-[15ch] text-[44px] font-semibold leading-[1.02] tracking-[-0.04em] sm:text-[60px] lg:text-[68px]">
-              {TITULO}.
-            </h1>
-            <p className="mt-6 max-w-[46ch] text-[17px] leading-relaxed text-ink-dim">{DESCRICAO}</p>
-            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
-              <BotaoDemo />
-              <Link href="/login" className="text-[14px] font-medium text-ink-dim underline decoration-line-strong underline-offset-4 hover:text-ink">
-                Já uso o Benjamin
-              </Link>
+        {/* Topo — o fundo tem um halo da escala de risco atrás da reunião. */}
+        <section className="relative">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute right-[-10%] top-[-6%] h-[620px] w-[720px] rounded-full opacity-[0.16] blur-[90px] escala-gradiente"
+          />
+          <div className="relative mx-auto grid max-w-[1180px] items-center gap-12 px-5 pb-16 pt-10 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:pb-20 lg:pt-14">
+            <div>
+              <p className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 text-[12.5px] font-medium text-ink-dim">
+                <span className="h-1.5 w-6 rounded-full escala-gradiente" aria-hidden />
+                Radar de churn para Customer Success
+              </p>
+              <h1 className="mt-5 max-w-[15ch] text-[44px] font-semibold leading-[1.02] tracking-[-0.045em] sm:text-[60px] lg:text-[68px]">
+                {TITULO}.
+              </h1>
+              <p className="mt-6 max-w-[46ch] text-[17.5px] leading-relaxed text-ink-dim">{DESCRICAO}</p>
+              <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+                <BotaoDemo />
+                <Link
+                  href="/login"
+                  className="text-[14px] font-medium text-ink-dim underline decoration-line-strong underline-offset-4 hover:text-ink"
+                >
+                  Já uso o Benjamin
+                </Link>
+              </div>
+              <ul className="mt-10 flex max-w-[58ch] flex-wrap gap-x-6 gap-y-2.5 text-[13px] text-ink-dim">
+                <ItemGarantia>Dados guardados no Brasil</ItemGarantia>
+                <ItemGarantia>CPF, CNPJ e telefone anonimizados</ItemGarantia>
+                <ItemGarantia>Todo alerta com a fala do cliente</ItemGarantia>
+              </ul>
             </div>
-            <ul className="mt-10 flex max-w-[58ch] flex-wrap gap-x-6 gap-y-2.5 text-[13px] text-ink-dim">
-              {['Dados guardados no Brasil', 'CPF, CNPJ e telefone anonimizados', 'Todo alerta com a fala do cliente'].map((t) => (
-                <li key={t} className="inline-flex items-center gap-1.5">
-                  <Check size={14} className="text-ink" aria-hidden />
-                  {t}
-                </li>
-              ))}
-            </ul>
+            <ReuniaoSendoLida />
           </div>
-          <CartaoConta />
+        </section>
+
+        {/* Faixa de falas */}
+        <section aria-label="Sinais que o Benjamin marca" className="pb-16">
+          <FaixaDeFalas />
+          <p className="mx-auto mt-3 max-w-[1180px] px-5 text-[12px] text-ink-faint sm:px-8">
+            Exemplos de falas e do sinal que o Benjamin marca em cada uma. A cor é o nível de risco.
+          </p>
         </section>
 
         {/* Problema */}
         <section className="border-y border-line bg-surface">
-          <div className="mx-auto grid max-w-[1180px] gap-10 px-5 py-20 sm:px-8 lg:grid-cols-[1fr_1.2fr] lg:gap-16 lg:py-28">
-            <h2 className="max-w-[16ch] text-[34px] font-semibold leading-[1.08] tracking-[-0.03em] sm:text-[42px]">
-              O cliente avisa antes de cancelar. O aviso fica na gravação.
-            </h2>
-            <div className="space-y-5 text-[16px] leading-relaxed text-ink-dim">
-              <p>
-                Insatisfação com o suporte, um patrocinador que saiu da empresa, um concorrente que mandou proposta.
-                Quase sempre isso aparece numa reunião semanas antes do cancelamento.
-              </p>
-              <p>
-                O problema é que ninguém relê dezenas de reuniões por semana. O health score olha uso e NPS, não o que
-                foi dito. E o time descobre o risco quando o pedido de cancelamento chega.
-              </p>
-              <p className="font-medium text-ink">
-                O Benjamin lê todas as conversas e põe o que importa na frente de quem pode agir.
-              </p>
+          <div className="mx-auto max-w-[1180px] px-5 py-20 sm:px-8 lg:py-28">
+            <div className="revela grid gap-8 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
+              <h2 className="max-w-[16ch] text-[34px] font-semibold leading-[1.08] tracking-[-0.03em] sm:text-[44px]">
+                O cliente avisa antes de cancelar. O aviso fica na gravação.
+              </h2>
+              <div className="space-y-5 text-[16.5px] leading-relaxed text-ink-dim">
+                <p>
+                  Insatisfação com o suporte, um patrocinador que saiu da empresa, um concorrente que mandou proposta.
+                  Quase sempre isso aparece numa reunião semanas antes do cancelamento.
+                </p>
+                <p>
+                  Ninguém relê dezenas de reuniões por semana. O health score olha uso e NPS, não o que foi dito. E o
+                  time descobre o risco quando o pedido de cancelamento chega.
+                </p>
+              </div>
+            </div>
+            <div className="revela mt-16">
+              <LinhaDoTempo />
             </div>
           </div>
         </section>
 
         {/* Como funciona — é uma sequência de verdade, por isso numerada. */}
         <section className="mx-auto max-w-[1180px] px-5 py-20 sm:px-8 lg:py-28">
-          <h2 className="text-[34px] font-semibold tracking-[-0.03em] sm:text-[42px]">Como funciona</h2>
-          <ol className="mt-12 grid gap-10 md:grid-cols-3 md:gap-8">
+          <h2 className="revela text-[34px] font-semibold tracking-[-0.03em] sm:text-[44px]">Como funciona</h2>
+          <ol className="mt-12 grid gap-12 md:grid-cols-3 md:gap-8">
             {PASSOS.map((passo, i) => (
-              <li key={passo.titulo} className="border-t border-ink pt-5">
-                <span className="text-[13px] font-semibold tabular-nums text-ink-faint">{i + 1}</span>
-                <h3 className="mt-3 text-[19px] font-semibold tracking-[-0.015em]">{passo.titulo}</h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-ink-dim">{passo.texto}</p>
-                {passo.icones.length > 0 ? (
-                  <div className="mt-4 flex gap-2 text-ink-faint" aria-hidden>
-                    {passo.icones.map((Icone, k) => (
-                      <Icone key={k} size={17} />
-                    ))}
-                  </div>
-                ) : null}
+              <li key={passo.titulo} className="revela flex flex-col">
+                <div className="min-h-[150px]">{passo.tela}</div>
+                <div className="mt-6 flex items-center gap-3">
+                  <span className="flex size-7 items-center justify-center rounded-full bg-ink text-[12.5px] font-semibold text-canvas">
+                    {i + 1}
+                  </span>
+                  <h3 className="text-[19px] font-semibold tracking-[-0.015em]">{passo.titulo}</h3>
+                </div>
+                <p className="mt-3 text-[15px] leading-relaxed text-ink-dim">{passo.texto}</p>
               </li>
             ))}
           </ol>
         </section>
 
+        {/* A carteira num olhar */}
+        <section className="bg-ink text-canvas">
+          <div className="mx-auto grid max-w-[1180px] items-center gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16 lg:py-28">
+            <div className="revela">
+              <h2 className="max-w-[14ch] text-[34px] font-semibold leading-[1.08] tracking-[-0.03em] sm:text-[44px]">
+                Sua carteira inteira, num olhar.
+              </h2>
+              <p className="mt-5 max-w-[44ch] text-[16.5px] leading-relaxed text-white/70">
+                Cada ponto é uma conta, posta no próprio risco de churn; o tamanho é o contrato. As contas que podem
+                cancelar pulsam, e a lista do radar já vem na ordem certa: da maior receita em risco para a menor.
+              </p>
+              <ul className="mt-8 space-y-3 text-[14.5px] text-white/80">
+                <li className="flex items-center gap-3">
+                  <span className="size-3 rounded-full bg-[var(--risco)]" aria-hidden />
+                  Risco alto: trate primeiro
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="size-3 rounded-full bg-[var(--atencao)]" aria-hidden />
+                  Atenção: acompanhe de perto
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="size-3 rounded-full bg-[var(--saude)]" aria-hidden />
+                  Saudável: espaço para expandir
+                </li>
+              </ul>
+            </div>
+            <div className="revela">
+              <Constelacao />
+              <p className="mt-2 text-[11.5px] text-white/45">Exemplo ilustrativo com dados fictícios.</p>
+            </div>
+          </div>
+        </section>
+
         {/* As duas regras */}
-        <section className="mx-auto max-w-[1180px] px-5 pb-20 sm:px-8 lg:pb-28">
-          <h2 className="max-w-[20ch] text-[34px] font-semibold leading-[1.08] tracking-[-0.03em] sm:text-[42px]">
+        <section className="mx-auto max-w-[1180px] px-5 py-20 sm:px-8 lg:py-28">
+          <h2 className="revela max-w-[20ch] text-[34px] font-semibold leading-[1.08] tracking-[-0.03em] sm:text-[44px]">
             Duas regras que o Benjamin não quebra
           </h2>
           <div className="mt-12 grid gap-6 lg:grid-cols-2">
-            <article className="rounded-2xl border border-line bg-surface p-7">
+            <article className="revela relative overflow-hidden rounded-3xl border border-line bg-surface p-7">
+              <div className="absolute inset-x-0 top-0 h-1 bg-[var(--risco)]" aria-hidden />
               <h3 className="text-[19px] font-semibold tracking-[-0.015em]">Nenhum alerta sem a fala que o sustenta</h3>
               <p className="mt-2 text-[15px] leading-relaxed text-ink-dim">
                 Todo sinal de risco vem com a frase exata, quem disse e em qual reunião. Seu time confere em segundos,
                 e ninguém precisa confiar numa caixa-preta.
               </p>
-              <Citacao texto="se não resolver a integração até dezembro a gente vai cancelar" className="mt-6" />
-              <p className="mt-2 pl-[18px] text-[12px] text-ink-faint">Sinal marcado: intenção de cancelar</p>
+              <div className="mt-6 rounded-2xl bg-[var(--risco-suave)] p-4">
+                <Citacao texto="se não resolver a integração até dezembro a gente vai cancelar" tom="risk" />
+                <p className="mt-2 pl-[18px] text-[12px] font-medium text-[var(--risco)]">Sinal marcado: intenção de cancelar</p>
+              </div>
             </article>
-            <article className="rounded-2xl border border-line bg-surface p-7">
+            <article className="revela relative overflow-hidden rounded-3xl border border-line bg-surface p-7">
+              <div className="absolute inset-x-0 top-0 h-1 bg-ink-faint" aria-hidden />
               <h3 className="text-[19px] font-semibold tracking-[-0.015em]">Quando não dá para saber, ele não chuta</h3>
               <p className="mt-2 text-[15px] leading-relaxed text-ink-dim">
-                Se a gravação não deixa claro quem falou, a mesma frase pode ser uma ameaça ou o cliente defendendo
-                o seu produto. Nesse caso o Benjamin não dá número, e a conta aparece como sem leitura. Risco
-                inventado custa mais caro que risco nenhum.
+                Se a gravação não deixa claro quem falou, a mesma frase pode ser uma ameaça ou o cliente defendendo o
+                seu produto. Nesse caso o Benjamin não dá número, e a conta aparece como sem leitura. Risco inventado
+                custa mais caro que risco nenhum.
               </p>
-              <div className="mt-6 flex items-center gap-3 rounded-xl border border-dashed border-line-strong px-4 py-3">
-                <span className="text-[13px] font-semibold text-ink-dim">Agro Pampa</span>
+              <div className="mt-6 flex items-center gap-3 rounded-2xl border border-dashed border-line-strong px-4 py-4">
+                <span className="size-3 rounded-full border-2 border-ink-faint" aria-hidden />
+                <span className="text-[13.5px] font-semibold text-ink-dim">Agro Pampa</span>
                 <span className="ml-auto text-[12.5px] text-ink-faint">Sem leitura de risco</span>
               </div>
             </article>
@@ -264,10 +295,12 @@ export default function ApresentacaoPage() {
         <section className="border-y border-line bg-surface">
           <div className="mx-auto flex max-w-[1180px] flex-col gap-8 px-5 py-16 sm:px-8 lg:flex-row lg:items-start lg:gap-16">
             <div className="flex items-center gap-3 lg:w-[34%]">
-              <ShieldCheck size={22} className="shrink-0" aria-hidden />
+              <span className="flex size-10 items-center justify-center rounded-full bg-[var(--saude-suave)]">
+                <ShieldCheck size={20} className="text-[var(--saude)]" aria-hidden />
+              </span>
               <h2 className="text-[24px] font-semibold tracking-[-0.02em]">Feito para conversa de cliente</h2>
             </div>
-            <ul className="grid flex-1 gap-5 text-[15px] leading-relaxed text-ink-dim sm:grid-cols-3">
+            <ul className="grid flex-1 gap-6 text-[15px] leading-relaxed text-ink-dim sm:grid-cols-3">
               <li>
                 <strong className="block font-semibold text-ink">Dados no Brasil</strong>
                 Banco de dados em São Paulo.
@@ -278,7 +311,7 @@ export default function ApresentacaoPage() {
               </li>
               <li>
                 <strong className="block font-semibold text-ink">Acesso por convite</strong>
-                Cada empresa só enxerga as próprias contas.
+                Só entra quem a sua empresa convidar.
               </li>
             </ul>
           </div>
@@ -286,7 +319,7 @@ export default function ApresentacaoPage() {
 
         {/* Perguntas */}
         <section className="mx-auto max-w-[820px] px-5 py-20 sm:px-8 lg:py-28">
-          <h2 className="text-[34px] font-semibold tracking-[-0.03em] sm:text-[42px]">Perguntas frequentes</h2>
+          <h2 className="text-[34px] font-semibold tracking-[-0.03em] sm:text-[44px]">Perguntas frequentes</h2>
           <div className="mt-10 divide-y divide-line border-y border-line">
             {PERGUNTAS.map((item) => (
               <details key={item.p} className="group py-5">
@@ -294,7 +327,7 @@ export default function ApresentacaoPage() {
                   {item.p}
                   <span
                     aria-hidden
-                    className="text-[22px] font-normal leading-none text-ink-faint transition-transform group-open:rotate-45"
+                    className="flex size-7 shrink-0 items-center justify-center rounded-full bg-surface-3 text-[18px] font-normal leading-none text-ink-dim transition-transform group-open:rotate-45"
                   >
                     +
                   </span>
@@ -306,23 +339,30 @@ export default function ApresentacaoPage() {
         </section>
 
         {/* Chamado final */}
-        <section className="bg-ink text-canvas">
-          <div className="mx-auto flex max-w-[1180px] flex-col items-start gap-8 px-5 py-20 sm:px-8 lg:flex-row lg:items-end lg:justify-between lg:py-24">
-            <div>
-              <h2 className="max-w-[18ch] text-[36px] font-semibold leading-[1.05] tracking-[-0.035em] sm:text-[46px]">
-                Veja o radar com as reuniões da sua empresa.
-              </h2>
-              <p className="mt-4 max-w-[52ch] text-[16px] leading-relaxed text-canvas/70">
-                Na demonstração, o Benjamin lê reuniões de contas que você já perdeu e mostra o que teria avisado
-                antes.
-              </p>
+        <section className="px-5 pb-16 sm:px-8">
+          <div className="relative mx-auto max-w-[1180px] overflow-hidden rounded-[32px] bg-ink text-canvas">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -bottom-40 -right-24 h-[420px] w-[620px] rounded-full opacity-25 blur-[90px] escala-gradiente"
+            />
+            <div className="relative flex flex-col items-start gap-8 px-7 py-16 sm:px-12 lg:flex-row lg:items-end lg:justify-between lg:py-20">
+              <div>
+                <div aria-hidden className="mb-8 h-1.5 w-24 rounded-full escala-gradiente" />
+                <h2 className="max-w-[18ch] text-[36px] font-semibold leading-[1.05] tracking-[-0.035em] sm:text-[48px]">
+                  Veja o radar com as reuniões da sua empresa.
+                </h2>
+                <p className="mt-4 max-w-[52ch] text-[16.5px] leading-relaxed text-white/70">
+                  Na demonstração, o Benjamin lê reuniões de contas que você já perdeu e mostra o que teria avisado
+                  antes.
+                </p>
+              </div>
+              <BotaoDemo invertido />
             </div>
-            <BotaoDemo invertido />
           </div>
         </section>
       </main>
 
-      <footer className="mx-auto flex max-w-[1180px] flex-col gap-3 px-5 py-8 text-[12.5px] text-ink-faint sm:flex-row sm:items-center sm:justify-between sm:px-8">
+      <footer className="mx-auto flex max-w-[1180px] flex-col gap-3 px-5 pb-10 text-[12.5px] text-ink-faint sm:flex-row sm:items-center sm:justify-between sm:px-8">
         <p>
           Benjamin, {TAGLINE.toLowerCase()}. Um produto{' '}
           <a href="https://ideonwork.com" className="underline decoration-line-strong underline-offset-2 hover:text-ink">
