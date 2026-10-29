@@ -143,7 +143,7 @@ export function recusouComprar(prep: Preparado): boolean {
   return false;
 }
 
-export function extrairProdutos(prep: Preparado): ProdutoTotvs[] {
+export function extrairProdutos(prep: Preparado, produtos: EntradaProduto[] = PRODUTOS): ProdutoTotvs[] {
   const achados: ProdutoTotvs[] = [];
   const recusou = recusouComprar(prep);
 
@@ -154,7 +154,7 @@ export function extrairProdutos(prep: Preparado): ProdutoTotvs[] {
    * longo; os contidos nele são descartados.
    */
   const brutos: { p: EntradaProduto; c: { inicio: number; fim: number } }[] = [];
-  for (const p of PRODUTOS) {
+  for (const p of produtos) {
     for (const c of casar(prep, p.padrao)) brutos.push({ p, c });
   }
   brutos.sort((a, b) => b.c.fim - b.c.inicio - (a.c.fim - a.c.inicio));
@@ -243,10 +243,10 @@ export function extrairProdutos(prep: Preparado): ProdutoTotvs[] {
 }
 
 /** Necessidades de outra unidade de negócio faladas sem citar produto (Cross-BU). */
-export function extrairCrossBu(prep: Preparado): ProdutoTotvs[] {
+export function extrairCrossBu(prep: Preparado, sinais: typeof SINAIS_CROSS_BU = SINAIS_CROSS_BU): ProdutoTotvs[] {
   const saida: ProdutoTotvs[] = [];
 
-  for (const grupo of SINAIS_CROSS_BU) {
+  for (const grupo of sinais) {
     for (const padrao of grupo.padroes) {
       const cs = casar(prep, padrao);
       if (cs.length === 0) continue;
@@ -269,10 +269,13 @@ export function extrairCrossBu(prep: Preparado): ProdutoTotvs[] {
  * Concorrentes
  * ================================================================== */
 
-export function extrairConcorrentes(prep: Preparado): Concorrente[] {
+export function extrairConcorrentes(
+  prep: Preparado,
+  concorrentes: { nome: string; padrao: string }[] = CONCORRENTES,
+): Concorrente[] {
   const saida: Concorrente[] = [];
 
-  for (const conc of CONCORRENTES) {
+  for (const conc of concorrentes) {
     for (const c of casar(prep, conc.padrao)) {
       const ctx = contextoBusca(prep, c.inicio);
       const historico = algumPadrao(ctx, CONTEXTO_CONCORRENTE_HISTORICO);

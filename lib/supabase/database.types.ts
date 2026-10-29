@@ -23,6 +23,18 @@ export type OrganizationRow = {
   id: string;
   name: string;
   slug: string;
+  /** 'totvs' liga a lista histórica da TOTVS no motor (migration 004). */
+  catalogo_base: string | null;
+  created_at: string;
+};
+
+/** Produto ou concorrente cadastrado pela empresa (migration 004). */
+export type CatalogoItemRow = {
+  id: string;
+  org_id: string;
+  tipo: 'produto' | 'concorrente';
+  nome: string;
+  sinonimos: string[];
   created_at: string;
 };
 
@@ -224,6 +236,7 @@ export type Database = {
       corrections: Tabela<CorrectionRow, 'analysis_id' | 'field' | 'action'>;
       corpus_samples: Tabela<CorpusSampleRow, 'code' | 'scenario' | 'raw_text'>;
       validation_runs: Tabela<ValidationRunRow, 'engine' | 'sample_count'>;
+      catalogo_itens: Tabela<CatalogoItemRow, 'org_id' | 'tipo' | 'nome'>;
     };
     Views: Record<never, never>;
     Functions: Record<never, never>;

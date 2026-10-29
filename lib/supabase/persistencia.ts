@@ -10,6 +10,7 @@ import type {
 } from './database.types';
 import { analisar, preparar } from '@/lib/analysis';
 import type {
+  Catalogo,
   AnalysisResult,
   Concorrente,
   Evidence,
@@ -70,6 +71,33 @@ export async function contextoDoUsuario(): Promise<Contexto> {
   if (!membro.data) throw new Error('Usuário sem empresa: crie a empresa em /comecar.');
 
   return { orgId: membro.data.org_id, userId: membro.data.id };
+}
+
+/**
+ * O que o motor procura nas reuniões desta empresa: os produtos e concorrentes
+ * cadastrados (tela /catalogo) e, para a organização TOTVS, a lista histórica.
+ * Vem junto o nome da empresa, que o motor usa para reconhecer o vendedor
+ * ("aqui na <empresa>").
+ */
+export async function catalogoDaEmpresa(orgId: string): Promise<{ catalogo: Catalogo; empresa: string }> {
+  const sb = await supabaseServer();
+  const [org, itens] = await Promise.all([
+    sb.from('organizations').select('name, catalogo_base').eq('id', orgId).maybeSingle(),
+    sb.from('catalogo_itens').select('tipo, nome, sinonimos').eq('org_id', orgId).order('nome'),
+  ]);
+  if (org.error) throw new Error(`Falha ao ler a empresa: ${org.error.message}`);
+  if (itens.error) throw new Error(`Falha ao ler o catálogo: ${itens.error.message}`);
+
+  const lista = itens.data ?? [];
+  const item = (i: (typeof lista)[number]) => ({ nome: i.nome, sinonimos: i.sinonimos ?? [] });
+  return {
+    empresa: org.data?.name ?? 'TOTVS',
+    catalogo: {
+      baseTotvs: org.data?.catalogo_base === 'totvs',
+      produtos: lista.filter((i) => i.tipo === 'produto').map(item),
+      concorrentes: lista.filter((i) => i.tipo === 'concorrente').map(item),
+    },
+  };
 }
 
 /**
@@ -487,10 +515,13 @@ export async function criarReuniaoComAnalise(entrada: EntradaIngestao): Promise<
 
     // Um único preparo determinístico. analisar() reprepara com o mesmo texto e,
     // sendo determinístico, produz offsets idênticos aos deste prep.
-    const prep = preparar(entrada.texto);
+    const { catalogo, empresa } = await catalogoDaEmpresa(ctx.orgId);
+    const prep = preparar(entrada.texto, { empresaVendedora: empresa });
     const analise = analisar({
       texto: entrada.texto,
       dataReuniao: entrada.data,
+      catalogo,
+      empresaVendedora: empresa,
       ...(memoria ? { memoria } : {}),
     });
 
@@ -630,9 +661,14 @@ export async function reanalisarReuniao(meetingId: string): Promise<void> {
     }
   }
 
+  // Reprocessar usa o catálogo de HOJE: é assim que um produto cadastrado
+  // depois passa a aparecer nas reuniões antigas.
+  const { catalogo, empresa } = await catalogoDaEmpresa(m.org_id);
   const analise = analisar({
     texto: transcript.data.raw_text,
     dataReuniao: m.meeting_date,
+    catalogo,
+    empresaVendedora: empresa,
     ...(memoria ? { memoria } : {}),
   });
 

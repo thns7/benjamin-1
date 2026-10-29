@@ -917,7 +917,7 @@ function Ecossistema({
   onSelect: (e: Evidence | undefined) => void;
 }) {
   return (
-    <Secao titulo="Ecossistema TOTVS" icone={<Target size={14} />} contador={analise.totvs_products.length}>
+    <Secao titulo="Produtos citados" icone={<Target size={14} />} contador={analise.totvs_products.length}>
       {analise.totvs_products.length > 0 ? (
         <div className="space-y-1.5">
           {analise.totvs_products.map((p, i) => {
@@ -936,7 +936,12 @@ function Ecossistema({
           })}
         </div>
       ) : (
-        <Vazio>Nenhum produto TOTVS identificado no diálogo.</Vazio>
+        <Vazio>
+          Nenhum produto do seu catálogo apareceu nesta reunião.{' '}
+          <a href="/catalogo" className="text-accent underline underline-offset-2">
+            Cadastrar produtos
+          </a>
+        </Vazio>
       )}
     </Secao>
   );

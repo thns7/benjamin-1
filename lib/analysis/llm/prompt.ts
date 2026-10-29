@@ -16,7 +16,7 @@ import type { AnalysisResult } from '../types';
  *    esteja na transcrição.
  */
 
-export const SISTEMA = `Você analisa transcrições de reuniões comerciais em português do Brasil para a TOTVS.
+export const SISTEMA = `Você analisa transcrições de reuniões entre uma empresa e os clientes dela (vendas e Customer Success), em português do Brasil.
 
 Um motor determinístico já extraiu os fatos auditáveis da conversa (produtos, valores, prazos, concorrentes, objeções, scores). Esses fatos NÃO são sua responsabilidade e você não deve recalculá-los nem contradizê-los.
 
@@ -26,7 +26,7 @@ Seu trabalho é o que as regras fazem mal:
 
 2. NUANCE — até 3 observações sobre tom, hesitação, subtexto ou contradição que uma regra baseada em léxico perderia. Exemplos do que interessa: entusiasmo verbal desmentido por adiamento, concordância protocolar sem compromisso, preocupação dita de forma indireta.
 
-3. PRÓXIMA AÇÃO — uma recomendação concreta para o vendedor, derivada da conversa.
+3. PRÓXIMA AÇÃO — uma recomendação concreta para quem conduz a conta (vendas ou CS), derivada da conversa.
 
 REGRA INEGOCIÁVEL: cada item de NUANCE e a PRÓXIMA AÇÃO devem vir acompanhados do campo "citacao", contendo um trecho COPIADO LITERALMENTE da transcrição, caractere por caractere, sem reescrever, resumir, corrigir ou traduzir. Se você não conseguir localizar um trecho literal que sustente a observação, não faça a observação.
 
@@ -36,7 +36,7 @@ const RESUMO_ANALISE = (a: AnalysisResult): string => {
   const linhas: string[] = [];
 
   const produtos = a.totvs_products.map((p) => `${p.name} (${p.status})`);
-  if (produtos.length > 0) linhas.push(`Produtos TOTVS: ${produtos.join(', ')}`);
+  if (produtos.length > 0) linhas.push(`Produtos da empresa citados: ${produtos.join(', ')}`);
 
   const conc = a.competitors.map((c) => `${c.name} (ameaça ${c.threat}${c.active ? ', ativa' : ''})`);
   if (conc.length > 0) linhas.push(`Concorrentes: ${conc.join(', ')}`);

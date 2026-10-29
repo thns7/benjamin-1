@@ -12,6 +12,7 @@ import {
   Plus,
   Radar,
   Sun,
+  Tags,
   type LucideIcon,
 } from 'lucide-react';
 import { Logo, TAGLINE, Wordmark } from './logo';
@@ -40,6 +41,10 @@ const GRUPOS: Grupo[] = [
       { href: '/reunioes', rotulo: 'Reuniões', icone: MessagesSquare },
       { href: '/reunioes/lote', rotulo: 'Importar', icone: FolderUp },
     ],
+  },
+  {
+    titulo: 'Empresa',
+    itens: [{ href: '/catalogo', rotulo: 'Catálogo', icone: Tags }],
   },
 ];
 

@@ -345,6 +345,29 @@ export type MemoriaCliente = {
   contract_value?: number;
 };
 
+/**
+ * Um produto ou concorrente cadastrado pela empresa. `sinonimos` são outros
+ * jeitos de chamar a mesma coisa nas reuniões ("RD", "RD Station CRM"). Tudo
+ * texto simples: o motor transforma em padrão de busca, sem expor regex.
+ */
+export type ItemCatalogo = {
+  nome: string;
+  sinonimos?: string[];
+};
+
+/**
+ * O que o motor procura nas reuniões de UMA empresa.
+ *
+ * `baseTotvs` liga a lista histórica da TOTVS (lexicons.ts) — usada pela
+ * organização TOTVS do Challenge. Empresas novas começam com ela desligada:
+ * sem isso o motor acharia "Protheus" e "SAP" na reunião de qualquer um.
+ */
+export type Catalogo = {
+  baseTotvs: boolean;
+  produtos: ItemCatalogo[];
+  concorrentes: ItemCatalogo[];
+};
+
 export type EntradaAnalise = {
   /** Texto bruto da transcrição. Única entrada obrigatória. */
   texto: string;
@@ -367,6 +390,11 @@ export type EntradaAnalise = {
    * a correção é teatro.
    */
   papeisFixados?: Record<string, Lado>;
+  /**
+   * Produtos e concorrentes da empresa que está analisando. Ausente = a lista
+   * da TOTVS (é o que os testes e o corpus de validação medem).
+   */
+  catalogo?: Catalogo;
 };
 
 /* ------------------------------------------------------------------ *
