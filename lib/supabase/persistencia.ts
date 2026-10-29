@@ -76,22 +76,29 @@ export async function contextoDoUsuario(): Promise<Contexto> {
 /**
  * O que o motor procura nas reuniões desta empresa: os produtos e concorrentes
  * cadastrados (tela /catalogo) e, para a organização TOTVS, a lista histórica.
- * Vem junto o nome da empresa, que o motor usa para reconhecer o vendedor
- * ("aqui na <empresa>").
+ * Vem junto o que o motor usa para reconhecer o vendedor: o nome da empresa
+ * ("aqui na <empresa>") e os nomes das pessoas dela. São as pessoas de toda a
+ * empresa, e não só quem está logado, porque o gestor envia reunião feita por
+ * outro vendedor e o Reprocessar roda por quem clicou, não por quem vendeu.
  */
-export async function catalogoDaEmpresa(orgId: string): Promise<{ catalogo: Catalogo; empresa: string }> {
+export async function catalogoDaEmpresa(
+  orgId: string,
+): Promise<{ catalogo: Catalogo; empresa: string; equipe: string[] }> {
   const sb = await supabaseServer();
-  const [org, itens] = await Promise.all([
+  const [org, itens, pessoas] = await Promise.all([
     sb.from('organizations').select('name, catalogo_base').eq('id', orgId).maybeSingle(),
     sb.from('catalogo_itens').select('tipo, nome, sinonimos').eq('org_id', orgId).order('nome'),
+    sb.from('app_users').select('name').eq('org_id', orgId),
   ]);
   if (org.error) throw new Error(`Falha ao ler a empresa: ${org.error.message}`);
   if (itens.error) throw new Error(`Falha ao ler o catálogo: ${itens.error.message}`);
+  if (pessoas.error) throw new Error(`Falha ao ler a equipe: ${pessoas.error.message}`);
 
   const lista = itens.data ?? [];
   const item = (i: (typeof lista)[number]) => ({ nome: i.nome, sinonimos: i.sinonimos ?? [] });
   return {
     empresa: org.data?.name ?? 'TOTVS',
+    equipe: (pessoas.data ?? []).map((p) => p.name).filter(Boolean),
     catalogo: {
       baseTotvs: org.data?.catalogo_base === 'totvs',
       produtos: lista.filter((i) => i.tipo === 'produto').map(item),
@@ -515,13 +522,14 @@ export async function criarReuniaoComAnalise(entrada: EntradaIngestao): Promise<
 
     // Um único preparo determinístico. analisar() reprepara com o mesmo texto e,
     // sendo determinístico, produz offsets idênticos aos deste prep.
-    const { catalogo, empresa } = await catalogoDaEmpresa(ctx.orgId);
-    const prep = preparar(entrada.texto, { empresaVendedora: empresa });
+    const { catalogo, empresa, equipe } = await catalogoDaEmpresa(ctx.orgId);
+    const prep = preparar(entrada.texto, { empresaVendedora: empresa, equipeVendedora: equipe });
     const analise = analisar({
       texto: entrada.texto,
       dataReuniao: entrada.data,
       catalogo,
       empresaVendedora: empresa,
+      equipeVendedora: equipe,
       ...(memoria ? { memoria } : {}),
     });
 
@@ -663,12 +671,13 @@ export async function reanalisarReuniao(meetingId: string): Promise<void> {
 
   // Reprocessar usa o catálogo de HOJE: é assim que um produto cadastrado
   // depois passa a aparecer nas reuniões antigas.
-  const { catalogo, empresa } = await catalogoDaEmpresa(m.org_id);
+  const { catalogo, empresa, equipe } = await catalogoDaEmpresa(m.org_id);
   const analise = analisar({
     texto: transcript.data.raw_text,
     dataReuniao: m.meeting_date,
     catalogo,
     empresaVendedora: empresa,
+    equipeVendedora: equipe,
     ...(memoria ? { memoria } : {}),
   });
 

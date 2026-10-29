@@ -270,3 +270,43 @@ describe('Confiança e último recurso', () => {
     assert.ok((p1?.confianca ?? 1) <= 0.25, 'palpite de último recurso não pode parecer certeza');
   });
 });
+
+describe('Sinal: pessoa da equipe cadastrada', () => {
+  /*
+   * Caso real da conta de demonstração: a vendedora não cita a empresa e diz
+   * "o nosso diretor de produto", que é marca de comprador. Sem a equipe, o
+   * motor a punha do lado do cliente e o risco da reunião saía zero.
+   */
+  const reuniao = [
+    fala('Marina Lopes', 'Oi, Rodrigo. Queria atualizar você sobre a integração.'),
+    fala('Rodrigo Prado', 'Marina, é a terceira vez que o webhook derruba a fila. Virou problema recorrente.'),
+    fala('Marina Lopes', 'Peço desculpas. O ajuste sai na próxima versão.'),
+    fala('Rodrigo Prado', 'Vocês não entregaram o que prometeram. Eu vou escalar isso internamente.'),
+    fala('Marina Lopes', 'Me deixa marcar uma reunião com o nosso diretor de produto ainda esta semana.'),
+    fala('Rodrigo Prado', 'Marque. E me mande o plano até quarta-feira.'),
+  ];
+
+  test('quem é da equipe é vendedor, mesmo com marca de comprador na fala', () => {
+    const papeis = inferirPapeis(reuniao, { empresaVendedora: 'Nuvia', equipeVendedora: ['Marina Lopes'] });
+    const marina = papeis.find((p) => p.nome === 'Marina Lopes');
+
+    assert.equal(marina?.lado, 'vendedor');
+    assert.ok(marina?.sinais.includes('membro_da_equipe'));
+    assert.ok((marina?.confianca ?? 0) >= 0.6, 'cadastro não é palpite: a confiança tem que refletir isso');
+    assert.equal(ladoDe(papeis, 'Rodrigo Prado'), 'cliente');
+  });
+
+  test('rótulo só com o primeiro nome casa; acento e maiúscula não importam', () => {
+    const papeis = inferirPapeis(
+      reuniao.map((f) => (f.falante === 'Marina Lopes' ? { ...f, falante: 'MARINA' } : f)),
+      { equipeVendedora: ['Marína Lopes'] },
+    );
+    assert.equal(ladoDe(papeis, 'MARINA'), 'vendedor');
+  });
+
+  test('mesmo primeiro nome com outro sobrenome não é da equipe', () => {
+    const papeis = inferirPapeis(reuniao, { equipeVendedora: ['Rodrigo Alves'] });
+    const rodrigo = papeis.find((p) => p.nome === 'Rodrigo Prado');
+    assert.ok(!rodrigo?.sinais.includes('membro_da_equipe'));
+  });
+});
