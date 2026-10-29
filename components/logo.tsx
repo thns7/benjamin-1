@@ -5,7 +5,8 @@
  * blocos soltos, a de baixo maior. O vão entre as peças é o que faz a letra —
  * sem ele seria só um B grosso.
  *
- * As três formas leem `--ink`, então a marca inverte junto com o tema. Não há
+ * Haste e barriga de cima leem `--ink` e invertem com o tema; a barriga de
+ * baixo lê `--accent`, o violeta da marca. Não há
  * ficha atrás: o B é a marca inteira, e precisa funcionar sozinho no papel, no
  * cartão e gravado em relevo (ver a identidade em `IDENTIDADE.md`).
  *
@@ -23,7 +24,7 @@ export function Logo({ size = 28 }: { size?: number }) {
       aria-label="Benjamin"
       className="shrink-0"
     >
-      <MarcaFormas cor="var(--ink)" />
+      <MarcaFormas cor="var(--ink)" destaque="var(--accent)" />
     </svg>
   );
 }
@@ -32,12 +33,13 @@ export function Logo({ size = 28 }: { size?: number }) {
  * As três formas do B, separadas do `<svg>` para o ícone de tela inicial
  * (`app/apple-icon.tsx`) desenhar a mesma marca com cor fixa.
  */
-export function MarcaFormas({ cor }: { cor: string }) {
+export function MarcaFormas({ cor, destaque = cor }: { cor: string; destaque?: string }) {
   return (
     <g fill={cor}>
       <rect x="4.5" y="4" width="5.75" height="24" rx="2.875" />
       <path d="M14 4H19.5A5.5 5.5 0 0 1 19.5 15H14Q13 15 13 14V5Q13 4 14 4Z" />
-      <path d="M13 25C13 20.2 16.8 16 21.5 16A6 6 0 0 1 21.5 28H14Q13 28 13 27Z" />
+      {/* A barriga de baixo é a assinatura: violeta, a mesma forma das aspas das falas. */}
+      <path d="M13 25C13 20.2 16.8 16 21.5 16A6 6 0 0 1 21.5 28H14Q13 28 13 27Z" fill={destaque} />
     </g>
   );
 }

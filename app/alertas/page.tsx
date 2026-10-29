@@ -66,7 +66,7 @@ function Chip({
       href={href}
       aria-current={ativo ? 'page' : undefined}
       className={`rounded-full px-3 py-1 text-[12px] font-medium transition-colors ${
-        ativo ? 'bg-ink text-canvas' : 'text-ink-dim hover:bg-surface-3 hover:text-ink'
+        ativo ? 'bg-accent-soft text-accent' : 'text-ink-dim hover:bg-surface-3 hover:text-ink'
       }`}
     >
       {children}

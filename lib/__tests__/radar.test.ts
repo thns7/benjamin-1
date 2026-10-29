@@ -1,6 +1,17 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { faixaRisco, montarRadar, motivosDaConta, posicionarNoMapa, type AnaliseRadar, type EntradaRadar } from '../radar';
+import {
+  ANEL_ALTO,
+  ANEL_MEDIO,
+  CORTE_ALTO,
+  faixaRisco,
+  montarRadar,
+  motivosDaConta,
+  posicionarNoPolar,
+  raioDoRisco,
+  type AnaliseRadar,
+  type EntradaRadar,
+} from '../radar';
 
 /**
  * Radar de churn: ordem das contas, abstenção e motivo com citação.
@@ -217,8 +228,8 @@ describe('motivosDaConta', () => {
   });
 });
 
-describe('posicionarNoMapa', () => {
-  const conta = (id: string, churn: number | null, contrato: number | null) => ({
+describe('posicionarNoPolar', () => {
+  const conta = (id: string, churn: number | null, contrato: number | null = 10) => ({
     id,
     nome: id,
     segmento: null,
@@ -232,32 +243,39 @@ describe('posicionarNoMapa', () => {
     concorrentes: [],
     alertasAbertos: 0,
   });
+  const dist = (p: { x: number; y: number }) => Math.hypot(p.x - 50, p.y - 50);
 
-  test('conta sem leitura fica fora do mapa, em vez de aparecer no risco zero', () => {
-    const pontos = posicionarNoMapa([conta('a', 50, 10), conta('b', null, 10)]);
-    assert.deepEqual(pontos.map((p) => p.id), ['a']);
+  test('quanto maior o risco, mais perto do centro', () => {
+    const pontos = posicionarNoPolar([conta('baixo', 10), conta('alto', 90), conta('medio', 50)]);
+    const d = Object.fromEntries(pontos.map((p) => [p.id, dist(p)]));
+    assert.ok(d.alto! < d.medio! && d.medio! < d.baixo!);
   });
 
-  test('ponto ou nome que se cobririam sobem de faixa; distantes ficam na primeira', () => {
-    // 'c' fica longe e sem nome; 'a' e 'b' estão em risco alto, então têm nome.
-    const pontos = posicionarNoMapa([conta('a', 80, 10), conta('b', 82, 10), conta('c', 20, null)]);
-    const faixa = Object.fromEntries(pontos.map((p) => [p.id, p.faixaVertical]));
-    assert.equal(faixa.c, 0);
-    assert.equal(faixa.a, 0);
-    assert.equal(faixa.b, 1);
+  test('os anéis ficam nos cortes de faixa', () => {
+    assert.ok(Math.abs(raioDoRisco(CORTE_ALTO) - ANEL_ALTO) < 1e-9);
+    assert.ok(ANEL_ALTO < ANEL_MEDIO);
   });
 
-  test('o nome conta como espaço ocupado: dois rótulos longos não dividem a faixa', () => {
-    const longo = (id: string, churn: number) => ({ ...conta(id, churn, 10), nome: 'Conta de nome bem comprido' });
-    const pontos = posicionarNoMapa([longo('a', 70), longo('b', 90)]);
-    assert.notEqual(pontos[0]?.faixaVertical, pontos[1]?.faixaVertical);
+  test('a mesma conta cai no mesmo lugar a cada carga', () => {
+    const a = posicionarNoPolar([conta('x', 70), conta('y', 40)]);
+    const b = posicionarNoPolar([conta('y', 40), conta('x', 70)]);
+    assert.deepEqual(
+      a.find((p) => p.id === 'x'),
+      b.find((p) => p.id === 'x'),
+    );
   });
 
-  test('tamanho segue a raiz do contrato; sem contrato não tem tamanho', () => {
-    const pontos = posicionarNoMapa([conta('grande', 50, 400), conta('pequena', 60, 100), conta('sem', 70, null)]);
-    const t = Object.fromEntries(pontos.map((p) => [p.id, p.tamanho]));
-    assert.equal(t.grande, 1);
-    assert.equal(t.pequena, 0.5);
-    assert.equal(t.sem, null);
+  test('conta sem leitura fica fora do radar', () => {
+    assert.deepEqual(posicionarNoPolar([conta('a', 50), conta('b', null)]).map((p) => p.id), ['a']);
+  });
+
+  test('pontos não se cobrem enquanto o anel tem espaço', () => {
+    // 8 contas no mesmo risco cabem no anel; com muito mais, o perímetro acaba
+    // e o radar aceita sobreposição (a lista ao lado continua completa).
+    const muitas = Array.from({ length: 8 }, (_, i) => conta(`c${i}`, 80));
+    const pontos = posicionarNoPolar(muitas);
+    for (let i = 0; i < pontos.length; i++)
+      for (let j = i + 1; j < pontos.length; j++)
+        assert.ok(Math.hypot(pontos[i]!.x - pontos[j]!.x, pontos[i]!.y - pontos[j]!.y) >= 6.9);
   });
 });

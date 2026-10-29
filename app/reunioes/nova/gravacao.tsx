@@ -460,7 +460,7 @@ export function GravacaoReuniao({ onTexto }: { onTexto: (t: string) => void }) {
             <button
               type="button"
               onClick={() => void comecar()}
-              className="inline-flex items-center gap-1.5 rounded-md bg-accent px-4 py-2 text-[12.5px] font-semibold text-canvas transition-opacity hover:opacity-90"
+              className="inline-flex items-center gap-1.5 rounded-md bg-acao px-4 py-2 text-[12.5px] font-semibold text-on-acao transition-opacity hover:opacity-90"
             >
               <Mic size={14} />
               {modo === 'online' ? 'Escolher a aba e gravar' : 'Gravar'}
