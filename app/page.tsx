@@ -1,12 +1,11 @@
 import Link from 'next/link';
 import { Bell, MessagesSquare, Swords } from 'lucide-react';
 import { Badge, BotaoLink, EmptyState, PageHeader } from '@/components/ui';
-import { tomChurn } from '@/components/cliente-ui';
-import { MapaDeRisco, Motivo, ROTULO_FAIXA, Tendencia } from '@/components/radar-ui';
+import { Motivo, RadarPolar, ROTULO_FAIXA, Tendencia } from '@/components/radar-ui';
 import { supabaseConfigurado } from '@/lib/supabase/server';
 import { SemBanco } from '@/components/sem-banco';
 import { carregarRadar } from '@/lib/radar-dados';
-import { DIAS_SEM_CONTATO, posicionarNoMapa, type ContaRadar, type FaixaRisco } from '@/lib/radar';
+import { DIAS_SEM_CONTATO, posicionarNoPolar, type ContaRadar, type FaixaRisco } from '@/lib/radar';
 
 export const dynamic = 'force-dynamic';
 
@@ -38,7 +37,7 @@ function Chip({ ativo, href, children }: { ativo: boolean; href: string; childre
       href={href}
       aria-current={ativo ? 'page' : undefined}
       className={`rounded-full px-3 py-1 text-[12px] font-medium transition-colors ${
-        ativo ? 'bg-ink text-canvas' : 'text-ink-dim hover:bg-surface-3 hover:text-ink'
+        ativo ? 'bg-accent-soft text-accent' : 'text-ink-dim hover:bg-surface-3 hover:text-ink'
       }`}
     >
       {children}
@@ -46,21 +45,28 @@ function Chip({ ativo, href, children }: { ativo: boolean; href: string; childre
   );
 }
 
-/** Uma conta: quem e quanto à esquerda, a fala no meio, o risco à direita. */
+const COR_FAIXA: Record<FaixaRisco, string> = {
+  alto: 'text-risk',
+  medio: 'text-warn',
+  baixo: 'text-health',
+  sem_leitura: 'text-ink-faint',
+};
+
+/** Uma conta: nome, contrato e a fala do cliente; o risco à direita. */
 function LinhaConta({ c }: { c: ContaRadar }) {
   return (
-    <li className="grid grid-cols-[1fr_auto] gap-x-8 gap-y-3 py-5 md:grid-cols-[minmax(170px,220px)_1fr_88px] md:items-start">
+    <li className="grid grid-cols-[1fr_auto] gap-x-6 px-5 py-4 transition-colors hover:bg-surface-2/60">
       <div className="min-w-0">
-        <Link href={`/clientes/${c.id}`} className="text-[14.5px] font-semibold tracking-[-0.01em] text-ink hover:underline">
+        <Link href={`/clientes/${c.id}`} className="text-[15px] font-semibold tracking-[-0.01em] text-ink hover:underline">
           {c.nome}
         </Link>
-        <p className="mt-1 text-[12px] leading-snug text-ink-faint">
+        <p className="mt-0.5 text-[12.5px] leading-snug text-ink-faint">
           {c.contrato == null ? 'Sem contrato cadastrado' : `Contrato de ${BRL.format(c.contrato)}`}
           {c.diasSemContato != null ? (
             <>
-              <br />
+              {', '}
               <span className={c.diasSemContato > DIAS_SEM_CONTATO ? 'font-medium text-warn' : ''}>
-                {c.diasSemContato === 0 ? 'Conversou hoje' : `Sem conversa há ${plural(c.diasSemContato, 'dia', 'dias')}`}
+                {c.diasSemContato === 0 ? 'conversou hoje' : `${plural(c.diasSemContato, 'dia', 'dias')} sem conversa`}
               </span>
             </>
           ) : null}
@@ -81,34 +87,28 @@ function LinhaConta({ c }: { c: ContaRadar }) {
             ))}
           </div>
         ) : null}
+        <div className="mt-3">
+          {c.motivo ? (
+            <Motivo motivo={c.motivo} compacto />
+          ) : (
+            <p className="text-[12.5px] leading-relaxed text-ink-faint">
+              {c.faixa === 'sem_leitura'
+                ? 'Ainda sem leitura de risco: falta uma reunião analisada em que dê para saber quem falou.'
+                : 'Nenhuma fala de risco na última reunião.'}
+            </p>
+          )}
+        </div>
       </div>
 
-      {/* No celular a fala vai para baixo e o risco fica ao lado do nome. */}
-      <div className="order-3 col-span-2 min-w-0 md:order-none md:col-span-1">
-        {c.motivo ? (
-          <Motivo motivo={c.motivo} compacto />
-        ) : (
-          <p className="pt-0.5 text-[12.5px] leading-relaxed text-ink-faint">
-            {c.faixa === 'sem_leitura'
-              ? 'Ainda sem leitura de risco: falta uma reunião analisada em que dê para saber quem falou.'
-              : 'Nenhuma fala de risco na última reunião.'}
-          </p>
-        )}
-      </div>
-
-      <div className="order-2 flex flex-col items-end gap-0.5 md:order-none">
+      <div className="flex flex-col items-end gap-0.5">
         {c.churn == null ? (
           <span className="text-[12px] text-ink-faint">{ROTULO_FAIXA[c.faixa]}</span>
         ) : (
           <>
-            <span
-              className={`text-[32px] font-semibold leading-none tracking-[-0.04em] tabular-nums ${
-                tomChurn(c.churn) === 'risk' ? 'text-risk' : 'text-ink'
-              }`}
-            >
+            <span className={`text-[34px] font-semibold leading-none tracking-[-0.04em] tabular-nums ${COR_FAIXA[c.faixa]}`}>
               {c.churn}
             </span>
-            <Tendencia valor={c.tendencia} />
+            <Tendencia valor={c.tendencia} faixa={c.faixa} />
           </>
         )}
       </div>
@@ -197,58 +197,64 @@ export default async function RadarPage({ searchParams }: { searchParams: Promis
 
   return (
     <>
-      {/* Sem descrição aqui: a manchete abaixo já diz o que a tela responde. */}
-      <PageHeader titulo="Radar de churn" acoes={acoes} />
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+        <p className="text-[13px] text-ink-faint">Radar de churn, hoje</p>
+        {acoes}
+      </div>
 
-      <section className="mb-12">
-        <h2 className="max-w-[22ch] text-[40px] font-semibold leading-[1.05] tracking-[-0.035em] text-ink sm:text-[46px]">
-          {manchete}
-        </h2>
-        {contexto.length > 0 ? (
-          <p className="mt-4 max-w-[62ch] text-[15px] leading-relaxed text-ink-dim">{contexto}</p>
-        ) : null}
-
-        <div className="mt-10">
-          <MapaDeRisco pontos={posicionarNoMapa(contas)} semLeitura={resumo.contasSemLeitura} />
-        </div>
-      </section>
-
-      <section>
-        <div className="mb-2 flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h2 className="text-[17px] font-semibold tracking-[-0.015em] text-ink">Contas por receita em risco</h2>
-            <p className="mt-0.5 text-[12.5px] text-ink-faint">
-              Contrato vezes risco de churn: uma conta grande com risco médio vem antes de uma pequena com risco alto.
-            </p>
-          </div>
-          <nav aria-label="Filtrar por faixa de risco" className="flex flex-wrap gap-1">
-            {FILTROS.map((f) => (
-              <Chip key={f.valor} ativo={faixa === f.valor} href={f.valor === 'todas' ? '/' : `/?faixa=${f.valor}`}>
-                {f.rotulo} {f.valor === 'todas' ? contas.length : contagem(f.valor)}
-              </Chip>
-            ))}
-          </nav>
-        </div>
-
-        {visiveis.length === 0 ? (
-          <p className="border-t border-line py-10 text-center text-[13px] text-ink-dim">
-            Nenhuma conta nesta faixa.{' '}
-            <Link href="/" className="font-medium text-ink underline underline-offset-2">
-              Ver todas
-            </Link>
-          </p>
+      {/* A abertura é uma frase: quem abre o radar quer saber se hoje é um dia tranquilo. */}
+      <h1 className="max-w-[24ch] text-[38px] font-semibold leading-[1.05] tracking-[-0.04em] text-ink sm:text-[46px]">
+        {resumo.contasEmRiscoAlto > 0 && resumo.receitaEmRisco > 0 ? (
+          <>
+            <span className="text-risk">{BRL_CURTO.format(resumo.receitaEmRisco)}</span> em contratos podem cancelar.
+          </>
         ) : (
-          <ul className="divide-y divide-line border-y border-line">
-            {visiveis.map((c) => (
-              <LinhaConta key={c.id} c={c} />
-            ))}
-          </ul>
+          manchete
         )}
+      </h1>
+      {contexto.length > 0 ? <p className="mt-3 max-w-[70ch] text-[15px] leading-relaxed text-ink-dim">{contexto}</p> : null}
 
-        <p className="mt-3 text-[12px] text-ink-faint">
-          O número é o risco de churn da reunião analisada mais recente; a seta compara com a anterior.
-        </p>
-      </section>
+      <div className="mt-8 grid items-start gap-8 lg:grid-cols-[minmax(320px,440px)_1fr]">
+        <RadarPolar
+          pontos={posicionarNoPolar(contas)}
+          semLeitura={resumo.contasSemLeitura}
+          className="lg:sticky lg:top-8"
+        />
+
+        <section className="vidro overflow-hidden rounded-2xl">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-4">
+            <div>
+              <h2 className="text-[15px] font-semibold tracking-[-0.01em] text-ink">Contas por receita em risco</h2>
+              <p className="mt-0.5 text-[12.5px] text-ink-faint">Contrato vezes risco: a maior perda possível vem primeiro.</p>
+            </div>
+            <nav aria-label="Filtrar por faixa de risco" className="flex flex-wrap gap-1">
+              {FILTROS.map((f) => (
+                <Chip key={f.valor} ativo={faixa === f.valor} href={f.valor === 'todas' ? '/' : `/?faixa=${f.valor}`}>
+                  {f.rotulo} {f.valor === 'todas' ? contas.length : contagem(f.valor)}
+                </Chip>
+              ))}
+            </nav>
+          </div>
+
+          {visiveis.length === 0 ? (
+            <p className="py-10 text-center text-[13px] text-ink-dim">
+              Nenhuma conta nesta faixa.{' '}
+              <Link href="/" className="font-medium text-accent underline underline-offset-2">
+                Ver todas
+              </Link>
+            </p>
+          ) : (
+            <ul className="divide-y divide-line">
+              {visiveis.map((c) => (
+                <LinhaConta key={c.id} c={c} />
+              ))}
+            </ul>
+          )}
+          <p className="border-t border-line px-5 py-3 text-[12px] text-ink-faint">
+            O número é o risco de churn da reunião analisada mais recente; a seta compara com a anterior.
+          </p>
+        </section>
+      </div>
     </>
   );
 }

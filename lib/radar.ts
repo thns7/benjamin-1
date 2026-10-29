@@ -298,32 +298,51 @@ export function motivosDaConta(
 }
 
 /* ------------------------------------------------------------------ *
- * Mapa de risco
+ * Radar circular
  * ------------------------------------------------------------------ */
 
-export type PontoMapa = {
+/**
+ * Distância do centro, em fração do raio: quanto maior o risco, mais perto do
+ * centro (o "alvo"). Risco 100 fica em 0,08 do raio, risco 0 na borda (0,94).
+ */
+export function raioDoRisco(risco: number): number {
+  const r = Math.max(0, Math.min(100, risco));
+  return 0.08 + 0.86 * (1 - r / 100);
+}
+
+/** Os anéis do radar ficam exatamente nos cortes de faixa. */
+export const ANEL_ALTO = raioDoRisco(CORTE_ALTO);
+export const ANEL_MEDIO = raioDoRisco(CORTE_MEDIO);
+
+export type PontoPolar = {
   id: string;
   nome: string;
-  /** Posição horizontal, 0–100: o próprio risco de churn. */
-  x: number;
-  /** Faixa vertical (0 = a mais próxima do eixo), para pontos não se cobrirem. */
-  faixaVertical: number;
-  /** 0–1, proporcional à raiz do contrato (área ∝ valor). null sem contrato. */
-  tamanho: number | null;
+  risco: number;
   faixa: FaixaRisco;
-  /** Nome escrito ao lado do ponto: só onde ajuda a ler o mapa. */
+  /** Posição em % da caixa quadrada do radar (0–100). */
+  x: number;
+  y: number;
+  /** 0–1, proporcional à raiz do contrato. null sem contrato. */
+  tamanho: number | null;
   rotulado: boolean;
 };
 
+/** Ângulo estável por conta: a mesma conta cai no mesmo lugar a cada carga. */
+function anguloDoId(id: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < id.length; i++) {
+    h ^= id.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return ((h >>> 0) % 3600) / 10;
+}
+
 /**
- * Posiciona as contas numa régua de risco. Contas sem leitura ficam fora: no
- * eixo de risco elas não têm lugar, e pô-las no zero diria "risco nenhum".
- *
- * Pontos próximos sobem de faixa para não se cobrirem (um enxame simples).
- * Recebem nome as contas em risco alto e as cinco de maior prioridade — o
- * resto aparece no título do ponto, para o mapa não virar uma nuvem de texto.
+ * Posiciona as contas no radar circular. Sem leitura fica fora (no radar não
+ * há lugar para "não sei"). Pontos que se cobririam giram até achar espaço.
+ * Recebem nome as contas em risco alto e as cinco de maior prioridade.
  */
-export function posicionarNoMapa(contas: ContaRadar[], faixasMax = 5): PontoMapa[] {
+export function posicionarNoPolar(contas: ContaRadar[], distanciaMinima = 7): PontoPolar[] {
   const comLeitura = contas.filter((c) => c.churn != null);
   const maiorContrato = Math.max(0, ...comLeitura.map((c) => c.contrato ?? 0));
   const prioritarias = new Set(
@@ -334,34 +353,32 @@ export function posicionarNoMapa(contas: ContaRadar[], faixasMax = 5): PontoMapa
       .map((c) => c.id),
   );
 
-  // Cada faixa guarda os trechos da régua já ocupados — o ponto E o nome dele.
-  // Um nome de 16 letras ocupa uns 12% da largura num painel de desktop.
-  const ocupado: [number, number][][] = [];
-  const cabe = (faixa: [number, number][], [a, b]: [number, number]) => faixa.every(([x, y]) => b <= x || a >= y);
-
+  const colocados: { x: number; y: number }[] = [];
+  // Os mais arriscados primeiro: são os que não podem ser empurrados.
   return [...comLeitura]
-    .sort((a, b) => (a.churn as number) - (b.churn as number))
+    .sort((a, b) => (b.churn as number) - (a.churn as number) || a.id.localeCompare(b.id))
     .map((c) => {
-      const x = c.churn as number;
-      const rotulado = c.faixa === 'alto' || prioritarias.has(c.id);
-      const nome = rotulado ? c.nome.length * 0.75 + 2 : 0;
-      const trecho: [number, number] = x < 78 ? [x - 2, x + 2 + nome] : [x - 2 - nome, x + 2];
-
-      let faixaVertical = ocupado.findIndex((f) => cabe(f, trecho));
-      if (faixaVertical === -1) {
-        faixaVertical = ocupado.length < faixasMax ? ocupado.length : ocupado.length - 1;
-        ocupado[faixaVertical] ??= [];
+      const risco = c.churn as number;
+      const raio = raioDoRisco(risco) * 50;
+      let angulo = anguloDoId(c.id);
+      let x = 0;
+      let y = 0;
+      for (let tentativa = 0; tentativa < 24; tentativa++) {
+        x = 50 + raio * Math.cos((angulo * Math.PI) / 180);
+        y = 50 + raio * Math.sin((angulo * Math.PI) / 180);
+        if (colocados.every((p) => Math.hypot(p.x - x, p.y - y) >= distanciaMinima)) break;
+        angulo = (angulo + 23) % 360;
       }
-      ocupado[faixaVertical]!.push(trecho);
-
+      colocados.push({ x, y });
       return {
         id: c.id,
         nome: c.nome,
-        x,
-        faixaVertical,
-        tamanho: c.contrato != null && maiorContrato > 0 ? Math.sqrt(c.contrato / maiorContrato) : null,
+        risco,
         faixa: c.faixa,
-        rotulado,
+        x: Math.round(x * 10) / 10,
+        y: Math.round(y * 10) / 10,
+        tamanho: c.contrato != null && maiorContrato > 0 ? Math.sqrt(c.contrato / maiorContrato) : null,
+        rotulado: c.faixa === 'alto' || prioritarias.has(c.id),
       };
     });
 }

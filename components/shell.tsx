@@ -60,7 +60,7 @@ function ehAtivo(pathname: string, href: string): boolean {
 }
 
 function AlternadorTema() {
-  const [tema, setTema] = useState<'dark' | 'light'>('light');
+  const [tema, setTema] = useState<'dark' | 'light'>('dark');
 
   useEffect(() => {
     const atual = document.documentElement.getAttribute('data-theme');
@@ -68,7 +68,7 @@ function AlternadorTema() {
   }, []);
 
   function alternar() {
-    const proximo = tema === 'light' ? 'dark' : 'light';
+    const proximo = tema === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', proximo);
     try {
       localStorage.setItem('benjamin-tema', proximo);
@@ -101,12 +101,12 @@ function BotaoNova({ compacto = false }: { compacto?: boolean }) {
   return (
     <Link
       href="/reunioes/nova"
-      className={`group inline-flex items-center justify-center gap-1.5 rounded-lg bg-accent font-semibold text-canvas transition-all duration-300 hover:shadow-glow ${
+      className={`group inline-flex items-center justify-center gap-1.5 rounded-lg bg-acao font-semibold text-on-acao transition-all duration-300 hover:shadow-glow ${
         compacto ? 'px-2.5 py-1.5 text-[11px]' : 'w-full px-3 py-2 text-[12px]'
       }`}
     >
       <Plus size={compacto ? 13 : 14} className="transition-transform duration-300 group-hover:rotate-90" />
-      {compacto ? 'Nova' : 'Nova reunião'}
+      {compacto ? 'Analisar' : 'Analisar reunião'}
     </Link>
   );
 }

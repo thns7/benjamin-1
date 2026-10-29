@@ -129,7 +129,7 @@ export default async function ClientePage({ params }: { params: Promise<{ id: st
                     {churnSerie.at(-1)}
                   </Mono>
                   <span className="text-[12px] text-ink-faint">/100</span>
-                  <Tendencia valor={churnTendencia} />
+                  <Tendencia valor={churnTendencia} faixa={faixa} />
                 </div>
                 <div className="mt-1">
                   <Badge tom={TOM_FAIXA[faixa]}>{ROTULO_FAIXA[faixa]}</Badge>

@@ -1,43 +1,81 @@
 @import 'tailwindcss';
 
 /*
-  Benjamin — sistema de cor.
-  Toda cor tem significado. Nada aqui é decorativo. A referência completa da
-  identidade (marca, paleta, tipografia, tom) está em `IDENTIDADE.md`.
+  Benjamin — sistema de cor (conceito "Radar de verdade", 2026-10-29).
+  Toda cor tem significado. A referência completa está em `IDENTIDADE.md`.
 
-    ink     carbono #161616 → texto, navegação, foco, ação primária, marca
-    health  verde         → saúde da conta, dessaturado
-    risk    vermelho      → churn e receita em risco, dessaturado
-    warn    grafite       → atenção e baixa confiabilidade — peso, não cor
+  Três camadas, cada uma com um papel:
 
-  A INTERFACE É PAPEL E CARBONO. Quatro tons neutros — #FAFAFA (papel),
-  #E5E5E5 (linha), #A3A3A3 (cinza médio) e #161616 (carbono) — fazem toda a
-  estrutura. Nenhum cinza puxa para o azul: o preto da marca é carbono. O interesse visual vem de espaço, peso e alinhamento, não de cor.
+    base    carbono escuro e tinta clara → fundos, texto, estrutura
+    marca   violeta                      → botão principal (acao), menu ativo,
+                                           links e foco (accent), a barriga do B
+    risco   verde, âmbar, vermelho       → só onde há dado de risco:
+            health (saudável), warn (atenção), risk (risco alto)
 
-  Verde e vermelho sobrevivem porque carregam decisão, não estilo: o produto é
-  um radar de churn, e "esta conta está em risco" precisa saltar da tela. Por
-  isso são as únicas cores, e por isso nada mais pode competir com elas.
-  `warn` é grafite: "dado de baixa confiabilidade" é ressalva, e gastar alarme
-  nela é gastar o alarme que o churn precisa.
+  A marca nunca indica risco, e o risco nunca decora. Se tudo for violeta ou
+  vermelho, nada chama atenção: um botão principal por tela, e a escala de
+  risco só onde há uma conta sendo avaliada.
 
-  Texto nunca usa #A3A3A3 sobre o papel: o contraste é de 2,4:1 e não passa no
-  WCAG AA. O cinza de texto mais claro é `ink-faint` (#6F6F6F, 4,8:1). O
-  #A3A3A3 fica para traço, ícone decorativo e borda forte.
+  O escuro é o padrão: é onde o radar e a escala brilham. O claro continua no
+  botão de tema, com a mesma marca e tons ajustados para o papel (o âmbar e o
+  vermelho escurecem para passar no WCAG AA como texto).
 
-  Antes a identidade era vidro sobre uma atmosfera azul e lilás. Saiu: a nova é
-  plana, como papel, e o painel se separa do fundo por linha fina e sombra
-  curta. As classes `.vidro*` continuam com o mesmo nome porque dezenas de
-  telas as usam — mudou o material, não o contrato.
-
-  `accent` e `accent-vivid` continuam existindo como dois tokens porque cerca de
-  mil usos no código apontam para eles. Ambos são tinta: `accent` é a cor de
-  texto e preenchimento, `accent-vivid` é a de aresta e foco.
-
-  O tema claro é o padrão. O escuro é opt-in e troca só os valores abaixo —
-  nenhum componente conhece o tema, todos leem as variáveis.
+  `accent` e `accent-vivid` ficaram como dois tokens por compatibilidade (muitos
+  usos no código). `acao` / `on-acao` existem porque o violeta claro, bom para
+  texto sobre o escuro, não segura texto branco: o botão usa o violeta mais
+  fundo. As classes `.vidro*` mantêm o nome; o material é painel liso.
 */
 
+/* Tema escuro: o padrão desde o conceito "Radar de verdade" (2026-10-29). */
 :root,
+[data-theme='dark'] {
+  --canvas: #0b0a10;
+  --canvas-deep: #08070c;
+  --surface: #14121c;
+  --surface-solid: #14121c;
+  --surface-2: #1b1926;
+  --surface-3: #26232f;
+  --line: rgb(255 255 255 / 0.08);
+  --line-strong: rgb(255 255 255 / 0.16);
+
+  --ink: #f4f3f7;
+  --ink-dim: #b5b3bf;
+  --ink-faint: #908d9b;
+
+  /* Marca: violeta. accent é texto, link e foco; acao é o fundo do botão
+     principal, mais escuro para segurar texto branco (5,0:1). */
+  --accent: #8b7bff;
+  --accent-vivid: #8b7bff;
+  --accent-soft: rgb(139 123 255 / 0.14);
+  --acao: #6a55f5;
+  --on-acao: #ffffff;
+  --ai: #8b7bff;
+  --ai-soft: rgb(139 123 255 / 0.14);
+
+  /* Escala de risco: verde, âmbar, vermelho. Só onde há dado de risco. */
+  --health: #3fb67f;
+  --health-soft: rgb(63 182 127 / 0.14);
+  --warn: #e9a23b;
+  --warn-soft: rgb(233 162 59 / 0.14);
+  --risk: #ff5a4e;
+  --risk-soft: rgb(255 90 78 / 0.14);
+  --gold: #e9a23b;
+
+  --barra: rgb(11 10 16 / 0.82);
+  --barra-blur: blur(14px) saturate(130%);
+
+  --shadow:
+    0 1px 2px rgb(0 0 0 / 0.4),
+    0 12px 32px -16px rgb(0 0 0 / 0.7);
+  --shadow-lift:
+    0 2px 6px rgb(0 0 0 / 0.45),
+    0 24px 48px -20px rgb(0 0 0 / 0.8);
+  --glow: 0 10px 32px -10px rgb(106 85 245 / 0.75);
+
+  --grao: 0.03;
+}
+
+/* Tema claro: opcional, no botão de tema. Mesma marca, tons para o papel. */
 [data-theme='light'] {
   --canvas: #fafafa;
   --canvas-deep: #f4f4f4;
@@ -52,74 +90,35 @@
   --ink-dim: #525252;
   --ink-faint: #6f6f6f;
 
-  --accent: #161616;
-  --accent-vivid: #161616;
-  --accent-soft: rgb(22 22 22 / 0.06);
-  --ai: #161616;
-  --ai-soft: rgb(22 22 22 / 0.06);
+  --accent: #5b3fd9;
+  --accent-vivid: #5b3fd9;
+  --accent-soft: #eeebfc;
+  --acao: #5b3fd9;
+  --on-acao: #ffffff;
+  --ai: #5b3fd9;
+  --ai-soft: #eeebfc;
+
   --health: #2e7d5b;
   --health-soft: #e6f2ec;
-  --warn: #525252;
-  --warn-soft: #f4f4f4;
+  /* Âmbar escurecido: o #E9A23B do escuro não passa como texto no papel. */
+  --warn: #9a6410;
+  --warn-soft: #fbf1df;
   --risk: #be3f32;
   --risk-soft: #fbeae7;
-  --gold: #161616;
+  --gold: #9a6410;
 
-  /* Barras fixas (lateral e mobile) passam por cima do conteúdo ao rolar. */
   --barra: rgb(250 250 250 / 0.86);
   --barra-blur: blur(14px) saturate(140%);
 
-  /* Sombra curta e neutra: o painel apoiado no papel, não flutuando. */
   --shadow:
     0 1px 2px rgb(22 22 22 / 0.04),
     0 8px 24px -14px rgb(22 22 22 / 0.12);
   --shadow-lift:
     0 2px 4px rgb(22 22 22 / 0.05),
     0 16px 36px -16px rgb(22 22 22 / 0.18);
-  --glow: 0 6px 20px -6px rgb(22 22 22 / 0.32);
+  --glow: 0 8px 24px -8px rgb(91 63 217 / 0.55);
 
   --grao: 0.02;
-}
-
-[data-theme='dark'] {
-  --canvas: #0f0f0f;
-  --canvas-deep: #0a0a0a;
-  --surface: #161616;
-  --surface-solid: #161616;
-  --surface-2: #1c1c1c;
-  --surface-3: #262626;
-  --line: rgb(255 255 255 / 0.08);
-  --line-strong: rgb(255 255 255 / 0.16);
-
-  --ink: #fafafa;
-  --ink-dim: #d4d4d4;
-  --ink-faint: #a3a3a3;
-
-  --accent: #fafafa;
-  --accent-vivid: #ffffff;
-  --accent-soft: rgb(255 255 255 / 0.08);
-  --ai: #fafafa;
-  --ai-soft: rgb(255 255 255 / 0.08);
-  --health: #5fbf8b;
-  --health-soft: rgb(95 191 139 / 0.14);
-  --warn: #a3a3a3;
-  --warn-soft: rgb(255 255 255 / 0.06);
-  --risk: #f0736a;
-  --risk-soft: rgb(240 115 106 / 0.14);
-  --gold: #fafafa;
-
-  --barra: rgb(15 15 15 / 0.86);
-  --barra-blur: blur(14px) saturate(120%);
-
-  --shadow:
-    0 1px 2px rgb(0 0 0 / 0.4),
-    0 10px 28px -14px rgb(0 0 0 / 0.6);
-  --shadow-lift:
-    0 2px 6px rgb(0 0 0 / 0.45),
-    0 18px 40px -16px rgb(0 0 0 / 0.7);
-  --glow: 0 6px 22px -6px rgb(255 255 255 / 0.22);
-
-  --grao: 0.035;
 }
 
 @theme inline {
@@ -139,6 +138,8 @@
   --color-accent: var(--accent);
   --color-accent-vivid: var(--accent-vivid);
   --color-accent-soft: var(--accent-soft);
+  --color-acao: var(--acao);
+  --color-on-acao: var(--on-acao);
   --color-ai: var(--ai);
   --color-ai-soft: var(--ai-soft);
   --color-health: var(--health);
@@ -158,12 +159,13 @@
   --shadow-glow: var(--glow);
 }
 
-html {
-  color-scheme: light;
-}
-
+html,
 [data-theme='dark'] {
   color-scheme: dark;
+}
+
+[data-theme='light'] {
+  color-scheme: light;
 }
 
 body {
@@ -245,11 +247,73 @@ body::after {
 .escalonar > *:nth-child(7) { animation-delay: 0.26s; }
 .escalonar > *:nth-child(8) { animation-delay: 0.3s; }
 
+/*
+  Radar circular (components/radar-ui.tsx). O fundo esquenta para o centro,
+  onde ficam as contas em risco; a varredura violeta é a marca em movimento.
+*/
+.radar-polar {
+  background:
+    radial-gradient(circle, color-mix(in srgb, var(--risk) 20%, transparent) 0%, color-mix(in srgb, var(--risk) 6%, transparent) 26%, color-mix(in srgb, var(--warn) 5%, transparent) 46%, transparent 72%),
+    var(--surface);
+}
+
+.radar-anel {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 9999px;
+  border: 1px dashed var(--line-strong);
+  pointer-events: none;
+}
+
+.radar-anel-medio {
+  border-color: color-mix(in srgb, var(--warn) 45%, transparent);
+}
+
+.radar-anel-alto {
+  border-color: color-mix(in srgb, var(--risk) 55%, transparent);
+}
+
+@keyframes radar-gira {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.radar-varredura {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: conic-gradient(from 0deg, transparent 0deg, transparent 290deg, color-mix(in srgb, var(--accent) 30%, transparent) 356deg, color-mix(in srgb, var(--accent) 70%, transparent) 360deg);
+  animation: radar-gira 5s linear infinite;
+  pointer-events: none;
+}
+
+.radar-ponto-alto {
+  box-shadow: 0 0 16px 2px color-mix(in srgb, var(--risk) 65%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .radar-varredura {
+    animation: none;
+    transform: rotate(-60deg);
+  }
+}
+
 /* Acessibilidade: foco sempre visível, inclusive na navegação por teclado. */
 :focus-visible {
   outline: 2px solid var(--accent-vivid);
   outline-offset: 2px;
   border-radius: 4px;
+}
+
+/*
+  Campo cujo foco aparece no contorno do campo inteiro (focus-within no pai):
+  sem isto a regra acima desenharia um segundo anel só no input.
+*/
+.foco-no-campo:focus-visible {
+  outline: none;
 }
 
 /*

@@ -1,6 +1,12 @@
 import Link from 'next/link';
 import { ArrowDownRight, ArrowUpRight, Minus } from 'lucide-react';
-import { CORTE_ALTO, CORTE_MEDIO, type FaixaRisco, type MotivoRisco, type PontoMapa } from '@/lib/radar';
+import {
+  ANEL_ALTO,
+  ANEL_MEDIO,
+  type FaixaRisco,
+  type MotivoRisco,
+  type PontoPolar,
+} from '@/lib/radar';
 import { Badge, type Tom } from './ui';
 
 /* ------------------------------------------------------------------ *
@@ -26,9 +32,10 @@ const fmtData = (iso: string) => new Date(`${iso.slice(0, 10)}T00:00:00`).toLoca
 
 /**
  * Variação do risco desde a leitura anterior. Subir é ruim, então a seta para
- * cima é vermelha — o contrário do que um gráfico de receita faria.
+ * cima é âmbar ou vermelha (conforme a faixa em que o risco chegou) — o
+ * contrário do que um gráfico de receita faria.
  */
-export function Tendencia({ valor }: { valor: number | null }) {
+export function Tendencia({ valor, faixa }: { valor: number | null; faixa?: FaixaRisco }) {
   if (valor == null) return null;
   if (valor === 0) {
     return (
@@ -38,9 +45,11 @@ export function Tendencia({ valor }: { valor: number | null }) {
     );
   }
   const subiu = valor > 0;
+  // A cor segue onde o risco chegou: subir para "médio" é atenção, não alarme.
+  const cor = !subiu ? 'text-health' : faixa === 'medio' || faixa === 'baixo' ? 'text-warn' : 'text-risk';
   return (
     <span
-      className={`inline-flex items-center gap-0.5 text-[11.5px] font-medium tabular-nums ${subiu ? 'text-risk' : 'text-health'}`}
+      className={`inline-flex items-center gap-0.5 text-[11.5px] font-medium tabular-nums ${cor}`}
       title={subiu ? 'Risco subiu desde a leitura anterior' : 'Risco caiu desde a leitura anterior'}
     >
       {subiu ? <ArrowUpRight size={11} /> : <ArrowDownRight size={11} />}
@@ -130,79 +139,117 @@ export function Motivo({
   );
 }
 
+const COR_PONTO: Record<FaixaRisco, string> = {
+  alto: 'var(--risk)',
+  medio: 'var(--warn)',
+  baixo: 'var(--health)',
+  sem_leitura: 'var(--ink-faint)',
+};
+
 /**
- * Mapa de risco: a carteira inteira numa régua de 0 a 100. Cada ponto é uma
- * conta, posta no próprio risco de churn; a área do ponto é o contrato. A
- * zona de risco alto é a única com cor de fundo — é para lá que o olho vai.
+ * Radar circular: a peça central do Benjamin. Cada conta é um ponto; quanto
+ * mais perto do centro, maior o risco de churn. Os anéis ficam nos cortes de
+ * faixa (67 e 34), o tamanho do ponto é o contrato e a varredura violeta gira
+ * sem parar (parada para quem pede menos movimento).
  *
- * HTML posicionado em vez de SVG: os pontos ficam em porcentagem da largura e
- * o texto não encolhe junto no celular.
+ * `comLinks` liga cada ponto à página da conta; a landing usa o mesmo
+ * desenho com dados fictícios, sem link.
  */
-export function MapaDeRisco({ pontos, semLeitura }: { pontos: PontoMapa[]; semLeitura: number }) {
-  const ALTURA_FAIXA = 30;
-  const faixas = Math.max(1, ...pontos.map((p) => p.faixaVertical + 1));
-  const altura = faixas * ALTURA_FAIXA + 24;
-  const diametro = (p: PontoMapa) => (p.tamanho == null ? 9 : Math.round(10 + p.tamanho * 18));
-  const cor: Record<FaixaRisco, string> = {
-    alto: 'bg-risk',
-    medio: 'bg-ink',
-    baixo: 'bg-ink-faint',
-    sem_leitura: 'bg-ink-faint',
-  };
+export function RadarPolar({
+  pontos,
+  semLeitura = 0,
+  comLinks = true,
+  className = '',
+}: {
+  pontos: PontoPolar[];
+  semLeitura?: number;
+  comLinks?: boolean;
+  className?: string;
+}) {
+  const diametro = (p: PontoPolar) => (p.tamanho == null ? 9 : Math.round(8 + p.tamanho * 18));
+  const anel = (fracao: number) => ({ width: `${fracao * 100}%`, height: `${fracao * 100}%` });
+  const posicao = (p: PontoPolar) => ({ left: `${p.x}%`, top: `${p.y}%` }) as const;
 
   return (
-    <figure aria-label="Mapa de risco das contas" className="select-none">
-      <div className="relative" style={{ height: altura }}>
-        {/* Zonas: só a de risco alto tem fundo. */}
-        <div className="absolute inset-y-0 rounded-r-lg bg-risk-soft" style={{ left: `${CORTE_ALTO}%`, right: 0 }} />
-        <div className="absolute inset-y-0 border-l border-dashed border-line-strong" style={{ left: `${CORTE_MEDIO}%` }} />
-        <div className="absolute bottom-0 left-0 right-0 border-t border-ink/70" />
+    <figure aria-label="Radar de churn: contas mais perto do centro têm mais risco" className={className}>
+      {/* Três camadas: o disco (recortado no círculo), os pontos e, por cima de
+          todos, os nomes. Nome nunca fica embaixo de ponto, e um nome perto da
+          borda não é cortado pelo círculo. */}
+      <div className="relative aspect-square w-full select-none">
+        <div className="radar-polar absolute inset-0 overflow-hidden rounded-full border border-line" aria-hidden>
+          <div className="radar-anel" style={anel(0.94)} />
+          <div className="radar-anel radar-anel-medio" style={anel(ANEL_MEDIO)} />
+          <div className="radar-anel radar-anel-alto" style={anel(ANEL_ALTO)} />
+          <div className="absolute inset-x-[3%] top-1/2 h-px bg-line" />
+          <div className="absolute inset-y-[3%] left-1/2 w-px bg-line" />
+          <div className="radar-varredura" />
+        </div>
 
         {pontos.map((p) => {
           const d = diametro(p);
-          const aDireita = p.x < 78;
-          return (
+          const ponto = (
+            <span
+              className={`block rounded-full ${p.faixa === 'alto' ? 'radar-ponto-alto' : ''} ${p.tamanho == null ? 'border-2' : ''}`}
+              style={{
+                width: d,
+                height: d,
+                background: p.tamanho == null ? 'transparent' : COR_PONTO[p.faixa],
+                borderColor: COR_PONTO[p.faixa],
+              }}
+            />
+          );
+          return comLinks ? (
             <Link
               key={p.id}
               href={`/clientes/${p.id}`}
-              title={`${p.nome}: risco ${p.x}`}
-              className="group absolute flex items-center"
-              style={{
-                left: `${p.x}%`,
-                bottom: 12 + p.faixaVertical * ALTURA_FAIXA,
-                transform: 'translate(-50%, 50%)',
-              }}
+              title={`${p.nome}: risco ${p.risco}`}
+              aria-label={`${p.nome}: risco ${p.risco}`}
+              className="absolute z-10 -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-125"
+              style={posicao(p)}
             >
-              <span
-                className={`block rounded-full ring-2 ring-surface transition-transform group-hover:scale-110 ${
-                  p.tamanho == null ? 'border-2 border-current bg-transparent text-ink-faint' : cor[p.faixa]
-                }`}
-                style={{ width: d, height: d }}
-              />
-              {p.rotulado ? (
-                <span
-                  className={`absolute hidden whitespace-nowrap text-[12px] font-medium sm:block ${p.faixa === 'alto' ? 'text-risk' : 'text-ink'} ${
-                    aDireita ? 'left-full ml-2' : 'right-full mr-2'
-                  }`}
-                >
-                  {p.nome}
-                </span>
-              ) : null}
+              {ponto}
             </Link>
+          ) : (
+            <span key={p.id} className="absolute z-10 -translate-x-1/2 -translate-y-1/2" style={posicao(p)}>
+              {ponto}
+            </span>
           );
         })}
+
+        {pontos
+          .filter((p) => p.rotulado)
+          .map((p) => {
+            // O nome vai para dentro do disco: à direita do ponto, salvo perto
+            // da borda direita. Assim ele não invade a margem da página.
+            const aDireita = p.x < 68;
+            const folga = diametro(p) / 2 + 6;
+            return (
+              <span
+                key={`nome-${p.id}`}
+                aria-hidden
+                className="pointer-events-none absolute z-20 hidden -translate-y-1/2 whitespace-nowrap rounded-full border border-line bg-canvas/90 px-2 py-0.5 text-[12px] font-semibold text-ink backdrop-blur-sm sm:block"
+                style={
+                  aDireita
+                    ? { left: `calc(${p.x}% + ${folga}px)`, top: `${p.y}%` }
+                    : { right: `calc(${100 - p.x}% + ${folga}px)`, top: `${p.y}%` }
+                }
+              >
+                {p.nome} <span className="tabular-nums" style={{ color: COR_PONTO[p.faixa] }}>{p.risco}</span>
+              </span>
+            );
+          })}
       </div>
-      <figcaption className="relative mt-2 h-4 text-[11.5px] text-ink-faint">
-        <span className="absolute left-0">risco baixo</span>
-        <span className="absolute -translate-x-1/2" style={{ left: `${(CORTE_MEDIO + CORTE_ALTO) / 2}%` }}>
-          médio
+      <figcaption className="mt-3">
+        <span className="flex flex-wrap gap-x-4 gap-y-1 text-[12.5px] font-medium">
+          <span className="inline-flex items-center gap-1.5 text-risk"><span className="size-2 rounded-full bg-risk" />risco alto, no centro</span>
+          <span className="inline-flex items-center gap-1.5 text-warn"><span className="size-2 rounded-full bg-warn" />atenção</span>
+          <span className="inline-flex items-center gap-1.5 text-health"><span className="size-2 rounded-full bg-health" />saudável, na borda</span>
         </span>
-        <span className="absolute right-0 font-medium text-risk">alto</span>
+        <span className="mt-1.5 block text-[12.5px] leading-relaxed text-ink-faint">
+          O tamanho do ponto é o contrato; ponto vazado é conta sem contrato cadastrado.
+          {semLeitura > 0 ? ` ${semLeitura} conta${semLeitura > 1 ? 's' : ''} sem leitura de risco não aparece${semLeitura > 1 ? 'm' : ''} no radar.` : ''}
+        </span>
       </figcaption>
-      <p className="mt-4 text-[12px] text-ink-faint">
-        Cada ponto é uma conta; o tamanho é o contrato. Ponto vazado: sem contrato cadastrado.
-        {semLeitura > 0 ? ` ${semLeitura} conta${semLeitura > 1 ? 's' : ''} sem leitura de risco ficou fora do mapa.` : ''}
-      </p>
     </figure>
   );
 }
