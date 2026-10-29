@@ -26,6 +26,7 @@ import {
   CONTEXTO_CONCORRENTE_HISTORICO,
   GATILHOS_COMPRA,
   MARCA_TERCEIRO,
+  NEGADORES,
   OBJECOES,
   PRODUTOS,
   RECUSA_COMPRA,
@@ -903,11 +904,42 @@ export function extrairTarefas(prep: Preparado, dataReuniao: string): Tarefa[] {
  * Sinais de churn e de upsell
  * ================================================================== */
 
+const RE_NEGADOR = new RegExp(`^(?:${NEGADORES.join('|')})$`);
+/** Preposição e artigo não contam na janela: "nunca pensei EM cancelar". */
+const RE_LIGACAO = /^(?:em|de|a|o|as|os|da|do|na|no|pra|para)$/;
+
+/**
+ * O sinal de churn foi negado por quem falou?
+ *
+ * "Não estou insatisfeito" disparava "Declarou insatisfação" e somava risco
+ * numa conta que estava dizendo o contrário. A regra olha só as duas palavras
+ * imediatamente antes do termo (sem contar preposição e artigo), dentro da
+ * mesma oração: "não estou
+ * insatisfeito" e "nunca pensamos em cancelar" são negação; "Não, vamos
+ * cancelar" e "se não resolverem, vamos cancelar" não são, porque a vírgula
+ * separa a negação do termo. A janela curta é deliberada: perder uma negação
+ * longa ("não é que a gente esteja pensando em cancelar") custa menos do que
+ * apagar um risco verdadeiro.
+ *
+ * Padrão que já carrega a negação ("não vamos renovar", "chamado sem
+ * resposta") não passa por aqui: a negação é o próprio sinal.
+ */
+function sinalNegado(prep: Preparado, inicio: number, fim: number): boolean {
+  const termo = prep.textoBusca.slice(inicio, fim).split(/[^\p{L}]+/u);
+  if (termo.some((p) => RE_NEGADOR.test(p))) return false;
+
+  const antes = prep.textoBusca.slice(Math.max(0, inicio - 60), inicio);
+  const oracao = antes.split(/[.,;:!?\n]/).pop() ?? '';
+  const palavras = oracao.split(/[^\p{L}]+/u).filter((p) => p && !RE_LIGACAO.test(p));
+  return palavras.slice(-2).some((p) => RE_NEGADOR.test(p));
+}
+
 export function extrairSinaisChurn(prep: Preparado): SinalPontuado[] {
   const saida: SinalPontuado[] = [];
   for (const sinal of SINAIS_CHURN) {
     for (const c of casar(prep, sinal.padrao)) {
       if (!ehFalaDoCliente(prep, c.inicio)) continue;
+      if (sinalNegado(prep, c.inicio, c.fim)) continue;
       const ev = evidenciaEm(prep, c.inicio, c.fim);
       saida.push({ text: sinal.rotulo, weight: sinal.peso, evidence: ev });
     }
