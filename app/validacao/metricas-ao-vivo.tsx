@@ -233,14 +233,14 @@ export function MetricasAoVivo() {
             }`}
           >
             <p className="text-[12.5px] font-semibold text-ink">
-              Teste de overfitting — delta médio{' '}
+              Teste de overfitting | delta médio{' '}
               <span className="font-mono">{r.overfitting.delta_medio}</span>
             </p>
             <p className="mt-0.5 text-[11.5px] leading-relaxed text-ink-dim">{r.overfitting.veredito}</p>
             {r.overfitting.suspeitos.length > 0 ? (
               <p className="mt-1 text-[11.5px] leading-relaxed text-warn">
                 Campos com delta acima de 0,15: {r.overfitting.suspeitos.join(', ')}. O ganho veio de
-                amostras lidas durante o ajuste e o holdout não acompanhou — o gap fica reportado em vez
+                amostras lidas durante o ajuste e o holdout não acompanhou | o gap fica reportado em vez
                 de ser escondido.
               </p>
             ) : null}
@@ -275,12 +275,12 @@ export function MetricasAoVivo() {
             <Tabela titulo="Corpus REAL" legenda="Reuniões gravadas pelo squad" r={r.corpus_real.metricas} />
           ) : null}
           <Tabela
-            titulo="DEV — partição ajustável"
+            titulo="DEV | partição ajustável"
             legenda="Os erros desta partição são lidos para ajustar léxico e pesos"
             r={r.sintetico.dev}
           />
           <Tabela
-            titulo="HOLDOUT — partição lacrada"
+            titulo="HOLDOUT | partição lacrada"
             legenda="Nunca inspecionada item a item; só métrica agregada"
             r={r.sintetico.holdout}
           />

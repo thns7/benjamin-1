@@ -173,7 +173,7 @@ function tituloInformativo(titulo: string, tipo: TipoReuniao, cliente: string | 
     .filter(Boolean);
   const soVocabularioDeTipo = palavras.every((p) => VOCABULARIO_DE_TIPO.has(p));
   if (!soVocabularioDeTipo) return titulo;
-  return cliente ? `${ROTULO_TIPO[tipo]} — ${cliente}` : ROTULO_TIPO[tipo];
+  return cliente ? `${ROTULO_TIPO[tipo]} | ${cliente}` : ROTULO_TIPO[tipo];
 }
 
 export function metadadosDoCaminho(caminho: string, pastas: string[]): Metadados {

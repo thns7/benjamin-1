@@ -55,7 +55,7 @@ const TIPOS_ACEITOS = [
 const INDISPONIVEL = {
   erro: 'Transcrição de áudio indisponível: OPENAI_API_KEY não está configurada.',
   detalhe:
-    'O núcleo do Benjamin analisa texto. A captação por áudio é um adaptador plugável e precisa de credencial de STT. Sem ela o sistema não simula uma transcrição — use a aba "Colar texto" ou configure a chave no ambiente.',
+    'O núcleo do Benjamin analisa texto. A captação por áudio é um adaptador plugável e precisa de credencial de STT. Sem ela o sistema não simula uma transcrição | use a aba "Colar texto" ou configure a chave no ambiente.',
   alternativas: [
     'Colar a transcrição pronta (Meet, Zoom ou Teams exportam legenda).',
     'Gravar a reunião mesmo assim: o áudio fica salvo no navegador para ser transcrito quando a chave estiver configurada.',
@@ -154,7 +154,7 @@ export async function POST(req: Request) {
       arquivo: arquivo.name,
       tamanho_mb: Number(mb.toFixed(2)),
       aviso:
-        'Transcrição automática não revisada. Confira antes de analisar — o Índice de Confiabilidade do briefing indica a qualidade do texto.',
+        'Transcrição automática não revisada. Confira antes de analisar | o Índice de Confiabilidade do briefing indica a qualidade do texto.',
     });
   } catch (erro) {
     const mensagem = erro instanceof Error ? erro.message : 'Erro ao transcrever.';

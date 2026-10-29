@@ -39,12 +39,12 @@ const ACAO_SUGERIDA: Record<string, string> = {
     'Ligue para a conta antes do próximo ciclo de renovação e trate a insatisfação registrada na evidência.',
   concorrente:
     'Compare escopo e integração com o concorrente citado, não só preço de lista, e registre a diferença por escrito.',
-  oportunidade: 'Crie a tarefa de proposta enquanto o gatilho está quente — oportunidade parada esfria.',
+  oportunidade: 'Crie a tarefa de proposta enquanto o gatilho está quente | oportunidade parada esfria.',
   budget: 'Confirme o valor com quem aprova e registre a faixa no CRM antes da próxima conversa.',
   prazo: 'Reconfirme a data com o cliente; prazo sem dono vira atraso.',
   coaching: 'Revise a gravação com o vendedor focando em escuta, não em roteiro.',
   qualidade_dado:
-    'Refaça a captura com melhor áudio ou marcação de falante — as extrações desta reunião têm base fraca.',
+    'Refaça a captura com melhor áudio ou marcação de falante | as extrações desta reunião têm base fraca.',
 };
 
 const FILTROS_SEVERIDADE = ['todas', 'alta', 'media', 'baixa'] as const;

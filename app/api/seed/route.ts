@@ -25,11 +25,11 @@ export const maxDuration = 60;
 const CLIENTE = 'Metalúrgica Vale Verde';
 
 const TITULO: Record<string, string> = {
-  descoberta: 'Descoberta — dor de folha manual no RH',
-  demonstracao: 'Demonstração — RM integrado ao Protheus',
-  negociacao: 'Negociação — proposta faseada e entrada da Senior',
-  follow_up: 'Follow-up — preço pela terceira vez e desconfiança técnica',
-  proposta: 'Proposta — ROI para o CFO e data de decisão',
+  descoberta: 'Descoberta | dor de folha manual no RH',
+  demonstracao: 'Demonstração | RM integrado ao Protheus',
+  negociacao: 'Negociação | proposta faseada e entrada da Senior',
+  follow_up: 'Follow-up | preço pela terceira vez e desconfiança técnica',
+  proposta: 'Proposta | ROI para o CFO e data de decisão',
 };
 
 /**
@@ -64,7 +64,7 @@ const ROTULO_CENARIO: Record<string, string> = {
   follow_up: 'Follow-up',
   renovacao: 'Renovação',
   customer_success_saudavel: 'Customer Success',
-  customer_success_insatisfeito: 'Customer Success — insatisfação',
+  customer_success_insatisfeito: 'Customer Success | insatisfação',
   upsell_modulo: 'Upsell de módulo',
   expansao: 'Expansão de filiais',
   alinhamento_tecnico: 'Alinhamento técnico',
@@ -151,7 +151,7 @@ export async function POST() {
       // O código da amostra entra no título por dois motivos: garante unicidade
       // (duas amostras podem ter o mesmo cliente e cenário) e liga a reunião
       // exibida na tela à amostra medida em scripts/validar.ts.
-      const titulo = `${ROTULO_CENARIO[amostra.cenario] ?? amostra.cenario} — ${nome} · ${amostra.codigo}`;
+      const titulo = `${ROTULO_CENARIO[amostra.cenario] ?? amostra.cenario} | ${nome} · ${amostra.codigo}`;
       if (titulosNaBase.has(titulo)) continue;
       // Marcar antes de criar protege contra duplicar dentro da mesma execução.
       titulosNaBase.add(titulo);

@@ -39,7 +39,7 @@ const BRL = new Intl.NumberFormat('pt-BR', {
   currency: 'BRL',
   maximumFractionDigits: 0,
 });
-const fmtBRL = (n: number | null) => (n == null ? '—' : BRL.format(n));
+const fmtBRL = (n: number | null) => (n == null ? '|' : BRL.format(n));
 const fmtData = (iso: string) => new Date(`${iso}T00:00:00`).toLocaleDateString('pt-BR');
 
 const TIPO: Record<string, string> = {
@@ -65,7 +65,7 @@ const UNIDADE: Record<string, string> = {
   gestao: 'Gestão',
   rd_station: 'RD Station',
   techfin: 'Techfin',
-  indefinido: '—',
+  indefinido: '|',
 };
 
 export default async function ClientePage({ params }: { params: Promise<{ id: string }> }) {
@@ -259,7 +259,7 @@ export default async function ClientePage({ params }: { params: Promise<{ id: st
                 <dt className="text-ink-dim">Risco de churn (última)</dt>
                 <dd>
                   {churnAtual == null ? (
-                    <span className="text-ink-faint">—</span>
+                    <span className="text-ink-faint">|</span>
                   ) : (
                     <Mono tom={tomChurn(churnAtual)}>{churnAtual}</Mono>
                   )}
@@ -284,7 +284,7 @@ export default async function ClientePage({ params }: { params: Promise<{ id: st
                 </Badge>
                 {v.personaTopo.decision_power !== 'decisor' ? (
                   <p className="pt-1 text-[11px] leading-relaxed text-warn">
-                    Nenhuma reunião contou com quem assina — é o que mais pesa contra o health score.
+                    Nenhuma reunião contou com quem assina | é o que mais pesa contra o health score.
                   </p>
                 ) : null}
               </div>
@@ -338,7 +338,7 @@ export default async function ClientePage({ params }: { params: Promise<{ id: st
                     {recorrente ? (
                       <p className="mt-1.5 flex items-start gap-1.5 text-[11px] font-medium text-warn">
                         <TriangleAlert size={12} className="mt-0.5 shrink-0" />
-                        Apareceu em {o.mencoes} reuniões e segue sem resolução — trate antes do próximo passo.
+                        Apareceu em {o.mencoes} reuniões e segue sem resolução | trate antes do próximo passo.
                       </p>
                     ) : null}
                   </li>
@@ -502,7 +502,7 @@ export default async function ClientePage({ params }: { params: Promise<{ id: st
         <Card
           plano
           titulo="Linha do tempo"
-          legenda="Cada reunião com seus indicadores — clique para abrir o briefing"
+          legenda="Cada reunião com seus indicadores | clique para abrir o briefing"
           acoes={<MessagesSquare size={14} className="text-ink-faint" />}
         >
           {v.linhaTempo.length === 0 ? (

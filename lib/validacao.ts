@@ -132,9 +132,9 @@ export async function carregarValidacao(): Promise<VisaoValidacao> {
       totalRedacoes,
       confiabilidadeMedia: Math.round(somaConfiabilidade / n),
       distribuicao: [
-        { faixa: '75–100 (alta)', quantidade: distribuicao.alta, tom: 'health' },
-        { faixa: '50–74 (média)', quantidade: distribuicao.media, tom: 'warn' },
-        { faixa: '0–49 (baixa)', quantidade: distribuicao.baixa, tom: 'risk' },
+        { faixa: '75 a 100 (alta)', quantidade: distribuicao.alta, tom: 'health' },
+        { faixa: '50 a 74 (média)', quantidade: distribuicao.media, tom: 'warn' },
+        { faixa: '0 a 49 (baixa)', quantidade: distribuicao.baixa, tom: 'risk' },
       ],
       avisosMaisComuns: [...avisos.entries()]
         .map(([aviso, ocorrencias]) => ({ aviso, ocorrencias }))

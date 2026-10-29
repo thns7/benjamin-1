@@ -41,7 +41,7 @@ const jetbrains = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: `Benjamin — ${TAGLINE.toLowerCase()}`,
+    default: `Benjamin | ${TAGLINE.toLowerCase()}`,
     template: '%s · Benjamin',
   },
   description:

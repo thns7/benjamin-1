@@ -18,7 +18,7 @@ export function SemBanco({ oQueApareceAqui }: { oQueApareceAqui: string }) {
     <EmptyState
       icone={<DatabaseZap size={17} />}
       titulo="Banco de dados não configurado"
-      descricao={`${oQueApareceAqui} Faltam NEXT_PUBLIC_SUPABASE_URL e/ou SUPABASE_SERVICE_ROLE_KEY no .env.local — copie o .env.local.example, preencha as duas e reinicie o servidor. Com o banco de pé, POST /api/seed popula a base com o corpus versionado.`}
+      descricao={`${oQueApareceAqui} Faltam NEXT_PUBLIC_SUPABASE_URL e/ou SUPABASE_SERVICE_ROLE_KEY no .env.local | copie o .env.local.example, preencha as duas e reinicie o servidor. Com o banco de pé, POST /api/seed popula a base com o corpus versionado.`}
     />
   );
 }

@@ -221,7 +221,7 @@ function montarAlertas(
       kind: 'churn',
       severity: 'alta',
       audience: 'gestor',
-      title: `Risco de churn alto — ${rotuloCliente(ref.clienteNome)}`,
+      title: `Risco de churn alto | ${rotuloCliente(ref.clienteNome)}`,
       message: sinal
         ? `Risco ${a.churn_risk}/100. Sinal mais forte: "${sinal.text}".`
         : `Risco de churn em ${a.churn_risk}/100 nesta reunião.`,
