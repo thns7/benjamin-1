@@ -164,7 +164,7 @@ export function PainelEnriquecimento({
               </p>
               <p className="mt-1 text-[11px] leading-relaxed text-ink-dim">
                 O modelo produziu, mas a citação apresentada não existe na transcrição. Foram
-                descartadas antes de chegar à tela | é a regra de evidência aplicada ao LLM.
+                descartadas antes de chegar à tela. É a regra de evidência aplicada ao LLM.
               </p>
             </div>
           ) : null}

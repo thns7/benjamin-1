@@ -89,7 +89,7 @@ export type ResultadoTranscricao = {
 
 export async function transcreverArquivo(arquivo: Blob, nome: string, o: OpcoesTranscricao = {}): Promise<ResultadoTranscricao> {
   const { trechos, silenciosos, duracaoSegundos } = await fatiarAudio(arquivo, nome);
-  if (trechos.length === 0) throw new Error('O áudio não tem fala detectável | só silêncio.');
+  if (trechos.length === 0) throw new Error('O áudio não tem fala detectável, só silêncio.');
 
   const cache = o.cache ?? new Map<number, TrechoTranscrito>();
   const resultados: TrechoTranscrito[] = new Array(trechos.length);

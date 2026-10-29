@@ -29,14 +29,14 @@ import { Abas } from '@/components/abas';
  * ------------------------------------------------------------------ */
 
 const BRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
-const fmtBRL = (n: number | null | undefined) => (n == null ? '|' : BRL.format(n));
+const fmtBRL = (n: number | null | undefined) => (n == null ? 'n/d' : BRL.format(n));
 const pct = (n: number) => `${Math.round(n * 100)}%`;
 
 const UNIDADE: Record<BusinessUnit, string> = {
   gestao: 'Gestão',
   rd_station: 'RD Station',
   techfin: 'Techfin',
-  indefinido: '|',
+  indefinido: 'n/d',
 };
 
 const STATUS_PRODUTO: Record<'em_uso' | 'avaliando' | 'mencionado' | 'oportunidade', { rotulo: string; tom: Tom }> = {
@@ -181,8 +181,8 @@ export function Briefing({
                     é medida sobre o corpus versionado e publicada em{' '}
                     <a href="/validacao" className="text-accent hover:underline">
                       Validação
-                    </a>{' '}
-                    | o interesse é hoje o campo mais fraco do motor.
+                    </a>
+                    . O interesse é hoje o campo mais fraco do motor.
                   </p>
                   <ScoreCard
                     titulo="Interesse"
@@ -488,7 +488,7 @@ function Capa({
   const p = analise.persona;
 
   const num = (v: number | null) =>
-    v === null ? <span className="text-ink-faint">|</span> : <span className="tabular-nums">{v}</span>;
+    v === null ? <span className="text-ink-faint">n/d</span> : <span className="tabular-nums">{v}</span>;
 
   return (
     <section className="vidro rounded-xl p-5">
@@ -626,7 +626,7 @@ function SemAtribuicao({ analise }: { analise: AnalysisResult }) {
     <div className="flex gap-2 rounded-md border border-warn/30 bg-warn-soft/30 px-3 py-2.5">
       <TriangleAlert size={13} className="mt-0.5 shrink-0 text-warn" />
       <p className="text-[11.5px] leading-relaxed text-ink-dim">
-        Esta transcrição não separa quem falou, então os itens abaixo saem da conversa inteira |{' '}
+        Esta transcrição não separa quem falou, então os itens abaixo saem da conversa inteira,{' '}
         <strong className="font-medium text-ink">não só da fala do cliente</strong>. Uma dor descrita
         pelo vendedor numa demonstração entra aqui do mesmo jeito. A citação de cada item continua
         exata; o que falta é de quem ela é.
@@ -736,7 +736,7 @@ function ScoreCard({
         </div>
         <div className="mt-2 flex items-baseline gap-1">
           <Mono tom="neutro" className="text-3xl text-ink-faint">
-            |
+            n/d
           </Mono>
         </div>
         <p className="mt-2 text-[11.5px] leading-snug text-ink-faint">
@@ -1230,7 +1230,7 @@ function Tarefas({
           ))}
         </div>
       ) : (
-        <Vazio>Nenhum compromisso datado | a reunião terminou sem próximo passo claro.</Vazio>
+        <Vazio>Nenhum compromisso datado: a reunião terminou sem próximo passo claro.</Vazio>
       )}
     </Secao>
   );
@@ -1320,9 +1320,9 @@ function Conversa({ analise }: { analise: AnalysisResult }) {
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           <Metrica
             rotulo="Talk ratio vendedor"
-            valor={m.talk_ratio_seller != null ? pct(m.talk_ratio_seller) : '|'}
+            valor={m.talk_ratio_seller != null ? pct(m.talk_ratio_seller) : 'n/d'}
           />
-          <Metrica rotulo="Perguntas" valor={m.seller_questions ?? '|'} />
+          <Metrica rotulo="Perguntas" valor={m.seller_questions ?? 'n/d'} />
           <Metrica rotulo="Abertas / fechadas" valor={`${m.open_questions ?? 0}/${m.closed_questions ?? 0}`} />
           <Metrica rotulo="Maior monólogo" valor={`${m.longest_monologue_words ?? 0}p`} />
         </div>

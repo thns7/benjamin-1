@@ -233,7 +233,7 @@ export function deJson(texto: string): TranscricaoComMeta[] {
 export function deDocx(bytes: Uint8Array): string {
   const arquivos = unzipSync(bytes, { filter: (f) => f.name === 'word/document.xml' });
   const xml = arquivos['word/document.xml'];
-  if (!xml) throw new Error('DOCX sem word/document.xml | o arquivo pode estar corrompido.');
+  if (!xml) throw new Error('DOCX sem word/document.xml. O arquivo pode estar corrompido.');
   const doc = strFromU8(xml);
 
   // Texto, tabulação e quebra, na ordem em que aparecem em cada parágrafo.

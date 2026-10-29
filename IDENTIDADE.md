@@ -51,7 +51,7 @@ Três camadas, cada uma com um papel. **A marca nunca indica risco, e o risco nu
 
 Rótulos em frase normal, sem caixa alta espaçada; o wordmark é a única palavra em caixa alta.
 
-Sem travessão (— ou –) em texto da interface. Separador vira barra reta: "Follow-up | integração de entregas". Intervalo numérico vira "a": "0 a 100". Transcrições e citações ficam como o cliente falou, porque a citação precisa bater letra por letra com a transcrição.
+Sem travessão (— ou –) em texto da interface. Em **título** (reunião, alerta, aba do navegador), o separador é a barra reta: "Follow-up | integração de entregas". Em **frase**, use a pontuação que a frase pede: dois-pontos para explicação, ponto para uma segunda ideia, vírgula ou parênteses para um aposto. Valor ausente é "n/d". Intervalo numérico é "0 a 100". Transcrições e citações ficam como o cliente falou, porque a citação precisa bater letra por letra com a transcrição.
 
 ## Movimento
 

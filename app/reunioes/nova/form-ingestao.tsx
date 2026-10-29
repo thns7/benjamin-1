@@ -316,7 +316,7 @@ function Progresso({ etapa }: { etapa: number }) {
     <div className="py-6">
       <div className="mx-auto max-w-md">
         <p className="mb-4 text-center text-[12px] text-ink-dim">
-          O motor está processando a transcrição | cada etapa é um estágio real do pipeline.
+          O motor está processando a transcrição: cada etapa é um estágio real do pipeline.
         </p>
         <ol className="space-y-2">
           {ETAPAS.map((nome, i) => {

@@ -25,7 +25,7 @@ const BRL = new Intl.NumberFormat('pt-BR', {
   currency: 'BRL',
   maximumFractionDigits: 0,
 });
-const fmtBRL = (n: number | null) => (n == null ? '|' : BRL.format(n));
+const fmtBRL = (n: number | null) => (n == null ? 'n/d' : BRL.format(n));
 
 /** Bloco de valor com as premissas do cálculo sempre visíveis. */
 function CardValor({
@@ -150,7 +150,7 @@ export default async function TorrePage() {
         <Card
           plano
           titulo="Oportunidades por unidade de negócio"
-          legenda="Gestão, RD Station e Techfin | o mapeamento Cross-BU"
+          legenda="Gestão, RD Station e Techfin: o mapeamento Cross-BU"
           acoes={<Layers size={14} className="text-ink-faint" />}
         >
           {t.pipeline.porUnidade.length === 0 ? (
@@ -233,7 +233,7 @@ export default async function TorrePage() {
         <Card
           plano
           titulo="Contas que pedem atenção"
-          legenda="Ranqueadas por valor de contrato | churn médio ou alto, health baixo ou concorrente ativo"
+          legenda="Ranqueadas por valor de contrato (churn médio ou alto, health baixo ou concorrente ativo)"
           acoes={<Gauge size={14} className="text-ink-faint" />}
         >
           {t.contasEmRisco.length === 0 ? (
@@ -269,14 +269,14 @@ export default async function TorrePage() {
                       </td>
                       <td className="py-2 pr-4">
                         {c.churn == null ? (
-                          <span className="text-ink-faint">|</span>
+                          <span className="text-ink-faint">n/d</span>
                         ) : (
                           <Mono tom={tomChurn(c.churn)}>{c.churn}</Mono>
                         )}
                       </td>
                       <td className="py-2 pr-4">
                         {c.concorrentesAtivos.length === 0 ? (
-                          <span className="text-ink-faint">|</span>
+                          <span className="text-ink-faint">n/d</span>
                         ) : (
                           <span className="inline-flex items-center gap-1 text-risk">
                             <Swords size={11} />
@@ -286,7 +286,7 @@ export default async function TorrePage() {
                       </td>
                       <td className="py-2 pr-4 text-ink-dim">
                         {c.diasDesdeContato == null ? (
-                          '|'
+                          'n/d'
                         ) : (
                           <span className={c.diasDesdeContato > 30 ? 'text-warn' : undefined}>
                             há {c.diasDesdeContato}d
@@ -324,7 +324,7 @@ export default async function TorrePage() {
           {t.alertasAltos.length === 0 ? (
             <p className="text-[12px] text-ink-faint">
               Nenhum alerta de alta severidade. Os {t.totalAlertas} alerta(s) da base são de severidade
-              média ou baixa | veja em Alertas.
+              média ou baixa. Veja em Alertas.
             </p>
           ) : (
             <ul className="space-y-2">
