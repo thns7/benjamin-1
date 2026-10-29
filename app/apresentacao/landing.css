@@ -1,0 +1,253 @@
+/*
+  Landing do Benjamin — animações e cores próprias.
+
+  COR: a landing usa a escala de risco como paleta. Verde (saudável), âmbar
+  (atenção) e vermelho (risco) não são decoração: cada vez que aparecem, dizem
+  o quanto uma conta está perto de cancelar. O resto continua papel e carbono.
+
+  MOVIMENTO: um momento orquestrado no topo (a conversa sendo lida) e
+  revelações discretas ao rolar. As de rolagem usam scroll-driven animations
+  como melhoria progressiva: sem suporte, o conteúdo só aparece parado. Tudo
+  some com prefers-reduced-motion.
+*/
+
+.landing {
+  --saude: #2e7d5b;
+  --saude-suave: #e6f2ec;
+  --atencao: #c7861a;
+  --atencao-suave: #fbf1df;
+  --risco: #be3f32;
+  --risco-suave: #fbeae7;
+  --escala: linear-gradient(90deg, var(--saude) 0%, var(--atencao) 50%, var(--risco) 100%);
+}
+
+.escala-gradiente {
+  background-image: var(--escala);
+}
+
+.texto-escala {
+  background-image: var(--escala);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ------------------------------------------------------------------ *
+ * Topo: a conversa sendo lida
+ * ------------------------------------------------------------------ */
+
+@keyframes fala-entra {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.fala {
+  animation: fala-entra 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.fala:nth-child(1) { animation-delay: 0.3s; }
+.fala:nth-child(2) { animation-delay: 0.9s; }
+.fala:nth-child(3) { animation-delay: 1.5s; }
+.fala:nth-child(4) { animation-delay: 2.1s; }
+
+/* Marca-texto: a frase de risco é sublinhada como numa leitura humana. */
+@keyframes marcar {
+  from {
+    background-size: 0% 100%;
+  }
+}
+
+.marca-risco {
+  background-image: linear-gradient(transparent 58%, color-mix(in srgb, var(--risco) 22%, transparent) 58%);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  animation: marcar 0.9s 2.6s cubic-bezier(0.6, 0, 0.2, 1) both;
+}
+
+@keyframes selo-surge {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+}
+
+.selo-sinal {
+  animation: selo-surge 0.4s 3.3s cubic-bezier(0.3, 1.4, 0.5, 1) both;
+}
+
+/* Medidor: o ponto sai de 42 e para em 81. */
+@keyframes medidor-sobe {
+  from {
+    left: 42%;
+  }
+}
+
+.medidor-ponto {
+  left: 81%;
+  animation: medidor-sobe 1.3s 3.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* O número conta junto com o ponto. Sem suporte a @property, aparece 81. */
+@property --risco-contagem {
+  syntax: '<integer>';
+  initial-value: 81;
+  inherits: false;
+}
+
+@keyframes contar {
+  from {
+    --risco-contagem: 42;
+    color: var(--atencao);
+  }
+}
+
+.contador {
+  counter-reset: risco var(--risco-contagem);
+  animation: contar 1.3s 3.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.contador::after {
+  content: counter(risco);
+}
+
+/* ------------------------------------------------------------------ *
+ * Faixa de falas que passa sem parar
+ * ------------------------------------------------------------------ */
+
+@keyframes desliza {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.faixa-trilha {
+  animation: desliza 60s linear infinite;
+}
+
+.faixa:hover .faixa-trilha {
+  animation-play-state: paused;
+}
+
+/* Some nas bordas em vez de cortar seco. */
+.faixa {
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+/* ------------------------------------------------------------------ *
+ * Mini-telas dos passos
+ * ------------------------------------------------------------------ */
+
+@keyframes onda {
+  0%,
+  100% {
+    transform: scaleY(0.25);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.onda-barra {
+  transform-origin: center;
+  animation: onda 1.2s ease-in-out infinite;
+}
+
+@keyframes marcar-loop {
+  0%,
+  15% {
+    background-size: 0% 100%;
+  }
+  45%,
+  85% {
+    background-size: 100% 100%;
+  }
+  100% {
+    background-size: 0% 100%;
+  }
+}
+
+.marca-loop {
+  background-image: linear-gradient(transparent 58%, color-mix(in srgb, var(--risco) 24%, transparent) 58%);
+  background-repeat: no-repeat;
+  animation: marcar-loop 4s ease-in-out infinite;
+}
+
+/* ------------------------------------------------------------------ *
+ * Constelação: as contas em risco pulsam
+ * ------------------------------------------------------------------ */
+
+@keyframes pulso {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--risco) 55%, transparent);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 12px transparent;
+  }
+}
+
+.estrela-risco {
+  animation: pulso 2.4s ease-out infinite;
+}
+
+/* ------------------------------------------------------------------ *
+ * Revelação ao rolar (melhoria progressiva)
+ * ------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    @keyframes revela {
+      from {
+        opacity: 0;
+        transform: translateY(28px);
+      }
+    }
+
+    .revela {
+      animation: revela linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+
+    /* A linha do tempo se desenha conforme a seção entra. */
+    @keyframes traca {
+      from {
+        transform: scaleX(0);
+      }
+    }
+
+    .traco-tempo {
+      transform-origin: left;
+      animation: traca linear both;
+      animation-timeline: --linha-tempo;
+      animation-range: entry 30% cover 55%;
+    }
+
+    .linha-tempo {
+      view-timeline: --linha-tempo block;
+    }
+  }
+}
+
+/*
+  Movimento reduzido: tudo parado no estado final. Não basta encurtar a
+  duração (como faz a regra global): os atrasos de até 3,4 s continuariam
+  escondendo a conversa e o medidor. Sem animação, cada peça já nasce pronta.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .fala,
+  .marca-risco,
+  .selo-sinal,
+  .medidor-ponto,
+  .contador,
+  .faixa-trilha,
+  .onda-barra,
+  .marca-loop,
+  .estrela-risco {
+    animation: none;
+  }
+  .marca-loop {
+    background-size: 100% 100%;
+  }
+}
