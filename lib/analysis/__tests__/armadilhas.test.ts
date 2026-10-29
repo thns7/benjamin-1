@@ -164,3 +164,31 @@ describe('Higiene geral do motor', () => {
     assert.equal(r.transcript_quality.redacted_entities, 2);
   });
 });
+
+describe('Sinal de churn negado', () => {
+  const sinais = (fala: string) =>
+    roda(`Ana: Como estão as coisas por aí?\nJoão: ${fala}\nAna: Entendi, obrigada.`).churn_signals.map((s) => s.text);
+
+  test('"não estou insatisfeito" não é insatisfação declarada', () => {
+    assert.ok(!sinais('Não estou insatisfeito com o sistema, só quero ajustar o relatório.').includes('Declarou insatisfação'));
+  });
+
+  test('"nunca pensamos em cancelar" não é falar em cancelar', () => {
+    assert.ok(!sinais('A gente nunca pensou em cancelar, o time gosta da ferramenta.').includes('Falou em cancelar'));
+    assert.ok(!sinais('Nós não vamos cancelar, fica tranquila.').includes('Falou em cancelar'));
+  });
+
+  test('negação separada por vírgula não apaga o risco', () => {
+    assert.ok(sinais('Não, a gente vai cancelar mesmo.').includes('Falou em cancelar'));
+    assert.ok(sinais('Se não resolverem até sexta, vamos cancelar.').includes('Falou em cancelar'));
+  });
+
+  test('negação longe do termo não apaga o risco', () => {
+    assert.ok(sinais('Não resolveram nada e a diretoria está insatisfeita.').includes('Declarou insatisfação'));
+  });
+
+  test('padrão que já é negativo continua valendo', () => {
+    assert.ok(sinais('Do jeito que está, não vamos renovar.').includes('Disse que não renova'));
+    assert.ok(sinais('Tenho chamado sem resposta há duas semanas.').includes('Chamado sem resposta'));
+  });
+});
