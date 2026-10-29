@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { createBrowserClient } from '@supabase/ssr';
 import { Loader2, Lock, Mail, TriangleAlert } from 'lucide-react';
 import { Logo, TAGLINE, Wordmark } from '@/components/logo';
@@ -10,19 +10,9 @@ export function Entrada({ destino, motivo }: { destino: string; motivo?: string 
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState<string | null>(
-    motivo === 'convite'
-      ? 'Esta conta não tem convite para o Benjamin. Peça acesso a quem administra a base.'
-      : null,
+    motivo === 'link' ? 'O link de confirmação expirou ou já foi usado. Entre com seu e-mail e senha.' : null,
   );
   const [enviando, setEnviando] = useState(false);
-
-  // Quem chega barrado por falta de convite ainda tem sessão no Auth; encerra
-  // para não ficar preso num ciclo login → middleware → login.
-  useEffect(() => {
-    if (motivo === 'convite') {
-      void createBrowserClient(SUPABASE_URL, SUPABASE_CHAVE_PUBLICA).auth.signOut();
-    }
-  }, [motivo]);
 
   async function entrar(e: React.FormEvent) {
     e.preventDefault();
@@ -60,7 +50,7 @@ export function Entrada({ destino, motivo }: { destino: string; motivo?: string 
         <Wordmark className="mt-5 !text-[15px] !tracking-[0.5em] pl-[0.5em]" />
         <p className="mt-3 text-[11.5px] text-ink-faint">{TAGLINE}</p>
         <p className="mt-6 text-[12.5px] leading-relaxed text-ink-dim">
-          Esta base guarda transcrição de conversa com cliente. O acesso é só por convite.
+          Entre com o e-mail e a senha da sua conta.
         </p>
       </div>
 
@@ -120,9 +110,15 @@ export function Entrada({ destino, motivo }: { destino: string; motivo?: string 
       </form>
 
       <p className="mt-6 text-center text-[12.5px] text-ink-dim">
-        Ainda não usa o Benjamin?{' '}
+        Ainda não tem conta?{' '}
+        <a href="/cadastro" className="font-medium text-accent underline underline-offset-4">
+          Criar conta
+        </a>
+        <span className="mx-2 text-ink-faint" aria-hidden>
+          ou
+        </span>
         <a href="/apresentacao" className="font-medium text-ink underline decoration-line-strong underline-offset-4 hover:decoration-ink">
-          Conheça o produto
+          conheça o produto
         </a>
       </p>
     </div>

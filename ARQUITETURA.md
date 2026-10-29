@@ -111,7 +111,7 @@ auditabilidade nos campos que movem dinheiro.
 
 12 tabelas em PostgreSQL (Supabase, região `sa-east-1`), com RLS habilitado em
 todas. Desde a migration 002, as políticas isolam cada empresa: tabelas com
-`org_id` comparam com `org_do_usuario()` (a empresa do convite do login), e
+`org_id` comparam com `org_do_usuario()` (a empresa da pessoa logada; empresas nascem pelo cadastro, migration 003), e
 transcrições, análises e correções herdam a empresa da reunião.
 
 ```

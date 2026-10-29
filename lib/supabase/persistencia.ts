@@ -44,7 +44,7 @@ export type Contexto = { orgId: string; userId: string };
 const literalIlike = (s: string) => s.replace(/[\\%_]/g, (c) => `\\${c}`);
 
 /**
- * A empresa e a pessoa do login atual, pelo convite em app_users.
+ * A empresa e a pessoa do login atual, pela linha dela em app_users.
  *
  * Substitui a organização TOTVS e a persona "Ana Torres" que eram fixas no
  * código: tudo o que é gravado passa a pertencer à empresa de quem gravou, e o
@@ -61,15 +61,15 @@ export async function contextoDoUsuario(): Promise<Contexto> {
 
   // Desde a migration 002 a pessoa enxerga os colegas da empresa, então o
   // filtro por e-mail é necessário para achar a própria linha.
-  const convite = await sb
+  const membro = await sb
     .from('app_users')
     .select('id, org_id')
     .ilike('email', literalIlike(user.email))
     .maybeSingle();
-  if (convite.error) throw new Error(`Falha ao ler o convite: ${convite.error.message}`);
-  if (!convite.data) throw new Error('Usuário sem convite: peça para ser adicionado à empresa.');
+  if (membro.error) throw new Error(`Falha ao ler a empresa do usuário: ${membro.error.message}`);
+  if (!membro.data) throw new Error('Usuário sem empresa: crie a empresa em /comecar.');
 
-  return { orgId: convite.data.org_id, userId: convite.data.id };
+  return { orgId: membro.data.org_id, userId: membro.data.id };
 }
 
 /**
