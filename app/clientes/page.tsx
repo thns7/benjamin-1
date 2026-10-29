@@ -16,7 +16,7 @@ const BRL = new Intl.NumberFormat('pt-BR', {
   currency: 'BRL',
   maximumFractionDigits: 0,
 });
-const fmtBRL = (n: number | null) => (n == null ? '—' : BRL.format(n));
+const fmtBRL = (n: number | null) => (n == null ? '|' : BRL.format(n));
 
 const ESTAGIO: Record<string, string> = {
   prospeccao: 'Prospecção',
@@ -145,7 +145,7 @@ export default async function ClientesPage() {
                     </td>
                     <td className="px-4 py-2.5 text-ink-dim">
                       {dias == null ? (
-                        '—'
+                        '|'
                       ) : (
                         <span className={dias > 30 ? 'text-warn' : undefined}>
                           {dias === 0 ? 'hoje' : `há ${dias}d`}

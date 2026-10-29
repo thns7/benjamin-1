@@ -51,6 +51,8 @@ Três camadas, cada uma com um papel. **A marca nunca indica risco, e o risco nu
 
 Rótulos em frase normal, sem caixa alta espaçada; o wordmark é a única palavra em caixa alta.
 
+Sem travessão (— ou –) em texto da interface. Separador vira barra reta: "Follow-up | integração de entregas". Intervalo numérico vira "a": "0 a 100". Transcrições e citações ficam como o cliente falou, porque a citação precisa bater letra por letra com a transcrição.
+
 ## Movimento
 
 A varredura do radar e as revelações ao rolar da landing (melhoria progressiva). Com `prefers-reduced-motion`, tudo para no estado final.

@@ -67,7 +67,7 @@ export function redigir(bruto: string): ResultadoRedacao {
 
   /* istanbul ignore next — invariante estrutural, não caminho de execução */
   if (texto.length !== bruto.length) {
-    throw new Error('Redação alterou o comprimento do texto — offsets de evidência ficariam inválidos.');
+    throw new Error('Redação alterou o comprimento do texto | offsets de evidência ficariam inválidos.');
   }
 
   redacoes.sort((a, b) => a.start - b.start);

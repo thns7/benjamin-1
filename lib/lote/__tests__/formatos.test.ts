@@ -162,7 +162,7 @@ test('metadados saem do nome e da pasta', () => {
 
   const m = metadadosDoCaminho('2026-09-10 - Descoberta Protheus.vtt', ['transcricoes', 'Metalúrgica Vale Verde', 'setembro 2026']);
   assert.deepEqual(m, { titulo: 'Descoberta Protheus', data: '2026-09-10', cliente: 'Metalúrgica Vale Verde', tipo: 'descoberta' });
-  assert.equal(metadadosDoCaminho('2026-09-08 negociacao.json', ['Agro Norte']).titulo, 'Negociação — Agro Norte', 'nome que é só o tipo vira título legível');
+  assert.equal(metadadosDoCaminho('2026-09-08 negociacao.json', ['Agro Norte']).titulo, 'Negociação | Agro Norte', 'nome que é só o tipo vira título legível');
   assert.equal(metadadosDoCaminho('GMT20260910-143000_Recording.m4a', []).titulo, 'Reunião');
 });
 
@@ -196,7 +196,7 @@ test('extrair: zip com pastas por cliente, manifesto, duplicata, lixo e formatos
 
   const vtt = porNome('descoberta.vtt') as ItemTexto;
   assert.equal(vtt.tipo, 'texto');
-  assert.deepEqual(vtt.meta, { titulo: 'Descoberta — Metalurgica Vale Verde', data: '2026-09-10', cliente: 'Metalurgica Vale Verde', tipo: 'descoberta' });
+  assert.deepEqual(vtt.meta, { titulo: 'Descoberta | Metalurgica Vale Verde', data: '2026-09-10', cliente: 'Metalurgica Vale Verde', tipo: 'descoberta' });
   assert.equal(vtt.falantes, 2);
 
   assert.equal(porNome('copia.txt')?.tipo, 'ignorado', 'duplicata de conteúdo');

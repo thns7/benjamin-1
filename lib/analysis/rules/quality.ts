@@ -56,7 +56,7 @@ export function avaliarQualidade(prep: Preparado): QualidadeTranscricao {
 
   if (filler_density > 0.08) {
     indice -= 10;
-    warnings.push('Alta densidade de muletas de linguagem — sinal de transcrição ruidosa.');
+    warnings.push('Alta densidade de muletas de linguagem | sinal de transcrição ruidosa.');
   }
 
   if (prep.temDiarizacao && speaker_count < 2) {

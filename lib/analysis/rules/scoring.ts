@@ -128,7 +128,7 @@ export function calcularInteresse(e: EntradaInteresse): ResultadoInteresse {
   const score = Math.round(limitar(soma, 0, 100));
 
   if (score !== soma) {
-    fatores.push({ label: 'Limite 0–100 aplicado', delta: score - soma });
+    fatores.push({ label: 'Limite 0 a 100 aplicado', delta: score - soma });
   }
 
   return { interest_score: score, score_factors: fatores };

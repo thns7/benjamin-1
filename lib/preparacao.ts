@@ -137,13 +137,13 @@ export function montarPreparacao(v: VisaoCliente): Preparacao {
   const semDecisor = v.personaTopo?.decision_power !== 'decisor';
   if (objAutoridade) {
     add(
-      'Abra pela aprovação de quem decide — é o bloqueio real, não o preço.',
+      'Abra pela aprovação de quem decide | é o bloqueio real, não o preço.',
       `Objeção de autoridade em aberto, citada em ${objAutoridade.mencoes} reunião(ões): "${objAutoridade.texto}"`,
     );
   } else if (semDecisor && v.interesseHistorico.length >= 2) {
     add(
       'Traga quem assina para a próxima conversa.',
-      'Nenhuma das reuniões do ciclo contou com um decisor — é o fator que mais pesa contra o health score.',
+      'Nenhuma das reuniões do ciclo contou com um decisor | é o fator que mais pesa contra o health score.',
     );
   }
 
@@ -212,7 +212,7 @@ export function montarPreparacao(v: VisaoCliente): Preparacao {
     const proximos = parse<{ text: string }[]>(analise.next_steps, []);
     if (proximos.length === 0) {
       add(
-        'Saia da call com data marcada — a anterior terminou sem compromisso.',
+        'Saia da call com data marcada | a anterior terminou sem compromisso.',
         'A última reunião não registrou próximo passo, o que já derrubou o interesse projetado.',
       );
     }
@@ -257,12 +257,12 @@ const fmtData = (iso: string) => new Date(`${iso}T00:00:00`).toLocaleDateString(
 
 export function preparacaoEmTexto(nomeCliente: string, p: Preparacao): string {
   const L: string[] = [];
-  L.push(`${nomeCliente} — Briefing pré-reunião`);
+  L.push(`${nomeCliente} | Briefing pré-reunião`);
   L.push('');
 
   if (p.ultimaConversa) {
     L.push(
-      `Última conversa: ${fmtData(p.ultimaConversa.data)} (há ${p.ultimaConversa.dias} dia(s)) — ${p.ultimaConversa.titulo}`,
+      `Última conversa: ${fmtData(p.ultimaConversa.data)} (há ${p.ultimaConversa.dias} dia(s)) | ${p.ultimaConversa.titulo}`,
     );
   } else {
     L.push('Última conversa: nenhuma reunião analisada ainda.');
@@ -275,7 +275,7 @@ export function preparacaoEmTexto(nomeCliente: string, p: Preparacao): string {
   }
   if (p.principalObjecao) {
     L.push(
-      `Principal objeção: ${p.principalObjecao.categoria} — ${p.principalObjecao.mencoes} menção(ões), ${
+      `Principal objeção: ${p.principalObjecao.categoria} | ${p.principalObjecao.mencoes} menção(ões), ${
         p.principalObjecao.resolvida ? 'endereçada' : 'não endereçada'
       }`,
     );
@@ -301,7 +301,7 @@ export function preparacaoEmTexto(nomeCliente: string, p: Preparacao): string {
   }
   if (p.bant) {
     L.push(
-      `Cobertura BANT do ciclo: ${p.bant.score}/4${p.bant.missing.length > 0 ? ` — falta ${p.bant.missing.join(', ')}` : ''}`,
+      `Cobertura BANT do ciclo: ${p.bant.score}/4${p.bant.missing.length > 0 ? ` | falta ${p.bant.missing.join(', ')}` : ''}`,
     );
   }
   for (const a of p.ameacas) {

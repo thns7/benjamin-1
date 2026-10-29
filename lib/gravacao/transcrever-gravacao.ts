@@ -28,7 +28,7 @@ export async function transcreverGravacao(
   };
 
   const canais = (Object.entries(g.canais) as [Canal, Blob][]).filter(([, b]) => b.size > 0);
-  if (canais.length === 0) throw new Error('A gravação ficou vazia — nenhum áudio foi capturado.');
+  if (canais.length === 0) throw new Error('A gravação ficou vazia | nenhum áudio foi capturado.');
 
   const avisos: string[] = [];
   const resultados = await Promise.all(

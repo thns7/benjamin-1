@@ -188,7 +188,7 @@ export function criarAgenda(o: OpcoesAgenda) {
       t.status = statusDeRetorno;
       mudar(t, {
         fase: 'aguardando',
-        motivo: `${mensagem} — nova tentativa em ${Math.ceil(espera / 1000)} s (${t.tentativas + 1}/${maxTentativas}).`,
+        motivo: `${mensagem} | nova tentativa em ${Math.ceil(espera / 1000)} s (${t.tentativas + 1}/${maxTentativas}).`,
       });
       return;
     }

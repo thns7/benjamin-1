@@ -32,7 +32,7 @@ export default async function BriefingPage({ params }: { params: Promise<{ id: s
     return (
       <>
         <PageHeader titulo="Briefing" descricao="A análise da reunião, item por item, com a evidência ao lado." />
-        <SemBanco oQueApareceAqui="Aqui fica o briefing da reunião: oportunidades, retenção, ecossistema, persona, sentimento por aspecto, budget e próximos passos — cada item clicável, destacando o trecho de origem na transcrição." />
+        <SemBanco oQueApareceAqui="Aqui fica o briefing da reunião: oportunidades, retenção, ecossistema, persona, sentimento por aspecto, budget e próximos passos | cada item clicável, destacando o trecho de origem na transcrição." />
       </>
     );
   }
@@ -107,7 +107,7 @@ export default async function BriefingPage({ params }: { params: Promise<{ id: s
             <div className="mb-4 rounded-lg border border-warn/30 bg-warn-soft/25 px-4 py-3">
               <p className="flex items-center gap-1.5 text-[12px] font-semibold text-warn">
                 <ShieldAlert size={14} />
-                Qualidade do dado — trate as extrações com cautela
+                Qualidade do dado | trate as extrações com cautela
               </p>
               <ul className="mt-1.5 space-y-1">
                 {avisos.map((a, i) => (

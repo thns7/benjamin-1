@@ -1,6 +1,6 @@
 /**
  * Empresa de demonstração: Nuvia, plataforma fictícia de atendimento ao
- * cliente. Tudo aqui é inventado — empresas, pessoas e conversas. Os
+ * cliente. Tudo aqui é inventado | empresas, pessoas e conversas. Os
  * concorrentes são nomes reais do mercado de atendimento, citados como
  * concorrentes seriam numa reunião de verdade.
  *
@@ -65,7 +65,7 @@ Marina Lopes: Vou acompanhar pessoalmente e te dou um retorno até sexta-feira.
 Rodrigo Prado: Combinado. Preciso disso resolvido antes da auditoria de setembro.`,
       },
       {
-        titulo: 'Follow-up — instabilidade da integração',
+        titulo: 'Follow-up | instabilidade da integração',
         tipo: 'follow_up',
         data: '2026-08-26',
         texto: `Marina Lopes: Oi, Rodrigo. Aqui na Nuvia a engenharia fechou o diagnóstico e eu queria atualizar você sobre a integração.
@@ -78,7 +78,7 @@ Marina Lopes: Entendo. Me deixa marcar uma reunião com o nosso diretor de produ
 Rodrigo Prado: Marque. E me mande por escrito o plano de correção até quarta-feira.`,
       },
       {
-        titulo: 'Reunião com a diretoria — renovação',
+        titulo: 'Reunião com a diretoria | renovação',
         tipo: 'renovacao',
         data: '2026-10-21',
         texto: `Marina Lopes: Boa tarde, Rodrigo, boa tarde, Helena. Obrigada por receberem a gente.
@@ -130,7 +130,7 @@ Marina Lopes: Te mando a proposta até sexta-feira.`,
     valorContrato: 54_000,
     reunioes: [
       {
-        titulo: 'Onboarding — fechamento',
+        titulo: 'Onboarding | fechamento',
         tipo: 'customer_success',
         data: '2026-07-02',
         texto: `Marina Lopes: Oi, Bruno. Com isso a gente fecha o onboarding do Nuvia Atende. Ficou alguma dúvida?
@@ -140,7 +140,7 @@ Bruno Teixeira: Seria ótimo. Eles ainda têm o hábito antigo.
 Marina Lopes: Combinado, mando duas datas até amanhã.`,
       },
       {
-        titulo: 'Revisão de uso — adoção baixa',
+        titulo: 'Revisão de uso | adoção baixa',
         tipo: 'customer_success',
         data: '2026-09-16',
         texto: `Marina Lopes: Oi, Bruno. Olhei os dados de uso e só seis dos vinte atendentes entram na plataforma.
@@ -161,7 +161,7 @@ Bruno Teixeira: Trinta dias eu consigo segurar.`,
     valorContrato: 120_000,
     reunioes: [
       {
-        titulo: 'Alinhamento — expansão para filiais',
+        titulo: 'Alinhamento | expansão para filiais',
         tipo: 'negociacao',
         data: '2026-08-12',
         texto: `Marina Lopes: Oi, Fernanda. Como foi a implantação do Nuvia Atende na matriz?
@@ -202,7 +202,7 @@ Marina Lopes: Vou abrir o chamado com prioridade e te mando o número hoje.
 Gustavo Moreira: Beleza.`,
       },
       {
-        titulo: 'Follow-up — integração de entregas',
+        titulo: 'Follow-up | integração de entregas',
         tipo: 'follow_up',
         data: '2026-09-30',
         texto: `Marina Lopes: Oi, Gustavo. Queria saber se a integração de entregas normalizou.
@@ -221,7 +221,7 @@ Gustavo Moreira: Pode marcar. Se resolver o volume de novembro, faz sentido.`,
     valorContrato: 150_000,
     reunioes: [
       {
-        titulo: 'Reunião de crise — atendimento ao cooperado',
+        titulo: 'Reunião de crise | atendimento ao cooperado',
         tipo: 'customer_success',
         data: '2026-06-18',
         texto: `Marina Lopes: Boa tarde, Sérgio. Sei que o momento é delicado.
@@ -232,7 +232,7 @@ Marina Lopes: Vou colocar um time de engenharia dedicado nisso hoje.
 Sérgio Bastos: Preciso de resposta em uma semana.`,
       },
       {
-        titulo: 'Acompanhamento — correção da URA',
+        titulo: 'Acompanhamento | correção da URA',
         tipo: 'follow_up',
         data: '2026-08-04',
         texto: `Marina Lopes: Oi, Sérgio. Como ficou a URA depois da correção?
@@ -262,7 +262,7 @@ Sérgio Bastos: Faz. Quero testar com uma regional primeiro. Me manda uma propos
     valorContrato: 36_000,
     reunioes: [
       {
-        titulo: 'Check-in — agendamentos',
+        titulo: 'Check-in | agendamentos',
         tipo: 'customer_success',
         data: '2026-08-20',
         texto: `Marina Lopes: Oi, Camila. Como está o Nuvia Bot nos agendamentos?
@@ -273,7 +273,7 @@ Marina Lopes: Quer levar o bot para a nova unidade?
 Camila Duarte: Quero. A unidade nova abre em novembro. Me manda a proposta.`,
       },
       {
-        titulo: 'Expansão — nova unidade',
+        titulo: 'Expansão | nova unidade',
         tipo: 'negociacao',
         data: '2026-10-22',
         texto: `Marina Lopes: Oi, Camila. A proposta da nova unidade ficou boa para vocês?

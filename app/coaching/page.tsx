@@ -33,7 +33,7 @@ function tomTalkRatio(v: number): Tom {
 }
 
 function leituraTalkRatio(v: number): string {
-  if (v > 0.7) return 'O vendedor dominou a conversa — pouco espaço para o cliente revelar dor.';
+  if (v > 0.7) return 'O vendedor dominou a conversa | pouco espaço para o cliente revelar dor.';
   if (v > FAIXA_IDEAL.max) return 'Acima da faixa de referência: dá para abrir mais espaço de escuta.';
   if (v < FAIXA_IDEAL.min) return 'Bem abaixo da faixa: reunião conduzida pelo cliente, vale checar se a agenda foi coberta.';
   return 'Dentro da faixa de referência de venda consultiva.';
@@ -97,7 +97,7 @@ export default async function CoachingPage() {
         <EmptyState
           icone={<GraduationCap size={18} />}
           titulo="Nenhuma reunião analisada ainda"
-          descricao="Esta tela mede a conversa, não o cliente: talk-to-listen ratio contra a faixa de referência, número e tipo de perguntas, maior monólogo e cobertura BANT — com evolução ao longo do tempo. Tom construtivo: é ferramenta de desenvolvimento."
+          descricao="Esta tela mede a conversa, não o cliente: talk-to-listen ratio contra a faixa de referência, número e tipo de perguntas, maior monólogo e cobertura BANT | com evolução ao longo do tempo. Tom construtivo: é ferramenta de desenvolvimento."
           acao={
             <BotaoLink href="/reunioes/nova" variante="primario">
               Analisar uma reunião
@@ -134,11 +134,11 @@ export default async function CoachingPage() {
           </p>
           <p className={`mt-2 font-mono text-2xl ${mediaTalk > 0 ? '' : 'text-ink-faint'}`}>
             <Mono tom={mediaTalk > 0 ? tomTalkRatio(mediaTalk) : 'neutro'}>
-              {mediaTalk > 0 ? pct(mediaTalk) : '—'}
+              {mediaTalk > 0 ? pct(mediaTalk) : '|'}
             </Mono>
           </p>
           <p className="mt-1 text-[11px] text-ink-faint">
-            faixa de referência {pct(FAIXA_IDEAL.min)}–{pct(FAIXA_IDEAL.max)}
+            faixa de referência {pct(FAIXA_IDEAL.min)} a {pct(FAIXA_IDEAL.max)}
           </p>
         </div>
         <div className="min-w-0">
@@ -212,7 +212,7 @@ export default async function CoachingPage() {
             {semDiarizacao > 0 ? (
               <p className="mt-3 rounded-md border border-warn/30 bg-warn-soft/25 px-3 py-2 text-[11.5px] leading-relaxed text-warn">
                 {semDiarizacao} reunião(ões) sem marcação de falante ficaram fora destas médias. Sem saber
-                quem falou o quê, o sistema não inventa turno — o talk ratio simplesmente não existe.
+                quem falou o quê, o sistema não inventa turno | o talk ratio simplesmente não existe.
               </p>
             ) : null}
           </Card>
@@ -291,7 +291,7 @@ export default async function CoachingPage() {
                       </td>
                       <td className="py-2 pr-4 text-ink-dim">
                         {l.metricas?.seller_questions == null ? (
-                          '—'
+                          '|'
                         ) : (
                           <>
                             <Mono>{l.metricas.seller_questions}</Mono>
@@ -304,7 +304,7 @@ export default async function CoachingPage() {
                       </td>
                       <td className="py-2 pr-4 text-ink-dim">
                         {l.metricas?.longest_monologue_words == null ? (
-                          '—'
+                          '|'
                         ) : (
                           <Mono tom={l.metricas.longest_monologue_words > 150 ? 'warn' : 'neutro'}>
                             {l.metricas.longest_monologue_words}p

@@ -35,7 +35,7 @@ const DESCRICAO =
   'O Benjamin lê as reuniões do seu time de Customer Success e avisa quando uma conta está em risco, sempre com a fala do cliente que mostra por quê.';
 
 export const metadata: Metadata = {
-  title: { absolute: 'Benjamin — radar de churn para Customer Success' },
+  title: { absolute: 'Benjamin | radar de churn para Customer Success' },
   description: DESCRICAO,
   openGraph: { title: TITULO, description: DESCRICAO, type: 'website', locale: 'pt_BR', siteName: 'Benjamin' },
   twitter: { card: 'summary_large_image', title: TITULO, description: DESCRICAO },
