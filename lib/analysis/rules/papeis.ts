@@ -26,6 +26,12 @@ export type FalaDoTurno = {
 export type OpcoesPapeis = {
   /** Quem está vendendo nesta call. Entra no léxico como sinal, não no código. */
   empresaVendedora?: string;
+  /**
+   * Nomes das pessoas da empresa que está analisando (app_users). Quem fala na
+   * reunião com um desses nomes está do lado que vende: o app sabe disso, o
+   * texto muitas vezes não diz.
+   */
+  equipeVendedora?: string[];
   /** Confirmação humana. Chave em minúsculo; vence qualquer sinal do motor. */
   papeisFixados?: Record<string, Lado>;
 };
@@ -155,6 +161,14 @@ const CARGOS_COMPRADOR: RegExp[] = [
  * ------------------------------------------------------------------ */
 
 const PESO = {
+  /**
+   * O maior peso da tabela, abaixo só da confirmação humana. Não é palpite
+   * sobre o texto, é cadastro: a pessoa é da empresa. Fica como peso e não
+   * como fixação para continuar entrando nas contas de condução da reunião, e
+   * para um homônimo do lado do cliente ainda poder ser vencido por cargo e
+   * dêixis somados.
+   */
+  equipe: 4.0,
   cargo: 2.5,
   empresaVendedora: 2.0,
   lexico: 1.0,
@@ -184,6 +198,32 @@ const CONFIANCA_ORDEM_DE_FALA = 0.2;
  */
 function confiancaDe(forca: number): number {
   return Number(Math.min(0.95, 1 - Math.exp(-forca / 2.5)).toFixed(2));
+}
+
+function partesDoNome(nome: string): string[] {
+  return dobrar(nome)
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .split(/\s+/)
+    .filter((t) => t.length >= 2);
+}
+
+/**
+ * O rótulo do falante é alguém da equipe?
+ *
+ * Mesmo primeiro nome e, quando os dois lados trazem sobrenome, ao menos um
+ * sobrenome em comum. Assim "Marina" e "Marina Lopes" casam com a cadastrada
+ * Marina Lopes, e "Marina Souza" não casa. O caso que sobra é o rótulo só com
+ * o primeiro nome quando o cliente tem o mesmo primeiro nome de alguém da
+ * equipe; aí o motor erra, e a correção humana de papel resolve.
+ */
+function ehDaEquipe(falante: string, equipe: string[][]): boolean {
+  const f = partesDoNome(falante);
+  if (f.length === 0) return false;
+  return equipe.some((m) => {
+    if (m.length === 0 || m[0] !== f[0]) return false;
+    if (f.length === 1 || m.length === 1) return true;
+    return f.slice(1).some((t) => m.slice(1).includes(t));
+  });
 }
 
 function mediana(valores: number[]): number {
@@ -222,6 +262,7 @@ export function inferirPapeis(
 ): PapelInferido[] {
   const empresa = opcoes?.empresaVendedora ?? 'TOTVS';
   const fixados = opcoes?.papeisFixados ?? {};
+  const equipe = (opcoes?.equipeVendedora ?? []).map(partesDoNome);
 
   // Agrupamento por falante, preservando a ordem em que cada um entrou na call.
   const porFalante = new Map<string, Acumulado>();
@@ -278,6 +319,7 @@ export function inferirPapeis(
       }
     }
 
+    if (ehDaEquipe(p.nome, equipe)) anotar(p, PESO.equipe, 'membro_da_equipe');
     if (reEmpresa.test(texto)) anotar(p, PESO.empresaVendedora, 'cita_empresa_vendedora');
 
     for (const m of MARCAS_FORNECEDOR) if (m.re.test(texto)) anotar(p, PESO.lexico, m.sinal);

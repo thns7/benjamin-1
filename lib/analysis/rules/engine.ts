@@ -39,6 +39,7 @@ export function analisarComRegras(entrada: EntradaAnalise): AnalysisResult {
 
   const prep = preparar(entrada.texto, {
     empresaVendedora: entrada.empresaVendedora,
+    equipeVendedora: entrada.equipeVendedora,
     papeisFixados: entrada.papeisFixados,
   });
   const dataReuniao = entrada.dataReuniao ?? new Date().toISOString().slice(0, 10);

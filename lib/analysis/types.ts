@@ -383,6 +383,11 @@ export type EntradaAnalise = {
    */
   empresaVendedora?: string;
   /**
+   * Nomes das pessoas da empresa que analisa. Falante com um desses nomes é
+   * reconhecido como vendedor mesmo quando não cita a empresa.
+   */
+  equipeVendedora?: string[];
+  /**
    * Papéis confirmados por um humano. Chave em minúsculo, vence o motor.
    *
    * Isto não é campo de auditoria: talk ratio, voz do cliente e o filtro de
