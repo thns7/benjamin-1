@@ -139,6 +139,18 @@ curl -X POST http://localhost:3000/api/seed
 Ingere o arco de 5 reuniões da Metalúrgica Vale Verde e o corpus sintético
 completo, usando o mesmo texto que a validação mede. É idempotente.
 
+### Conta de demonstração
+
+```bash
+DEMO_EMAIL=... DEMO_SENHA=... APP_URL=http://localhost:3000 npx tsx scripts/semear-demo.ts
+```
+
+Cria a empresa fictícia **Nuvia** (plataforma de atendimento) com catálogo, 8
+contas e 18 reuniões (`scripts/demo/conversas.ts`), todas enviadas por
+`POST /api/meetings` com o login da conta. O usuário precisa existir no Supabase
+Auth com e-mail confirmado. No container de nuvem, rode o app e o script com
+`NODE_USE_ENV_PROXY=1`. É idempotente.
+
 ---
 
 ## Validando
