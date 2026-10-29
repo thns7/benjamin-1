@@ -249,7 +249,9 @@ scripts/        validação por linha de comando
 
 - RLS habilitado em todas as tabelas; acesso ao banco **exclusivo do servidor**
 - **Isolamento por empresa:** o servidor lê e grava com o login de quem está
-  usando, e o banco só devolve o que é da empresa do convite (migration 002).
+  usando, e o banco só devolve o que é da empresa dele (migration 002).
+- **Cadastro aberto:** qualquer pessoa cria a conta em `/cadastro` e a própria
+  empresa (função `criar_empresa`, migration 003), sempre como empresa nova
   Esquecer um filtro no código não vaza dado de outra empresa
 - Anonimização automática de CPF, CNPJ, e-mail, telefone e cartão antes da
   análise — guarda-se tipo e posição, **nunca o valor**

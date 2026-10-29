@@ -53,12 +53,26 @@ function BotaoDemo({ invertido = false }: { invertido?: boolean }) {
       target="_blank"
       rel="noopener noreferrer"
       className={`group inline-flex min-h-12 items-center gap-2 rounded-full px-6 text-[14.5px] font-semibold transition-all ${
-        invertido ? 'bg-ink text-canvas hover:shadow-[0_8px_28px_-6px_rgb(255_255_255/0.35)]' : 'bg-acao text-on-acao shadow-glow hover:brightness-110'
+        invertido ? 'bg-ink text-canvas hover:shadow-[0_8px_28px_-6px_rgb(255_255_255/0.35)]' : 'border border-line-strong text-ink hover:border-ink'
       }`}
     >
       Pedir uma demonstração
       <ArrowUpRight size={16} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
     </a>
+  );
+}
+
+/** Ação principal: o cadastro é aberto (migration 003). */
+function BotaoCriarConta({ compacto = false }: { compacto?: boolean }) {
+  return (
+    <Link
+      href="/cadastro"
+      className={`inline-flex items-center rounded-full bg-acao font-semibold text-on-acao shadow-glow transition-all hover:brightness-110 ${
+        compacto ? 'min-h-10 px-4 text-[13px]' : 'min-h-12 px-6 text-[14.5px]'
+      }`}
+    >
+      Criar conta
+    </Link>
   );
 }
 
@@ -94,7 +108,7 @@ const PERGUNTAS = [
   },
   {
     p: 'Onde ficam os dados das minhas reuniões?',
-    r: 'Num banco de dados em São Paulo. CPF, CNPJ, e-mail, telefone e cartão são anonimizados antes da análise, e o que fica guardado é o texto já anonimizado. O acesso é só por convite.',
+    r: 'Num banco de dados em São Paulo. CPF, CNPJ, e-mail, telefone e cartão são anonimizados antes da análise, e o que fica guardado é o texto já anonimizado. Cada empresa só enxerga as próprias contas.',
   },
   {
     p: 'O Benjamin usa inteligência artificial?',
@@ -128,10 +142,11 @@ export default function ApresentacaoPage() {
             </a>
             <Link
               href="/login"
-              className="inline-flex min-h-10 items-center rounded-full border border-line-strong bg-surface px-4 text-[13px] font-semibold text-ink transition-colors hover:border-ink"
+              className="inline-flex min-h-10 items-center rounded-full px-4 text-[13px] font-semibold text-ink transition-colors hover:text-accent"
             >
               Entrar
             </Link>
+            <BotaoCriarConta compacto />
           </nav>
         </div>
       </header>
@@ -154,13 +169,8 @@ export default function ApresentacaoPage() {
               </h1>
               <p className="mt-6 max-w-[46ch] text-[17.5px] leading-relaxed text-ink-dim">{DESCRICAO}</p>
               <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+                <BotaoCriarConta />
                 <BotaoDemo />
-                <Link
-                  href="/login"
-                  className="text-[14px] font-medium text-ink-dim underline decoration-line-strong underline-offset-4 hover:text-ink"
-                >
-                  Já uso o Benjamin
-                </Link>
               </div>
               <ul className="mt-10 flex max-w-[58ch] flex-wrap gap-x-6 gap-y-2.5 text-[13px] text-ink-dim">
                 <ItemGarantia>Dados guardados no Brasil</ItemGarantia>
@@ -330,8 +340,8 @@ export default function ApresentacaoPage() {
                 CPF, CNPJ, e-mail, telefone e cartão nunca são guardados.
               </li>
               <li>
-                <strong className="block font-semibold text-ink">Acesso por convite</strong>
-                Só entra quem a sua empresa convidar.
+                <strong className="block font-semibold text-ink">Cada empresa no seu espaço</strong>
+                Uma empresa nunca enxerga as contas de outra, e quem garante é o banco de dados.
               </li>
             </ul>
           </div>
@@ -372,11 +382,14 @@ export default function ApresentacaoPage() {
                   Veja o radar com as reuniões da sua empresa.
                 </h2>
                 <p className="mt-4 max-w-[52ch] text-[16.5px] leading-relaxed text-ink-dim">
-                  Na demonstração, o Benjamin lê reuniões de contas que você já perdeu e mostra o que teria avisado
-                  antes.
+                  Crie a conta e analise a primeira reunião agora. Se preferir, na demonstração o Benjamin lê reuniões
+                  de contas que você já perdeu e mostra o que teria avisado antes.
                 </p>
               </div>
-              <BotaoDemo />
+              <div className="flex flex-wrap gap-3">
+                <BotaoCriarConta />
+                <BotaoDemo />
+              </div>
             </div>
           </div>
         </section>
