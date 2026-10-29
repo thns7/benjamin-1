@@ -245,26 +245,6 @@ body::after {
 .escalonar > *:nth-child(7) { animation-delay: 0.26s; }
 .escalonar > *:nth-child(8) { animation-delay: 0.3s; }
 
-/*
-  Landing: o ponto de risco sai do médio e entra na zona alta. É a única
-  animação da página; com movimento reduzido ele já nasce no fim.
-*/
-@keyframes risco-sobe {
-  from {
-    left: 42%;
-    background-color: var(--ink);
-  }
-  to {
-    left: 81%;
-    background-color: var(--risk);
-  }
-}
-
-.landing-ponto {
-  left: 81%;
-  animation: risco-sobe 1.6s 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-
 /* Acessibilidade: foco sempre visível, inclusive na navegação por teclado. */
 :focus-visible {
   outline: 2px solid var(--accent-vivid);
