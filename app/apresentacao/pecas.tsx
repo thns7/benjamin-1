@@ -1,5 +1,6 @@
 import { Check, Mic, MonitorUp } from 'lucide-react';
-import { Citacao } from '@/components/radar-ui';
+import { Citacao, RadarPolar } from '@/components/radar-ui';
+import { faixaRisco, posicionarNoPolar, type ContaRadar } from '@/lib/radar';
 
 /*
  * Peças visuais da landing. Todas são ilustrações com dados fictícios e dizem
@@ -8,85 +9,66 @@ import { Citacao } from '@/components/radar-ui';
  */
 
 /* ------------------------------------------------------------------ *
- * Topo: uma reunião sendo lida
+ * Topo: o radar com uma carteira de exemplo
  * ------------------------------------------------------------------ */
 
-const CONVERSA = [
-  { quem: 'Carla, CS', lado: 'time', texto: 'Como foi o primeiro trimestre com o painel novo?' },
-  { quem: 'Renata, cliente', lado: 'cliente', texto: 'O painel ficou bom. O suporte é que demorou de novo.' },
-  { quem: 'Carla, CS', lado: 'time', texto: 'Entendi. E para a renovação de janeiro, como vocês estão?' },
-  { quem: 'Renata, cliente', lado: 'cliente', texto: '', risco: 'a diretoria pediu para a gente olhar outras opções antes de renovar' },
-] as const;
+/** Carteira fictícia: poucas contas em risco, muitas saudáveis, como na vida real. */
+function carteiraDeExemplo(): ContaRadar[] {
+  const nomeadas: [string, number, number | null][] = [
+    ['Logística Ventura', 81, 240_000],
+    ['Clínica Aurora', 88, 36_000],
+    ['Ótica Lumen', 72, null],
+    ['Grupo Tavares', 58, 510_000],
+    ['Escola Horizonte', 18, 48_000],
+  ];
+  // Gerador determinístico: o mesmo desenho no servidor e em todo carregamento.
+  let semente = 42;
+  const aleatorio = () => {
+    semente = (semente * 16807) % 2147483647;
+    return (semente - 1) / 2147483646;
+  };
+  const anonimas: [string, number, number][] = Array.from({ length: 22 }, (_, i) => {
+    const sorte = aleatorio();
+    const risco = sorte < 0.6 ? 5 + aleatorio() * 28 : sorte < 0.9 ? 36 + aleatorio() * 28 : 68 + aleatorio() * 10;
+    return [`conta-${i}`, Math.round(risco), [20, 40, 60, 90, 150, 300][Math.floor(aleatorio() * 6)]! * 1000];
+  });
+  return [...nomeadas, ...anonimas].map(([nome, churn, contrato]) => ({
+    id: nome,
+    // Só as nomeadas ganham rótulo: o resto é o fundo da carteira.
+    nome: nome.startsWith('conta-') ? '' : nome,
+    segmento: null,
+    contrato,
+    churn,
+    tendencia: null,
+    faixa: faixaRisco(churn),
+    prioridade: contrato == null ? null : (contrato * churn) / 100,
+    diasSemContato: null,
+    motivo: null,
+    concorrentes: [],
+    alertasAbertos: 0,
+  }));
+}
 
-export function ReuniaoSendoLida() {
+export function RadarDeExemplo({ className = '' }: { className?: string }) {
+  const pontos = posicionarNoPolar(carteiraDeExemplo(), 9).map((p) => ({ ...p, rotulado: p.rotulado && p.nome !== '' }));
+  return <RadarPolar pontos={pontos} comLinks={false} className={className} />;
+}
+
+/** O cartão que flutua sobre o radar: a fala que pôs a conta em risco. */
+export function CartaoFala({ className = '' }: { className?: string }) {
   return (
-    <figure
-      aria-label="Exemplo: o Benjamin lendo uma reunião e marcando o risco de churn"
-      className="relative rounded-[22px] border border-line bg-surface p-5 shadow-lift sm:p-6"
+    <div
+      className={`rounded-2xl border border-[var(--risco)]/35 bg-surface/90 p-4 shadow-lift backdrop-blur-md sm:p-5 ${className}`}
     >
-      <div className="flex items-center justify-between gap-3 border-b border-line pb-3">
-        <div className="flex items-center gap-2">
-          <span className="relative flex size-2.5">
-            <span className="absolute inline-flex size-full animate-ping rounded-full bg-[var(--risco)] opacity-50 motion-reduce:hidden" />
-            <span className="relative inline-flex size-2.5 rounded-full bg-[var(--risco)]" />
-          </span>
-          <p className="text-[12.5px] font-semibold">Renovação 2027, Logística Ventura</p>
-        </div>
-        <p className="text-[11.5px] text-ink-faint">lendo a reunião</p>
+      <Citacao texto="a diretoria pediu para a gente olhar outras opções antes de renovar" tom="risk" />
+      <span className="mt-3 inline-flex rounded-full bg-[var(--risco-suave)] px-2.5 py-1 text-[11.5px] font-semibold text-[var(--risco)]">
+        Avaliando trocar de fornecedor
+      </span>
+      <div className="mt-3 flex items-end justify-between gap-4">
+        <p className="text-[12px] text-ink-faint">Logística Ventura, R$ 240 mil</p>
+        <p className="text-[32px] font-semibold leading-none tracking-[-0.04em] text-[var(--risco)] tabular-nums">81</p>
       </div>
-
-      <ol className="mt-4 space-y-3">
-        {CONVERSA.map((f, i) => (
-          <li key={i} className={`fala flex flex-col ${f.lado === 'cliente' ? 'items-start' : 'items-end'}`}>
-            <span className="mb-1 text-[11px] text-ink-faint">{f.quem}</span>
-            {'risco' in f && f.risco ? (
-              <p className="max-w-[90%] rounded-2xl rounded-tl-sm border border-[var(--risco)]/25 bg-surface px-3.5 py-2.5 font-fala text-[17px] italic leading-snug text-ink">
-                <span className="marca-risco">{f.risco}</span>
-              </p>
-            ) : (
-              <p
-                className={`max-w-[88%] rounded-2xl px-3.5 py-2 text-[13.5px] leading-snug ${
-                  f.lado === 'cliente' ? 'rounded-tl-sm bg-surface-2 text-ink' : 'rounded-tr-sm bg-ink text-canvas'
-                }`}
-              >
-                {f.texto}
-              </p>
-            )}
-          </li>
-        ))}
-      </ol>
-
-      <div className="selo-sinal mt-4 flex flex-wrap items-center gap-2">
-        <span className="inline-flex items-center gap-1 rounded-full bg-[var(--risco-suave)] px-2.5 py-1 text-[11.5px] font-semibold text-[var(--risco)]">
-          Sinal de churn: avaliando trocar de fornecedor
-        </span>
-        <span className="inline-flex items-center gap-1 rounded-full bg-[var(--atencao-suave)] px-2.5 py-1 text-[11.5px] font-semibold text-[var(--atencao)]">
-          Suporte lento, 2ª vez
-        </span>
-      </div>
-
-      <div className="mt-5 rounded-2xl bg-canvas p-4">
-        <div className="flex items-end justify-between">
-          <div>
-            <p className="text-[12px] font-medium text-ink-dim">Risco de churn</p>
-            <p className="mt-0.5 text-[11.5px] text-ink-faint">Contrato de R$ 240.000</p>
-          </div>
-          <p aria-label="Risco 81 de 100" className="text-[44px] font-semibold leading-none tracking-[-0.04em] text-[var(--risco)] tabular-nums">
-            <span className="contador" aria-hidden />
-          </p>
-        </div>
-        <div className="relative mt-4 h-2.5 rounded-full escala-gradiente" aria-hidden>
-          <span className="medidor-ponto absolute top-1/2 block size-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-surface bg-ink shadow-md" />
-        </div>
-        <div className="mt-2 flex justify-between text-[11px] text-ink-faint" aria-hidden>
-          <span>saudável</span>
-          <span>atenção</span>
-          <span className="font-medium text-[var(--risco)]">risco alto</span>
-        </div>
-      </div>
-
-      <figcaption className="mt-4 text-[11px] text-ink-faint">Exemplo ilustrativo com dados fictícios.</figcaption>
-    </figure>
+    </div>
   );
 }
 
@@ -254,59 +236,6 @@ export function TelaRadar() {
         </li>
       ))}
     </ul>
-  );
-}
-
-/* ------------------------------------------------------------------ *
- * Constelação: a carteira num só olhar
- * ------------------------------------------------------------------ */
-
-/** Gerador determinístico: a mesma constelação em todo carregamento e no servidor. */
-function semente(n: number) {
-  let s = n;
-  return () => {
-    s = (s * 16807) % 2147483647;
-    return (s - 1) / 2147483646;
-  };
-}
-
-export function Constelacao() {
-  const r = semente(42);
-  const contas = Array.from({ length: 46 }, (_, i) => {
-    // Mais contas saudáveis que em risco, como numa carteira real.
-    const risco = Math.round(Math.pow(r(), 1.6) * 100);
-    return { i, risco, y: 8 + r() * 80, tamanho: 6 + Math.round(r() * 16) };
-  });
-  const cor = (v: number) => (v >= 67 ? 'var(--risco)' : v >= 34 ? 'var(--atencao)' : 'var(--saude)');
-
-  return (
-    <figure aria-label="Exemplo: dezenas de contas espalhadas pela escala de risco" className="relative">
-      <div className="relative h-[300px] rounded-3xl border border-white/10 bg-white/[0.03] sm:h-[340px]">
-        <div className="absolute inset-y-0 left-[67%] right-0 rounded-r-3xl bg-[var(--risco)]/10" />
-        <div className="absolute inset-y-0 left-[34%] border-l border-dashed border-white/15" />
-        <div className="absolute inset-y-0 left-[67%] border-l border-dashed border-white/15" />
-        {contas.map((c) => (
-          <span
-            key={c.i}
-            className={`absolute block -translate-x-1/2 -translate-y-1/2 rounded-full ${c.risco >= 67 ? 'estrela-risco' : ''}`}
-            style={{
-              left: `${3 + c.risco * 0.94}%`,
-              top: `${c.y}%`,
-              width: c.tamanho,
-              height: c.tamanho,
-              background: cor(c.risco),
-              opacity: c.risco >= 67 ? 1 : 0.75,
-              animationDelay: `${(c.i % 7) * 0.35}s`,
-            }}
-          />
-        ))}
-      </div>
-      <div className="mt-3 flex justify-between text-[12px] text-white/55">
-        <span className="text-[var(--saude)]">saudáveis</span>
-        <span className="text-[var(--atencao)]">atenção</span>
-        <span className="font-semibold text-[#f0736a]">em risco: comece por aqui</span>
-      </div>
-    </figure>
   );
 }
 

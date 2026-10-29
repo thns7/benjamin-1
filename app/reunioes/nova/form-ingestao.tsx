@@ -242,7 +242,7 @@ export function FormIngestao() {
                 <button
                   type="button"
                   onClick={analisar}
-                  className="inline-flex items-center gap-1.5 rounded-md bg-accent px-4 py-2 text-[12.5px] font-semibold text-canvas transition-opacity hover:opacity-90"
+                  className="inline-flex items-center gap-1.5 rounded-md bg-acao px-4 py-2 text-[12.5px] font-semibold text-on-acao transition-opacity hover:opacity-90"
                 >
                   <Sparkles size={14} />
                   Analisar reunião

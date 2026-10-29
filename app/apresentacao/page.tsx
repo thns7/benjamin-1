@@ -4,11 +4,11 @@ import { ArrowUpRight, ShieldCheck } from 'lucide-react';
 import { Logo, TAGLINE, Wordmark } from '@/components/logo';
 import {
   Citacao,
-  Constelacao,
+  CartaoFala,
   FaixaDeFalas,
   ItemGarantia,
   LinhaDoTempo,
-  ReuniaoSendoLida,
+  RadarDeExemplo,
   TelaCanais,
   TelaLeitura,
   TelaRadar,
@@ -53,9 +53,7 @@ function BotaoDemo({ invertido = false }: { invertido?: boolean }) {
       target="_blank"
       rel="noopener noreferrer"
       className={`group inline-flex min-h-12 items-center gap-2 rounded-full px-6 text-[14.5px] font-semibold transition-all ${
-        invertido
-          ? 'bg-canvas text-ink hover:shadow-[0_8px_28px_-6px_rgb(255_255_255/0.4)]'
-          : 'bg-ink text-canvas hover:shadow-[0_10px_30px_-10px_rgb(22_22_22/0.6)]'
+        invertido ? 'bg-ink text-canvas hover:shadow-[0_8px_28px_-6px_rgb(255_255_255/0.35)]' : 'bg-acao text-on-acao shadow-glow hover:brightness-110'
       }`}
     >
       Pedir uma demonstração
@@ -110,7 +108,9 @@ const PERGUNTAS = [
 
 export default function ApresentacaoPage() {
   return (
-    <div className="landing min-h-dvh overflow-x-clip bg-canvas text-ink">
+    // A landing é sempre escura: é onde o radar e a escala de risco brilham,
+    // e não muda se o visitante deixou o app no tema claro.
+    <div data-theme="dark" className="landing min-h-dvh overflow-x-clip bg-canvas text-ink">
       <header className="sticky top-0 z-30 bg-canvas/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-[1180px] items-center justify-between px-5 py-4 sm:px-8">
           <Link href="/apresentacao" className="flex items-center gap-2.5" aria-label="Benjamin, página inicial">
@@ -141,7 +141,7 @@ export default function ApresentacaoPage() {
         <section className="relative">
           <div
             aria-hidden
-            className="pointer-events-none absolute right-[-10%] top-[-6%] h-[620px] w-[720px] rounded-full opacity-[0.16] blur-[90px] escala-gradiente"
+            className="pointer-events-none absolute right-[-12%] top-[-20%] h-[820px] w-[900px] rounded-full bg-[radial-gradient(circle,rgb(110_91_255/0.28),transparent_62%)]"
           />
           <div className="relative mx-auto grid max-w-[1180px] items-center gap-12 px-5 pb-16 pt-10 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:pb-20 lg:pt-14">
             <div>
@@ -168,7 +168,10 @@ export default function ApresentacaoPage() {
                 <ItemGarantia>Todo alerta com a fala do cliente</ItemGarantia>
               </ul>
             </div>
-            <ReuniaoSendoLida />
+            <div className="relative mx-auto w-full max-w-[540px] lg:pl-8">
+              <RadarDeExemplo />
+              <CartaoFala className="relative z-20 mt-5 sm:absolute sm:mt-0 sm:bottom-28 sm:left-[-1.5rem] sm:w-[330px] lg:left-[-3rem]" />
+            </div>
           </div>
         </section>
 
@@ -212,7 +215,7 @@ export default function ApresentacaoPage() {
               <li key={passo.titulo} className="revela flex flex-col">
                 <div className="min-h-[150px]">{passo.tela}</div>
                 <div className="mt-6 flex items-center gap-3">
-                  <span className="flex size-7 items-center justify-center rounded-full bg-ink text-[12.5px] font-semibold text-canvas">
+                  <span className="flex size-7 items-center justify-center rounded-full bg-acao text-[12.5px] font-semibold text-on-acao">
                     {i + 1}
                   </span>
                   <h3 className="text-[19px] font-semibold tracking-[-0.015em]">{passo.titulo}</h3>
@@ -224,17 +227,17 @@ export default function ApresentacaoPage() {
         </section>
 
         {/* A carteira num olhar */}
-        <section className="bg-ink text-canvas">
-          <div className="mx-auto grid max-w-[1180px] items-center gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16 lg:py-28">
+        <section className="border-y border-line bg-canvas-deep">
+          <div className="mx-auto grid max-w-[1180px] items-center gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16 lg:py-28">
             <div className="revela">
               <h2 className="max-w-[14ch] text-[34px] font-semibold leading-[1.08] tracking-[-0.03em] sm:text-[44px]">
-                Sua carteira inteira, num olhar.
+                Do ponto no radar para a fala do cliente.
               </h2>
-              <p className="mt-5 max-w-[44ch] text-[16.5px] leading-relaxed text-white/70">
-                Cada ponto é uma conta, posta no próprio risco de churn; o tamanho é o contrato. As contas que podem
-                cancelar pulsam, e a lista do radar já vem na ordem certa: da maior receita em risco para a menor.
+              <p className="mt-5 max-w-[44ch] text-[16.5px] leading-relaxed text-ink-dim">
+                Ao lado do radar, as contas vêm na ordem certa: da maior receita em risco para a menor. Cada uma com a
+                frase que explica o número, quem disse e em qual reunião.
               </p>
-              <ul className="mt-8 space-y-3 text-[14.5px] text-white/80">
+              <ul className="mt-8 space-y-3 text-[14.5px] text-ink-dim">
                 <li className="flex items-center gap-3">
                   <span className="size-3 rounded-full bg-[var(--risco)]" aria-hidden />
                   Risco alto: trate primeiro
@@ -250,8 +253,25 @@ export default function ApresentacaoPage() {
               </ul>
             </div>
             <div className="revela">
-              <Constelacao />
-              <p className="mt-2 text-[11.5px] text-white/45">Exemplo ilustrativo com dados fictícios.</p>
+              <ul className="divide-y divide-line overflow-hidden rounded-2xl border border-line bg-surface">
+                {[
+                  { nome: 'Logística Ventura', meta: 'Contrato de R$ 240.000, 20 dias sem conversa', fala: 'a diretoria pediu para a gente olhar outras opções antes de renovar', risco: 81, cor: 'var(--risco)', tom: 'risk' as const },
+                  { nome: 'Grupo Tavares Varejo', meta: 'Contrato de R$ 510.000, 28 dias sem conversa', fala: 'o Marcos saiu e quem assume agora é a área financeira', risco: 58, cor: 'var(--atencao)', tom: 'neutro' as const },
+                  { nome: 'Escola Horizonte', meta: 'Contrato de R$ 48.000, 8 dias sem conversa', fala: 'o relatório novo virou rotina aqui', risco: 18, cor: 'var(--saude)', tom: 'neutro' as const },
+                ].map((c) => (
+                  <li key={c.nome} className="grid grid-cols-[1fr_auto] gap-5 px-5 py-4">
+                    <div className="min-w-0">
+                      <p className="text-[15px] font-semibold">{c.nome}</p>
+                      <p className="mt-0.5 text-[12.5px] text-ink-faint">{c.meta}</p>
+                      <Citacao texto={c.fala} tamanho="pequeno" tom={c.tom} className="mt-3" />
+                    </div>
+                    <p className="text-[34px] font-semibold leading-none tracking-[-0.04em] tabular-nums" style={{ color: c.cor }}>
+                      {c.risco}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-2 text-[11.5px] text-ink-faint">Exemplo ilustrativo com dados fictícios.</p>
             </div>
           </div>
         </section>
@@ -340,10 +360,10 @@ export default function ApresentacaoPage() {
 
         {/* Chamado final */}
         <section className="px-5 pb-16 sm:px-8">
-          <div className="relative mx-auto max-w-[1180px] overflow-hidden rounded-[32px] bg-ink text-canvas">
+          <div className="relative mx-auto max-w-[1180px] overflow-hidden rounded-[32px] border border-line bg-surface">
             <div
               aria-hidden
-              className="pointer-events-none absolute -bottom-40 -right-24 h-[420px] w-[620px] rounded-full opacity-25 blur-[90px] escala-gradiente"
+              className="pointer-events-none absolute -bottom-48 -right-24 h-[520px] w-[720px] rounded-full bg-[radial-gradient(circle,rgb(110_91_255/0.35),transparent_62%)]"
             />
             <div className="relative flex flex-col items-start gap-8 px-7 py-16 sm:px-12 lg:flex-row lg:items-end lg:justify-between lg:py-20">
               <div>
@@ -351,12 +371,12 @@ export default function ApresentacaoPage() {
                 <h2 className="max-w-[18ch] text-[36px] font-semibold leading-[1.05] tracking-[-0.035em] sm:text-[48px]">
                   Veja o radar com as reuniões da sua empresa.
                 </h2>
-                <p className="mt-4 max-w-[52ch] text-[16.5px] leading-relaxed text-white/70">
+                <p className="mt-4 max-w-[52ch] text-[16.5px] leading-relaxed text-ink-dim">
                   Na demonstração, o Benjamin lê reuniões de contas que você já perdeu e mostra o que teria avisado
                   antes.
                 </p>
               </div>
-              <BotaoDemo invertido />
+              <BotaoDemo />
             </div>
           </div>
         </section>

@@ -62,7 +62,7 @@ const CAMPO =
 const BOTAO =
   'inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface-2 px-3 py-1.5 text-[12px] font-medium text-ink transition-all duration-300 hover:border-line-strong disabled:opacity-50';
 const BOTAO_PRIMARIO =
-  'inline-flex items-center gap-1.5 rounded-lg bg-accent px-3.5 py-2 text-[12.5px] font-semibold text-canvas transition-all duration-300 hover:shadow-glow disabled:opacity-50';
+  'inline-flex items-center gap-1.5 rounded-lg bg-acao px-3.5 py-2 text-[12.5px] font-semibold text-on-acao transition-all duration-300 hover:shadow-glow disabled:opacity-50';
 
 const FORMATOS_ACEITOS =
   '.txt,.md,.vtt,.srt,.sbv,.docx,.odt,.rtf,.json,.csv,.tsv,.xlsx,.zip,.mp3,.m4a,.wav,.ogg,.oga,.opus,.webm,.flac,.aac,.wma,.mp4,.m4v,.mov,.mpeg,.mpga,.mkv,.3gp,.amr,audio/*,video/*';

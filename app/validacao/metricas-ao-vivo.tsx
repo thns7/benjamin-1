@@ -181,7 +181,7 @@ export function MetricasAoVivo() {
           type="button"
           onClick={rodar}
           disabled={rodando}
-          className="inline-flex items-center gap-1.5 rounded-md bg-accent px-4 py-2 text-[12.5px] font-semibold text-canvas transition-opacity hover:opacity-90 disabled:opacity-60"
+          className="inline-flex items-center gap-1.5 rounded-md bg-acao px-4 py-2 text-[12.5px] font-semibold text-on-acao transition-opacity hover:opacity-90 disabled:opacity-60"
         >
           {rodando ? <Loader2 size={14} className="animate-spin" /> : <FlaskConical size={14} />}
           {rodando ? 'Rodando o motor sobre o corpus' : 'Rodar validação agora'}
