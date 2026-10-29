@@ -101,7 +101,7 @@ export default async function PrepararPage({ params }: { params: Promise<{ id: s
           </p>
           <Link
             href="/reunioes/nova"
-            className="mt-4 inline-flex items-center gap-1.5 rounded-md bg-accent px-3 py-1.5 text-[12px] font-semibold text-canvas hover:opacity-90"
+            className="mt-4 inline-flex items-center gap-1.5 rounded-md bg-acao px-3 py-1.5 text-[12px] font-semibold text-on-acao hover:opacity-90"
           >
             Analisar uma reunião
           </Link>

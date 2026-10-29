@@ -267,7 +267,7 @@ export function BotaoLink({
     'inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-medium transition-all duration-300';
   const estilo =
     variante === 'primario'
-      ? 'bg-accent font-semibold text-canvas hover:shadow-glow'
+      ? 'bg-acao font-semibold text-on-acao hover:shadow-glow'
       : 'border border-line bg-surface-2 text-ink hover:border-line-strong hover:text-accent';
   return (
     <a href={href} className={`${base} ${estilo}`}>

@@ -1,63 +1,61 @@
 # Identidade visual
 
-Referência da marca do Benjamin. O código é a fonte da verdade: `components/logo.tsx` (marca e wordmark), `app/globals.css` (cores) e `app/layout.tsx` (fontes).
+Referência da marca do Benjamin, conceito **"Radar de verdade"** (2026-10-29). O código é a fonte da verdade: `components/logo.tsx` (marca), `components/radar-ui.tsx` (radar e citação), `app/globals.css` (cores) e `app/layout.tsx` (fontes).
 
 ## Posicionamento
 
-**Radar de churn para Customer Success.** O Benjamin lê as reuniões com os clientes e avisa quando uma conta está em risco, sempre com a citação que gerou o alerta.
+**Radar de churn para Customer Success.** O Benjamin lê as reuniões com os clientes e põe no radar as contas em risco, sempre com a fala do cliente que gerou o alerta.
 
 - **Frase da marca:** *Conversas que viram retenção.* (`TAGLINE` em `components/logo.tsx`)
 - **Tom:** calmo, preciso, sem exagero. Nunca prometer o que o motor não mostra com evidência.
 
+## A peça central: o radar
+
+Um radar circular de verdade. Cada conta é um ponto; **quanto mais perto do centro, maior o risco**. Os anéis ficam nos cortes de faixa (67 e 34), o tamanho do ponto é o contrato e uma varredura violeta gira sem parar (parada para quem pede menos movimento). Componente: `<RadarPolar>`; posições: `posicionarNoPolar()` em `lib/radar.ts`, estáveis por conta.
+
 ## Marca
 
-Um **B geométrico em três peças**: a haste é uma pílula e as duas barrigas são blocos separados, a de baixo maior. O vão entre as peças faz parte do desenho e não pode ser preenchido.
+Um **B geométrico em três peças**: a haste é uma pílula e as duas barrigas são blocos separados. **A barriga de baixo é violeta** e é a assinatura: a mesma forma das aspas que abrem cada fala do cliente.
 
-- **Uso:** tinta sobre papel ou papel sobre tinta. Sem gradiente, sombra, contorno ou outra cor.
-- **Ícone de app:** o B em tinta sobre fundo `#FAFAFA` (`app/apple-icon.tsx`).
-- **Favicon:** o B sem fundo, que inverte no tema escuro do sistema (`app/icon.svg`).
-- **Área de proteção:** pelo menos a largura da haste em volta da marca.
+- **Favicon:** `app/icon.svg` (claro e escuro conforme o sistema).
+- **Ícone de app:** `app/apple-icon.tsx`, B claro sobre o fundo escuro.
 
 ## Wordmark
 
-`B E N J A M I N`: caixa alta, peso leve (300) e tracking largo (0,42em a 0,5em). Ocupa largura, não altura, e nunca aparece em corpo grande. O componente é `<Wordmark />`.
+`B E N J A M I N`: caixa alta, peso leve (300), tracking largo. Componente `<Wordmark />`.
 
 ## Cores
 
-Todos os cinzas são **neutros** (sem fundo azulado): o preto da marca é carbono, `#161616`.
+Três camadas, cada uma com um papel. **A marca nunca indica risco, e o risco nunca decora.**
 
-| Token | Hex | Uso |
-| --- | --- | --- |
-| Papel (`canvas`) | `#FAFAFA` | Fundo |
-| Linha (`line`, `surface-3`) | `#E5E5E5` | Bordas e divisórias |
-| Cinza médio | `#A3A3A3` | Traço, ícone decorativo e texto secundário no tema escuro. **Nunca texto sobre o papel** (contraste 2,4:1). |
-| Carbono (`ink`, `accent`) | `#161616` | Texto, marca e ação primária |
+| Camada | Escuro (padrão) | Claro (opcional) | Onde |
+| --- | --- | --- | --- |
+| Base: fundo | `#0B0A10` | `#FAFAFA` | página |
+| Base: painel | `#14121C` | `#FFFFFF` | cartões, radar |
+| Base: texto | `#F4F3F7` | `#161616` | texto |
+| Marca: texto, link, foco (`accent`) | `#8B7BFF` | `#5B3FD9` | links, menu ativo, foco |
+| Marca: botão (`acao`) | `#6A55F5` + texto branco | `#5B3FD9` | um botão principal por tela |
+| Risco: saudável (`health`) | `#3FB67F` | `#2E7D5B` | contas saudáveis |
+| Risco: atenção (`warn`) | `#E9A23B` | `#9A6410` | contas em atenção |
+| Risco: alto (`risk`) | `#FF5A4E` | `#BE3F32` | contas em risco alto |
 
-Cores **funcionais**, fora da paleta da marca, que só aparecem quando carregam decisão:
-
-| Token | Hex (claro) | Uso |
-| --- | --- | --- |
-| `health` | `#2E7D5B` | Conta saudável |
-| `risk` | `#BE3F32` | Risco de churn e receita em risco |
-
-O cinza de texto mais claro é `ink-faint` (`#6F6F6F`, 4,8:1 sobre o papel, passa no WCAG AA).
+- No claro, âmbar e vermelho escurecem para passar no WCAG AA como texto.
+- `acao` existe porque o violeta claro (bom como texto sobre o escuro) não segura texto branco em cima.
+- A landing é **sempre escura** (`data-theme="dark"`), independente do tema escolhido no app.
 
 ## Tipografia
 
-Duas vozes, com papéis que não se misturam:
-
-- **Inter** é a voz do sistema: navegação, títulos, números e leituras. Números usam algarismos tabulares (`tabular-nums`), não fonte mono.
-- **Newsreader itálico** é a voz do cliente: **só** as citações literais das reuniões (componente `<Citacao>`). Dá para ver de longe o que é leitura do sistema e o que é fala de gente.
-- JetBrains Mono ficou só para o que é código ou identificador técnico (ex.: o selo do motor).
+- **Inter** é a voz do sistema: navegação, títulos, números (`tabular-nums`).
+- **Newsreader itálico** é a voz do cliente: **só** as citações literais das reuniões (`<Citacao>`).
+- JetBrains Mono só para identificador técnico.
 
 Rótulos em frase normal, sem caixa alta espaçada; o wordmark é a única palavra em caixa alta.
 
-## Marcas próprias da interface
+## Movimento
 
-- **Aspas do Benjamin:** a barriga de baixo do B, usada no lugar das aspas tipográficas em toda citação.
-- **Mapa de risco:** a carteira numa régua de 0 a 100; cada conta é um ponto do tamanho do contrato, e só a zona de risco alto tem cor de fundo.
-- **Manchete com dados:** o Radar abre com uma frase ("R$ 276 mil em contratos podem cancelar."), não com uma fileira de indicadores.
+A varredura do radar e as revelações ao rolar da landing (melhoria progressiva). Com `prefers-reduced-motion`, tudo para no estado final.
 
-## Material
+## Histórico
 
-Plano, como papel: painel branco, linha fina e sombra curta e neutra. Grão quase invisível no fundo. A identidade anterior (vidro sobre atmosfera azul e lilás) foi substituída em 2026-10.
+1. 2026-10: papel e tinta (preto e branco), depois carbono no lugar do azul.
+2. 2026-10-29: conceito "Radar de verdade" — escuro, violeta como marca, escala de risco viva, radar circular.
