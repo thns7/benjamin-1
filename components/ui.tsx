@@ -3,9 +3,9 @@ import type { ReactNode } from 'react';
 /* ------------------------------------------------------------------ *
  * Primitivas de interface do Benjamin.
  *
- * Componentes próprios, sem UI kit. O material é um só — vidro sobre papel —
- * e está definido em um único lugar (`.vidro`, no globals.css). Nenhuma
- * primitiva daqui redefine sombra, blur ou borda por conta própria: quando o
+ * Componentes próprios, sem UI kit. O material é um só (papel, linha fina e
+ * sombra curta) e está definido em um único lugar (`.vidro`, no globals.css).
+ * Nenhuma primitiva daqui redefine sombra ou borda por conta própria: quando o
  * material muda, muda em todas as telas de uma vez.
  * ------------------------------------------------------------------ */
 
@@ -133,7 +133,7 @@ export function Badge({
 }) {
   return (
     <span
-      className={`inline-flex items-center gap-1 rounded-md border px-1.5 py-0.5 text-[11px] font-medium ${TOM_CHIP[tom]}`}
+      className={`inline-flex items-center gap-1 rounded-md border px-1.5 py-0.5 text-[11.5px] font-medium ${TOM_CHIP[tom]}`}
     >
       {children}
     </span>
@@ -222,7 +222,7 @@ export function StatTile({
       <p className={`mt-1.5 text-[28px] font-semibold leading-none tracking-[-0.03em] tabular-nums ${TOM_TEXTO[tom]}`}>
         {valor}
       </p>
-      {detalhe ? <p className="mt-2 text-[11px] leading-snug text-ink-faint">{detalhe}</p> : null}
+      {detalhe ? <p className="mt-2 text-[11.5px] leading-snug text-ink-faint">{detalhe}</p> : null}
     </div>
   );
 }
@@ -243,12 +243,10 @@ export function EmptyState({
   acao?: ReactNode;
 }) {
   return (
-    <div className="vidro-sutil flex flex-col items-center justify-center rounded-xl border border-dashed border-line-strong px-6 py-16 text-center">
-      <div className="mb-4 flex size-11 items-center justify-center rounded-xl border border-line bg-accent-soft text-accent">
-        {icone}
-      </div>
-      <h3 className="text-[13px] font-semibold text-ink">{titulo}</h3>
-      <p className="mt-2 max-w-md text-[12px] leading-relaxed text-ink-dim">{descricao}</p>
+    <div className="flex flex-col items-center justify-center rounded-lg border border-line px-6 py-16 text-center">
+      <div className="mb-3 text-ink-faint">{icone}</div>
+      <h3 className="text-[14px] font-semibold text-ink">{titulo}</h3>
+      <p className="mt-1.5 max-w-md text-[13px] leading-relaxed text-ink-dim">{descricao}</p>
       {acao ? <div className="mt-5">{acao}</div> : null}
     </div>
   );
@@ -264,11 +262,11 @@ export function BotaoLink({
   variante?: 'primario' | 'secundario';
 }) {
   const base =
-    'inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-medium transition-all duration-300';
+    'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[12.5px] font-medium transition-colors duration-150';
   const estilo =
     variante === 'primario'
-      ? 'bg-acao font-semibold text-on-acao hover:shadow-glow'
-      : 'border border-line bg-surface-2 text-ink hover:border-line-strong hover:text-accent';
+      ? 'bg-acao font-semibold text-on-acao hover:opacity-90'
+      : 'border border-line bg-surface text-ink hover:border-line-strong hover:bg-surface-2';
   return (
     <a href={href} className={`${base} ${estilo}`}>
       {children}

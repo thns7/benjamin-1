@@ -126,7 +126,7 @@ export default async function BriefingPage({ params }: { params: Promise<{ id: s
         </>
       ) : (
         <div className="rounded-lg border border-risk/30 bg-risk-soft/25 px-6 py-10 text-center">
-          <div className="mx-auto mb-3 flex size-10 items-center justify-center rounded-lg border border-risk/40 bg-surface text-risk">
+          <div className="mx-auto mb-3 flex justify-center text-risk">
             <TriangleAlert size={18} />
           </div>
           <h3 className="text-[13px] font-semibold text-ink">Esta reunião não tem análise disponível</h3>

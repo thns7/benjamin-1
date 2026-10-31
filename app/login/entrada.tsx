@@ -41,7 +41,7 @@ export function Entrada({ destino, motivo }: { destino: string; motivo?: string 
   const input =
     // O foco aparece no contorno do campo inteiro (focus-within), não no input.
     'foco-no-campo w-full bg-transparent py-2.5 text-[13px] text-ink outline-none placeholder:text-ink-faint disabled:cursor-not-allowed';
-  const rotulo = 'block text-[11px] font-semibold text-ink-dim';
+  const rotulo = 'block text-[11.5px] font-semibold text-ink-dim';
 
   return (
     <div className="w-full max-w-[380px]">
@@ -95,7 +95,7 @@ export function Entrada({ destino, motivo }: { destino: string; motivo?: string 
         <button
           type="submit"
           disabled={enviando || !email || !senha}
-          className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-acao py-2.5 text-[12.5px] font-semibold text-on-acao transition-all duration-300 hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:shadow-none"
+          className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-acao py-2.5 text-[12.5px] font-semibold text-on-acao transition-colors duration-150 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:shadow-none"
         >
           {enviando ? <Loader2 size={14} className="animate-spin" /> : null}
           {enviando ? 'Entrando…' : 'Entrar'}

@@ -55,13 +55,13 @@ function CardValor({
     <section className="min-w-0">
       <div className="flex items-center gap-1.5 text-ink-faint">
         {icone}
-        <h2 className="text-[11px] font-semibold">{rotulo}</h2>
+        <h2 className="text-[11.5px] font-semibold">{rotulo}</h2>
       </div>
       <p className={`mt-2 font-mono text-3xl tabular-nums ${cor[tom]}`}>{valor}</p>
       <p className="mt-1 text-[11.5px] text-ink-dim">{detalhe}</p>
       <ul className="mt-3 space-y-1 border-t border-line pt-2">
         {premissas.map((p, i) => (
-          <li key={i} className="flex gap-1.5 text-[10.5px] leading-relaxed text-ink-faint">
+          <li key={i} className="flex gap-1.5 text-[11.5px] leading-relaxed text-ink-faint">
             <span className="mt-[5px] size-1 shrink-0 rounded-full bg-ink-faint" />
             {p}
           </li>
@@ -164,7 +164,7 @@ export default async function TorrePage() {
                     <div className="flex items-baseline justify-between gap-3">
                       <span className="text-[12.5px] text-ink">{u.unidade}</span>
                       <span className="flex items-baseline gap-2">
-                        <span className="text-[11px] text-ink-faint">{u.oportunidades} oport.</span>
+                        <span className="text-[11.5px] text-ink-faint">{u.oportunidades} oport.</span>
                         <Mono tom={u.valor > 0 ? 'health' : 'neutro'}>{fmtBRL(u.valor)}</Mono>
                       </span>
                     </div>
@@ -219,7 +219,7 @@ export default async function TorrePage() {
           </div>
           <ul className="mt-3 space-y-1 border-t border-line pt-2">
             {[...t.custo.premissas, ...t.produtividade.premissas].map((p, i) => (
-              <li key={i} className="flex gap-1.5 text-[10.5px] leading-relaxed text-ink-faint">
+              <li key={i} className="flex gap-1.5 text-[11.5px] leading-relaxed text-ink-faint">
                 <span className="mt-[5px] size-1 shrink-0 rounded-full bg-ink-faint" />
                 {p}
               </li>
@@ -244,7 +244,7 @@ export default async function TorrePage() {
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-[12.5px]">
-                <thead className="border-b border-line text-left text-[11px] text-ink-faint">
+                <thead className="border-b border-line text-left text-[11.5px] text-ink-faint">
                   <tr>
                     <th className="py-2 pr-4 font-medium">Conta</th>
                     <th className="py-2 pr-4 font-medium">Health</th>
@@ -262,7 +262,7 @@ export default async function TorrePage() {
                         <Link href={`/clientes/${c.id}`} className="font-medium text-ink hover:text-accent">
                           {c.nome}
                         </Link>
-                        {c.segmento ? <p className="text-[11px] text-ink-faint">{c.segmento}</p> : null}
+                        {c.segmento ? <p className="text-[11.5px] text-ink-faint">{c.segmento}</p> : null}
                       </td>
                       <td className="py-2 pr-4">
                         <Badge tom={tomHealth(c.banda)}>{c.health}</Badge>
@@ -341,14 +341,14 @@ export default async function TorrePage() {
                   </div>
                   <p className="mt-1 text-[12px] leading-relaxed text-ink-dim">{a.message}</p>
                   {a.evidence ? (
-                    <p className="mt-1 font-fala text-[13.5px] italic leading-snug text-ink-faint">
+                    <p className="mt-1 font-fala text-[13.5px] leading-snug text-ink-faint">
                       “{a.evidence}”
                     </p>
                   ) : null}
                   {a.meeting_id ? (
                     <Link
                       href={`/reunioes/${a.meeting_id}`}
-                      className="mt-1.5 inline-block text-[11px] text-accent hover:underline"
+                      className="mt-1.5 inline-block text-[11.5px] text-accent hover:underline"
                     >
                       abrir briefing →
                     </Link>

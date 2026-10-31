@@ -48,7 +48,7 @@ export function BotaoReprocessar({ meetingId }: { meetingId: string }) {
         {rodando ? 'Reprocessando' : 'Reprocessar'}
       </button>
       {erro ? (
-        <span className="inline-flex items-center gap-1 text-[11px] text-risk">
+        <span className="inline-flex items-center gap-1 text-[11.5px] text-risk">
           <TriangleAlert size={11} />
           {erro}
         </span>

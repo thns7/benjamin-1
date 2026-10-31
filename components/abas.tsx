@@ -97,7 +97,7 @@ export function Abas({ abas, inicial }: { abas: Aba[]; inicial?: string }) {
               {a.icone ? <span aria-hidden>{a.icone}</span> : null}
               {a.rotulo}
               {a.contador ? (
-                <span className="font-mono text-[11px] text-ink-faint">{a.contador}</span>
+                <span className="font-mono text-[11.5px] text-ink-faint">{a.contador}</span>
               ) : null}
               {/*
                 O sublinhado é um irmão absoluto em vez de `border-bottom` para

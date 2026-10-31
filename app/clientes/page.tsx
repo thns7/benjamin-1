@@ -111,7 +111,7 @@ export default async function ClientesPage() {
       ) : (
         <div className="overflow-x-auto vidro rounded-xl">
           <table className="w-full text-[12.5px]">
-            <thead className="border-b border-line text-left text-[11px] text-ink-faint">
+            <thead className="border-b border-line text-left text-[11.5px] text-ink-faint">
               <tr>
                 <th className="px-4 py-2.5 font-medium">Cliente</th>
                 <th className="px-4 py-2.5 font-medium">Health</th>
@@ -134,7 +134,7 @@ export default async function ClientesPage() {
                       <Link href={`/clientes/${c.id}`} className="font-medium text-ink hover:text-accent">
                         {c.name}
                       </Link>
-                      {c.segment ? <p className="text-[11px] text-ink-faint">{c.segment}</p> : null}
+                      {c.segment ? <p className="text-[11.5px] text-ink-faint">{c.segment}</p> : null}
                     </td>
                     <td className="px-4 py-2.5">
                       <Badge tom={tomHealth(c.health_band)}>{c.health_score}</Badge>

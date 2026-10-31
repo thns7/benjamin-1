@@ -71,7 +71,7 @@ function Numero({ valor, rotulo, tom = 'neutro' }: { valor: string; rotulo: stri
   return (
     <div className="rounded-md border border-line bg-surface-2 px-3 py-2.5">
       <p className={`font-mono text-[17px] tabular-nums ${cor[tom]}`}>{valor}</p>
-      <p className="mt-0.5 text-[10.5px] leading-tight text-ink-faint">{rotulo}</p>
+      <p className="mt-0.5 text-[11.5px] leading-tight text-ink-faint">{rotulo}</p>
     </div>
   );
 }
@@ -171,7 +171,7 @@ export default async function ValidacaoPage() {
                 ).map(([nome, valor, alvo]) => (
                   <li key={nome} className="flex items-center justify-between gap-2">
                     <span className="truncate text-ink-dim">{nome}</span>
-                    <Mono tom={valor >= alvo ? 'health' : 'warn'} className="shrink-0 text-[11px]">
+                    <Mono tom={valor >= alvo ? 'health' : 'warn'} className="shrink-0 text-[11.5px]">
                       {valor}/{alvo}
                     </Mono>
                   </li>
@@ -229,7 +229,7 @@ export default async function ValidacaoPage() {
                     ))}
                   </ul>
                 )}
-                <p className="mt-2 rounded-md border border-line bg-surface-2 px-3 py-2 text-[11px] leading-relaxed text-ink-faint">
+                <p className="mt-2 rounded-md border border-line bg-surface-2 px-3 py-2 text-[11.5px] leading-relaxed text-ink-faint">
                   A máscara tem exatamente o mesmo comprimento do trecho mascarado. Sem isso, todo offset
                   depois do primeiro CPF andaria e a evidência apontaria para o lugar errado da
                   transcrição. O valor original nunca é gravado, só o tipo e a posição.
@@ -249,7 +249,7 @@ export default async function ValidacaoPage() {
                   >
                     {t.confiabilidadeMedia}
                   </Mono>
-                  <span className="text-[11px] text-ink-faint">média da base</span>
+                  <span className="text-[11.5px] text-ink-faint">média da base</span>
                 </div>
                 <ul className="space-y-1.5">
                   {t.distribuicao.map((f) => {
@@ -273,7 +273,7 @@ export default async function ValidacaoPage() {
                     );
                   })}
                 </ul>
-                <p className="mt-2 text-[11px] leading-relaxed text-ink-faint">
+                <p className="mt-2 text-[11.5px] leading-relaxed text-ink-faint">
                   {t.comDiarizacao} transcrição(ões) com marcação de falante e {t.semDiarizacao} sem. Onde
                   não há marcação, as métricas de conversa ficam nulas: o sistema não inventa turno para
                   preencher gráfico.
@@ -328,7 +328,7 @@ export default async function ValidacaoPage() {
               Todo item extraído carrega a citação literal e o índice de caractere no texto seguro. Item
               sem evidência rastreável não é retornado.
             </p>
-            <p className="mt-2 rounded-md border border-accent/25 bg-accent-soft/20 px-3 py-2 text-[11px] leading-relaxed text-ink-dim">
+            <p className="mt-2 rounded-md border border-accent/25 bg-accent-soft/20 px-3 py-2 text-[11.5px] leading-relaxed text-ink-dim">
               <Quote size={11} className="mr-1 inline text-accent" />
               Um teste de invariante verifica, em todo o corpus, que{' '}
               <span className="font-mono">texto.slice(start, end) === quote</span>. É o que permite
@@ -342,7 +342,7 @@ export default async function ValidacaoPage() {
               objeto tipado. Não conhece Next, não conhece Supabase, não faz rede. É isso que permite
               rodá-lo sobre o corpus inteiro nesta tela e medir latência de verdade.
             </p>
-            <p className="mt-2 text-[11px] leading-relaxed text-ink-faint">
+            <p className="mt-2 text-[11.5px] leading-relaxed text-ink-faint">
               Invariante verificado em teste: a soma dos fatores de score bate exatamente com o número
               exibido. Se não bater, é bug.
             </p>
@@ -398,7 +398,7 @@ export default async function ValidacaoPage() {
                     ))}
                   </tbody>
                 </table>
-                <p className="mt-2 text-[11px] text-ink-faint">
+                <p className="mt-2 text-[11.5px] text-ink-faint">
                   {v.correcoes.total} intervenção(ões) humana(s) registrada(s). Taxa alta num campo indica
                   onde o motor precisa melhorar. É o mapa de trabalho, não um defeito escondido.
                 </p>

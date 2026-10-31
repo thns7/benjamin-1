@@ -233,7 +233,7 @@ export function Briefing({
             <SeloConfiabilidade valor={q.reliability_index} />
           </div>
           <Transcricao texto={transcricao} sel={sel} />
-          <div className="border-t border-line px-4 py-2 text-[10.5px] text-ink-faint">
+          <div className="border-t border-line px-4 py-2 text-[11.5px] text-ink-faint">
             Clique em qualquer item extraído para ver o trecho que o originou. {q.redacted_entities > 0
               ? `${q.redacted_entities} dado(s) sensível(is) anonimizado(s).`
               : 'Nenhum dado sensível encontrado.'}
@@ -324,11 +324,11 @@ function Secao({
     <section>
       <div className="mb-2.5 flex items-center gap-2">
         {icone ? <span className="text-ink-faint">{icone}</span> : null}
-        <h2 className="text-[11px] font-semibold text-ink-dim">
+        <h2 className="text-[11.5px] font-semibold text-ink-dim">
           {titulo}
         </h2>
         {contador != null ? (
-          <span className="ml-auto font-mono text-[11px] tabular-nums text-ink-faint">
+          <span className="ml-auto font-mono text-[11.5px] tabular-nums text-ink-faint">
             {contador}
           </span>
         ) : null}
@@ -394,7 +394,7 @@ function ItemEv({
         {campo ? <ControleCorrecao campo={campo} valor={valor ?? ev?.quote ?? null} /> : null}
       </div>
       {ev?.quote ? (
-        <p className="mt-1 line-clamp-2 font-fala text-[13.5px] italic leading-snug text-ink-faint">
+        <p className="mt-1 line-clamp-2 font-fala text-[13.5px] leading-snug text-ink-faint">
           “{ev.quote}”
         </p>
       ) : null}
@@ -582,7 +582,7 @@ function Acoes({
     <section className="vidro rounded-xl p-5">
       <div className="mb-3 flex items-center gap-2">
         <Target size={14} className="text-ink-faint" />
-        <h2 className="text-[11px] font-semibold text-ink-dim">
+        <h2 className="text-[11.5px] font-semibold text-ink-dim">
           O que fazer
         </h2>
       </div>
@@ -664,11 +664,11 @@ function Qualidade({ analise }: { analise: AnalysisResult }) {
               <Badge tom={f.side === 'vendedor' ? 'accent' : f.side === 'cliente' ? 'health' : 'neutro'}>
                 {f.side}
               </Badge>
-              <Mono className="text-[11px] tabular-nums text-ink-faint">
+              <Mono className="text-[11.5px] tabular-nums text-ink-faint">
                 confiança {f.confidence.toFixed(2)}
               </Mono>
               {f.signals.length > 0 ? (
-                <span className="min-w-0 truncate font-mono text-[10.5px] text-ink-faint">
+                <span className="min-w-0 truncate font-mono text-[11.5px] text-ink-faint">
                   {f.signals.join(' · ')}
                 </span>
               ) : null}
@@ -787,7 +787,7 @@ function ScoreCard({
           })}
         </ul>
       ) : (
-        <p className="mt-2 text-[11px] text-ink-faint">Sem fatores registrados.</p>
+        <p className="mt-2 text-[11.5px] text-ink-faint">Sem fatores registrados.</p>
       )}
     </section>
   );
@@ -819,7 +819,7 @@ function Confianca({
             <ItemEv key={`${s.label}-${i}`} ev={s.evidence} sel={sel} onSelect={onSelect}>
               <span className="flex items-center justify-between gap-2">
                 <span>{s.label}</span>
-                <Mono tom={s.delta >= 0 ? 'health' : 'risk'} className="text-[11px]">
+                <Mono tom={s.delta >= 0 ? 'health' : 'risk'} className="text-[11.5px]">
                   {s.delta >= 0 ? '+' : ''}
                   {s.delta}
                 </Mono>
@@ -848,7 +848,7 @@ function Sentimento({
     <Secao titulo="Sentimento" icone={<Gauge size={14} />}>
       <div className="mb-3 flex items-center gap-2">
         <Badge tom={s.tom}>{s.rotulo}</Badge>
-        <span className="text-[11px] text-ink-faint">
+        <span className="text-[11.5px] text-ink-faint">
           global {analise.sentiment_score >= 0 ? '+' : ''}
           {analise.sentiment_score.toFixed(2)}
         </span>
@@ -900,7 +900,7 @@ function Persona({
           </Badge>
         </div>
         {p.evidence?.quote ? (
-          <p className="mt-1 font-fala text-[13.5px] italic text-ink-faint">“{p.evidence.quote}”</p>
+          <p className="mt-1 font-fala text-[13.5px] text-ink-faint">“{p.evidence.quote}”</p>
         ) : null}
       </button>
     </Secao>
@@ -928,7 +928,7 @@ function Ecossistema({
                   <span className="font-medium">{p.name}</span>
                   <Badge tom={st.tom}>{st.rotulo}</Badge>
                   {p.unit !== 'indefinido' ? (
-                    <span className="text-[11px] text-ink-faint">{UNIDADE[p.unit]}</span>
+                    <span className="text-[11.5px] text-ink-faint">{UNIDADE[p.unit]}</span>
                   ) : null}
                 </span>
               </ItemEv>
@@ -965,9 +965,9 @@ function Oportunidades({
               <div className="flex flex-wrap items-center gap-2">
                 <span className="font-medium">{o.product}</span>
                 {o.unit !== 'indefinido' ? <Badge tom="accent">{UNIDADE[o.unit]}</Badge> : null}
-                <span className="ml-auto font-mono text-[11px] text-ink-dim">prob. {pct(o.probability)}</span>
+                <span className="ml-auto font-mono text-[11.5px] text-ink-dim">prob. {pct(o.probability)}</span>
                 {o.estimated_value ? (
-                  <Mono tom="health" className="text-[11px]">
+                  <Mono tom="health" className="text-[11.5px]">
                     {fmtBRL(o.estimated_value)}
                   </Mono>
                 ) : null}
@@ -1004,11 +1004,11 @@ function Concorrentes({
                   {c.active ? `ameaça ${c.threat}` : 'histórico'}
                 </Badge>
                 {!c.active ? (
-                  <span className="inline-flex items-center gap-1 text-[11px] text-ink-faint">
+                  <span className="inline-flex items-center gap-1 text-[11.5px] text-ink-faint">
                     <Ban size={11} /> não é ameaça ativa
                   </span>
                 ) : null}
-                {c.context ? <span className="text-[11px] text-ink-faint">· {c.context}</span> : null}
+                {c.context ? <span className="text-[11.5px] text-ink-faint">· {c.context}</span> : null}
               </span>
             </ItemEv>
           ))}
@@ -1035,14 +1035,14 @@ function ListaSinais({
 }) {
   return (
     <div>
-      <p className="mb-1.5 text-[11px] font-semibold text-ink-faint">{titulo}</p>
+      <p className="mb-1.5 text-[11.5px] font-semibold text-ink-faint">{titulo}</p>
       {sinais.length > 0 ? (
         <div className="space-y-1.5">
           {sinais.map((s, i) => (
             <ItemEv key={i} ev={s.evidence} sel={sel} onSelect={onSelect}>
               <span className="flex items-center justify-between gap-2">
                 <span>{s.text}</span>
-                <Mono tom={tom} className="shrink-0 text-[11px]">
+                <Mono tom={tom} className="shrink-0 text-[11.5px]">
                   {s.weight}
                 </Mono>
               </span>
@@ -1091,7 +1091,7 @@ function GrupoTexto({
   if (itens.length === 0) return null;
   return (
     <div>
-      <p className="mb-1.5 text-[11px] font-semibold text-ink-faint">
+      <p className="mb-1.5 text-[11.5px] font-semibold text-ink-faint">
         {titulo} <span className="text-ink-faint">· {itens.length}</span>
       </p>
       <div className="space-y-1.5">
@@ -1164,9 +1164,9 @@ function Extracoes({
                   <span>{item.text}</span>
                   <Badge tom={item.resolved ? 'health' : 'warn'}>{item.category}</Badge>
                   {item.resolved ? (
-                    <span className="text-[10px] text-health">resolvida</span>
+                    <span className="text-[11.5px] text-health">resolvida</span>
                   ) : (
-                    <span className="text-[10px] text-warn">em aberto</span>
+                    <span className="text-[11.5px] text-warn">em aberto</span>
                   )}
                 </span>
               );
@@ -1221,9 +1221,9 @@ function Tarefas({
                 <Badge tom={t.side === 'interno' ? 'accent' : 'neutro'}>
                   {t.side === 'interno' ? 'nosso' : 'cliente'}
                 </Badge>
-                {t.responsible ? <span className="text-[11px] text-ink-faint">{t.responsible}</span> : null}
+                {t.responsible ? <span className="text-[11.5px] text-ink-faint">{t.responsible}</span> : null}
                 {t.due_date ? (
-                  <span className="ml-auto font-mono text-[11px] text-warn">{t.due_date}</span>
+                  <span className="ml-auto font-mono text-[11.5px] text-warn">{t.due_date}</span>
                 ) : null}
               </div>
             </ItemEv>
@@ -1257,7 +1257,7 @@ function Financeiro({
               </Mono>
               <Badge tom="neutro">{b.kind}</Badge>
               {b.confidential ? (
-                <span className="inline-flex items-center gap-1 rounded border border-warn/40 bg-warn-soft px-1.5 py-0.5 text-[10px] font-medium text-warn">
+                <span className="inline-flex items-center gap-1 rounded border border-warn/40 bg-warn-soft px-1.5 py-0.5 text-[11.5px] font-medium text-warn">
                   <Lock size={10} /> sigiloso
                 </span>
               ) : null}
@@ -1286,7 +1286,7 @@ function Voz({
           <ItemEv key={i} ev={v.evidence} sel={sel} onSelect={onSelect}>
             <span className="flex flex-wrap items-center gap-2">
               <Badge tom="ai">{v.type.replace('_', ' ')}</Badge>
-              {v.target ? <span className="text-[11px] text-ink-faint">{v.target}</span> : null}
+              {v.target ? <span className="text-[11.5px] text-ink-faint">{v.target}</span> : null}
               <span>{v.text}</span>
             </span>
           </ItemEv>
@@ -1328,7 +1328,7 @@ function Conversa({ analise }: { analise: AnalysisResult }) {
         </div>
       )}
       <div className="mt-3 flex flex-wrap items-center gap-2">
-        <span className="text-[11px] font-semibold text-ink-faint">BANT</span>
+        <span className="text-[11.5px] font-semibold text-ink-faint">BANT</span>
         <Mono tom={b.score >= 3 ? 'health' : b.score >= 2 ? 'warn' : 'risk'}>{b.score}/4</Mono>
         {(['budget', 'authority', 'need', 'timeline'] as const).map((k) => (
           <Badge key={k} tom={b[k] ? 'health' : 'neutro'}>
@@ -1336,7 +1336,7 @@ function Conversa({ analise }: { analise: AnalysisResult }) {
           </Badge>
         ))}
         {b.missing.length > 0 ? (
-          <span className="text-[11px] text-ink-faint">falta: {b.missing.join(', ')}</span>
+          <span className="text-[11.5px] text-ink-faint">falta: {b.missing.join(', ')}</span>
         ) : null}
       </div>
     </Secao>
@@ -1360,7 +1360,7 @@ function ValorNegocio({ analise }: { analise: AnalysisResult }) {
       {v.assumptions.length > 0 ? (
         <ul className="mt-3 space-y-1">
           {v.assumptions.map((a, i) => (
-            <li key={i} className="flex gap-1.5 text-[11px] leading-relaxed text-ink-faint">
+            <li key={i} className="flex gap-1.5 text-[11.5px] leading-relaxed text-ink-faint">
               <span className="mt-[6px] size-1 shrink-0 rounded-full bg-ink-faint" />
               {a}
             </li>
