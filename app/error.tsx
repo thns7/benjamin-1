@@ -9,11 +9,11 @@ import { TriangleAlert } from 'lucide-react';
 export default function Erro({ error, reset }: { error: Error; reset: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center rounded-lg border border-risk/40 bg-risk-soft/30 px-6 py-14 text-center">
-      <div className="mb-3 flex size-10 items-center justify-center rounded-lg border border-risk/40 bg-surface text-risk">
+      <div className="mb-3 flex justify-center text-risk">
         <TriangleAlert size={18} />
       </div>
       <h2 className="text-[13px] font-semibold text-ink">Algo falhou ao carregar esta tela</h2>
-      <p className="mt-1.5 max-w-lg font-mono text-[11px] leading-relaxed text-ink-dim">
+      <p className="mt-1.5 max-w-lg font-mono text-[11.5px] leading-relaxed text-ink-dim">
         {error.message}
       </p>
       <button

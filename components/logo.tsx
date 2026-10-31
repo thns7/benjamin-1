@@ -6,7 +6,7 @@
  * sem ele seria só um B grosso.
  *
  * Haste e barriga de cima leem `--ink` e invertem com o tema; a barriga de
- * baixo lê `--accent`, o violeta da marca. Não há
+ * baixo lê `--accent`, o verde-petróleo da marca. Não há
  * ficha atrás: o B é a marca inteira, e precisa funcionar sozinho no papel, no
  * cartão e gravado em relevo (ver a identidade em `IDENTIDADE.md`).
  *
@@ -38,26 +38,20 @@ export function MarcaFormas({ cor, destaque = cor }: { cor: string; destaque?: s
     <g fill={cor}>
       <rect x="4.5" y="4" width="5.75" height="24" rx="2.875" />
       <path d="M14 4H19.5A5.5 5.5 0 0 1 19.5 15H14Q13 15 13 14V5Q13 4 14 4Z" />
-      {/* A barriga de baixo é a assinatura: violeta, a mesma forma das aspas das falas. */}
+      {/* A barriga de baixo é a assinatura: na cor da marca, a mesma forma das aspas das falas. */}
       <path d="M13 25C13 20.2 16.8 16 21.5 16A6 6 0 0 1 21.5 28H14Q13 28 13 27Z" fill={destaque} />
     </g>
   );
 }
 
 /**
- * O nome espaçado é a identidade. Peso leve e tracking largo transformam oito
- * letras em uma régua horizontal, por isso o wordmark nunca aparece em corpo
- * grande: ele ocupa largura, não altura.
- *
- * `aria-label` devolve a palavra inteira ao leitor de tela, que de outro modo
- * soletraria as letras uma a uma por causa do espaçamento.
+ * O nome, escrito como nome: caixa normal, peso firme, sem espaçamento de
+ * letreiro. Caixa alta fina e espaçada era o figurino de marca gerada; o B já
+ * faz o trabalho de símbolo, a palavra só precisa ser lida.
  */
 export function Wordmark({ className = '' }: { className?: string }) {
   return (
-    <span
-      aria-label="Benjamin"
-      className={`block text-[12.5px] font-light uppercase leading-none tracking-[0.42em] text-ink ${className}`}
-    >
+    <span className={`block text-[15px] font-bold leading-none tracking-[-0.01em] text-ink ${className}`}>
       Benjamin
     </span>
   );

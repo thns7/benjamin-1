@@ -46,14 +46,14 @@ export function BotaoTratar({ alertaId, tratado }: { alertaId: string; tratado: 
         className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[11.5px] font-medium transition-colors disabled:opacity-60 ${
           tratado
             ? 'border border-line bg-surface-2 text-ink-dim hover:border-line-strong hover:text-ink'
-            : 'bg-acao text-on-acao hover:shadow-glow'
+            : 'bg-acao text-on-acao hover:opacity-90'
         }`}
       >
         {enviando ? <Loader2 size={12} className="animate-spin" /> : tratado ? <RotateCcw size={12} /> : <Check size={12} />}
         {tratado ? 'Reabrir' : 'Marcar como tratado'}
       </button>
       {erro ? (
-        <span className="inline-flex items-center gap-1 text-[11px] text-risk">
+        <span className="inline-flex items-center gap-1 text-[11.5px] text-risk">
           <TriangleAlert size={11} />
           {erro}
         </span>

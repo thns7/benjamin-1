@@ -10,7 +10,6 @@ import {
   FolderUp,
   Loader2,
   Mic,
-  Sparkles,
   TriangleAlert,
 } from 'lucide-react';
 import { EXEMPLO_CANONICO } from '@/lib/analysis/exemplo-canonico';
@@ -38,7 +37,7 @@ const hoje = () => new Date().toISOString().slice(0, 10);
 
 const CAMPO =
   'w-full rounded-md border border-line bg-surface-2 px-3 py-2 text-[13px] text-ink placeholder:text-ink-faint transition-colors focus:border-accent focus:outline-none';
-const ROTULO = 'mb-1 block text-[11px] font-medium text-ink-faint';
+const ROTULO = 'mb-1 block text-[11.5px] font-medium text-ink-faint';
 
 export function FormIngestao() {
   const router = useRouter();
@@ -138,7 +137,7 @@ export function FormIngestao() {
         </BotaoAba>
         <Link
           href="/reunioes/lote"
-          className="ml-auto inline-flex items-center gap-1.5 rounded-t-md border-b-2 border-transparent px-3 py-2 text-[12.5px] font-medium text-ink-dim transition-colors hover:text-ink"
+          className="ml-auto inline-flex items-center gap-1.5 border-b-2 border-transparent px-3 py-2 text-[12.5px] font-medium text-ink-dim transition-colors hover:text-ink"
         >
           <FolderUp size={14} />
           Várias de uma vez
@@ -210,9 +209,8 @@ export function FormIngestao() {
                   <button
                     type="button"
                     onClick={carregarExemplo}
-                    className="inline-flex items-center gap-1 rounded border border-ai/30 bg-ai-soft px-2 py-1 text-[11px] font-medium text-ai transition-colors hover:border-ai/60"
+                    className="text-[12px] font-medium text-accent underline decoration-accent/40 underline-offset-2 transition-colors hover:decoration-accent"
                   >
-                    <Sparkles size={12} />
                     usar uma reunião de exemplo
                   </button>
                 </div>
@@ -223,7 +221,7 @@ export function FormIngestao() {
                   value={texto}
                   onChange={(e) => setTexto(e.target.value)}
                 />
-                <p className="mt-1 text-[11px] text-ink-faint">
+                <p className="mt-1 text-[11.5px] text-ink-faint">
                   {palavras > 0 ? `${palavras} palavras` : 'CPF, CNPJ, e-mail e telefone são anonimizados antes da análise.'}
                 </p>
               </div>
@@ -236,7 +234,7 @@ export function FormIngestao() {
               ) : null}
 
               <div className="flex items-center justify-between gap-3">
-                <p className="text-[11px] text-ink-faint">
+                <p className="text-[11.5px] text-ink-faint">
                   O núcleo roda 100% em regras: análise determinística, custo de API R$ 0,00.
                 </p>
                 <button
@@ -244,7 +242,6 @@ export function FormIngestao() {
                   onClick={analisar}
                   className="inline-flex items-center gap-1.5 rounded-md bg-acao px-4 py-2 text-[12.5px] font-semibold text-on-acao transition-opacity hover:opacity-90"
                 >
-                  <Sparkles size={14} />
                   Analisar reunião
                 </button>
               </div>
@@ -296,7 +293,7 @@ function BotaoAba({
     <button
       type="button"
       onClick={onClick}
-      className={`inline-flex items-center gap-1.5 rounded-t-md border-b-2 px-3 py-2 text-[12.5px] font-medium transition-colors ${
+      className={`inline-flex items-center gap-1.5 border-b-2 px-3 py-2 text-[12.5px] font-medium transition-colors ${
         ativo
           ? 'border-accent text-ink'
           : 'border-transparent text-ink-dim hover:text-ink'
@@ -305,7 +302,7 @@ function BotaoAba({
       {icone}
       {children}
       {beta ? (
-        <span className="rounded bg-warn-soft px-1 py-px text-[11.5px] font-semibold text-warn">beta</span>
+        <span className="text-[11.5px] font-normal text-ink-faint">beta</span>
       ) : null}
     </button>
   );

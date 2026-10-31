@@ -65,7 +65,7 @@ function Chip({
     <Link
       href={href}
       aria-current={ativo ? 'page' : undefined}
-      className={`rounded-full px-3 py-1 text-[12px] font-medium transition-colors ${
+      className={`rounded-md px-3 py-1 text-[12px] font-medium transition-colors ${
         ativo ? 'bg-accent-soft text-accent' : 'text-ink-dim hover:bg-surface-3 hover:text-ink'
       }`}
     >
@@ -160,7 +160,7 @@ export default async function AlertasPage({
               </Chip>
             </div>
             <div className="flex flex-wrap items-center gap-1.5">
-              <span className="text-[11px] font-semibold text-ink-faint">
+              <span className="text-[11.5px] font-semibold text-ink-faint">
                 Severidade
               </span>
               {FILTROS_SEVERIDADE.map((s) => (

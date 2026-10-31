@@ -76,7 +76,7 @@ export function Cadastro() {
   if (confirmar) {
     return (
       <div className="w-full max-w-[400px] text-center">
-        <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-accent-soft text-accent">
+        <div className="mx-auto flex justify-center text-accent">
           <MailCheck size={22} aria-hidden />
         </div>
         <h1 className="mt-5 text-[22px] font-semibold tracking-[-0.02em]">Confirme seu e-mail</h1>
@@ -96,12 +96,12 @@ export function Cadastro() {
         <a href="/apresentacao" aria-label="Benjamin, página inicial">
           <Logo size={40} />
         </a>
-        <Wordmark className="mt-4 !text-[14px] !tracking-[0.5em] pl-[0.5em]" />
+        <Wordmark className="mt-3 !text-[18px]" />
         <h1 className="mt-6 text-[22px] font-semibold tracking-[-0.02em]">Crie a conta da sua empresa</h1>
         <p className="mt-1.5 text-[13.5px] text-ink-dim">Seu radar de churn fica pronto em um minuto.</p>
       </div>
 
-      <form onSubmit={criar} className="vidro rounded-2xl p-6">
+      <form onSubmit={criar} className="vidro rounded-xl p-6">
         <Campo id="nome" rotulo="Seu nome" icone={<User size={14} />}>
           <input id="nome" autoComplete="name" required value={nome} onChange={(e) => setNome(e.target.value)} disabled={enviando} className={classeInput} placeholder="Ana Souza" />
         </Campo>

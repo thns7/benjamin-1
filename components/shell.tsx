@@ -65,7 +65,7 @@ function ehAtivo(pathname: string, href: string): boolean {
 }
 
 function AlternadorTema() {
-  const [tema, setTema] = useState<'dark' | 'light'>('dark');
+  const [tema, setTema] = useState<'dark' | 'light'>('light');
 
   useEffect(() => {
     const atual = document.documentElement.getAttribute('data-theme');
@@ -87,7 +87,7 @@ function AlternadorTema() {
     <button
       type="button"
       onClick={alternar}
-      className="inline-flex size-7 items-center justify-center rounded-lg border border-line text-ink-faint transition-all duration-300 hover:border-line-strong hover:text-accent"
+      className="inline-flex size-7 items-center justify-center rounded-md border border-line text-ink-faint transition-colors duration-150 hover:border-line-strong hover:text-ink"
       aria-label={tema === 'dark' ? 'Mudar para tema claro' : 'Mudar para tema escuro'}
       title={tema === 'dark' ? 'Tema claro' : 'Tema escuro'}
     >
@@ -97,20 +97,19 @@ function AlternadorTema() {
 }
 
 /**
- * Botão de ação primária. É o único bloco de tinta chapada da interface — numa
- * tela de papel e tinta, um bloco chapado de tinta é o destaque mais forte
- * disponível, e ele fica reservado para a única coisa que o usuário SEMPRE pode
- * fazer: trazer uma reunião nova para dentro.
+ * Botão de ação primária: o único bloco chapado na cor da marca. Fica
+ * reservado para a única coisa que o usuário SEMPRE pode fazer: trazer uma
+ * reunião nova para dentro.
  */
 function BotaoNova({ compacto = false }: { compacto?: boolean }) {
   return (
     <Link
       href="/reunioes/nova"
-      className={`group inline-flex items-center justify-center gap-1.5 rounded-lg bg-acao font-semibold text-on-acao transition-all duration-300 hover:shadow-glow ${
-        compacto ? 'px-2.5 py-1.5 text-[11px]' : 'w-full px-3 py-2 text-[12px]'
+      className={`inline-flex items-center justify-center gap-1.5 rounded-md bg-acao font-semibold text-on-acao transition-opacity duration-150 hover:opacity-90 ${
+        compacto ? 'px-2.5 py-1.5 text-[12px]' : 'w-full px-3 py-2 text-[13px]'
       }`}
     >
-      <Plus size={compacto ? 13 : 14} className="transition-transform duration-300 group-hover:rotate-90" />
+      <Plus size={compacto ? 13 : 14} />
       {compacto ? 'Analisar' : 'Analisar reunião'}
     </Link>
   );
@@ -126,13 +125,7 @@ export function Shell({ children, motor }: { children: ReactNode; motor: string 
           <Logo size={28} />
           <div className="min-w-0">
             <Wordmark />
-            {/*
-              Sem truncate e sem caixa alta: o wordmark já gasta toda a largura
-              da barra com tracking de 0.42em, e a tagline em caixa alta atrás
-              dele cortava em "DE CAD…". Duas linhas em caixa baixa cabem, e
-              uma promessa pela metade é pior que promessa nenhuma.
-            */}
-            <p className="mt-1.5 text-[10px] leading-[1.35] text-ink-faint">
+            <p className="mt-1 text-[11.5px] leading-[1.35] text-ink-faint">
               {TAGLINE}
             </p>
           </div>
@@ -156,20 +149,13 @@ export function Shell({ children, motor }: { children: ReactNode; motor: string 
                       <Link
                         href={item.href}
                         aria-current={ativo ? 'page' : undefined}
-                        className={`relative flex items-center gap-2.5 rounded-lg px-2.5 py-[7px] text-[12.5px] transition-all duration-300 ${
+                        className={`flex items-center gap-2.5 rounded-md px-2.5 py-[7px] text-[13px] transition-colors duration-150 ${
                           ativo
-                            ? 'bg-accent-soft font-semibold text-accent'
+                            ? 'bg-surface-3 font-semibold text-ink'
                             : 'text-ink-dim hover:bg-surface-2 hover:text-ink'
                         }`}
                       >
-                        {/* marcador na sangria: diz onde você está sem gastar cor */}
-                        {ativo ? (
-                          <span
-                            aria-hidden
-                            className="absolute -left-3 top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-r-full bg-accent"
-                          />
-                        ) : null}
-                        <Icone size={15} className="shrink-0" />
+                        <Icone size={15} className={`shrink-0 ${ativo ? 'text-accent' : ''}`} />
                         {item.rotulo}
                       </Link>
                     </li>
@@ -181,11 +167,8 @@ export function Shell({ children, motor }: { children: ReactNode; motor: string 
         </nav>
 
         <div className="flex items-center justify-between gap-2 border-t border-line px-3 py-3">
-          <span
-            className="inline-flex items-center gap-1 rounded-md border border-line bg-surface-2 px-1.5 py-0.5 font-mono text-[10px] text-ink-dim"
-            title="Motor de análise ativo"
-          >
-            motor: {motor}
+          <span className="text-[11.5px] text-ink-faint" title="Motor de análise ativo">
+            Motor de {motor}
           </span>
           <div className="flex items-center gap-1.5">
             <AlternadorTema />
@@ -198,7 +181,7 @@ export function Shell({ children, motor }: { children: ReactNode; motor: string 
       <header className="no-print vidro-sutil fixed inset-x-0 top-0 z-20 flex items-center justify-between border-b border-line px-4 py-2.5 md:hidden">
         <Link href="/" className="flex items-center gap-2.5">
           <Logo size={24} />
-          <Wordmark className="!text-[11px] !tracking-[0.34em]" />
+          <Wordmark />
         </Link>
         <div className="flex items-center gap-2">
           <BotaoNova compacto />
@@ -208,7 +191,7 @@ export function Shell({ children, motor }: { children: ReactNode; motor: string 
       </header>
 
       <main className="min-w-0 flex-1 px-4 pb-20 pt-20 md:px-10 md:pt-10">
-        <div className="subir mx-auto max-w-[1200px]">{children}</div>
+        <div className="mx-auto max-w-[1200px]">{children}</div>
       </main>
 
       {/* Navegação inferior do mobile */}
@@ -223,7 +206,7 @@ export function Shell({ children, motor }: { children: ReactNode; motor: string 
                 key={item.href}
                 href={item.href}
                 aria-current={ativo ? 'page' : undefined}
-                className={`flex flex-col items-center gap-1 px-2 py-1 text-[9.5px] transition-colors ${
+                className={`flex flex-col items-center gap-1 px-2 py-1 text-[11.5px] transition-colors ${
                   ativo ? 'font-semibold text-accent' : 'text-ink-faint'
                 }`}
               >

@@ -73,7 +73,7 @@ export function ColunaCatalogo({
     'foco-no-campo mt-1.5 w-full rounded-lg border border-line bg-surface-2 px-3 py-2.5 text-[13.5px] text-ink outline-none placeholder:text-ink-faint focus:border-accent focus:ring-2 focus:ring-accent/20';
 
   return (
-    <section className="vidro flex flex-col rounded-2xl">
+    <section className="vidro flex flex-col rounded-xl">
       <div className="border-b border-line px-5 py-4">
         <h2 className="text-[16px] font-semibold tracking-[-0.01em]">{titulo}</h2>
         <p className="mt-1 text-[13px] leading-relaxed text-ink-dim">{descricao}</p>
@@ -141,7 +141,7 @@ export function ColunaCatalogo({
         <button
           type="submit"
           disabled={enviando || nome.trim().length < 2}
-          className="mt-4 inline-flex min-h-10 items-center gap-1.5 rounded-lg bg-acao px-4 text-[13px] font-semibold text-on-acao transition-all hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-40"
+          className="mt-4 inline-flex min-h-10 items-center gap-1.5 rounded-lg bg-acao px-4 text-[13px] font-semibold text-on-acao transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
         >
           {enviando ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />}
           Adicionar

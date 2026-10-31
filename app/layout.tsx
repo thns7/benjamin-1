@@ -1,35 +1,31 @@
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
-import { Inter, JetBrains_Mono, Newsreader } from 'next/font/google';
+import { JetBrains_Mono, Literata, Public_Sans } from 'next/font/google';
 import { Shell } from '@/components/shell';
 import { TAGLINE } from '@/components/logo';
 import './globals.css';
 
 /*
-  Inter, como pede a identidade (`IDENTIDADE.md`). A versão anterior usava a
-  Instrument Sans justamente para fugir do Inter; a identidade nova troca
-  personalidade tipográfica por calma: o rosto da marca fica no B e no
-  wordmark espaçado em peso leve, e o texto corrido só precisa ser legível em
-  corpo pequeno, onde o Inter é dos melhores. O mono continua: este é um
-  produto de números, e número fora de tabular-nums dança na tela.
+  Public Sans: a voz do sistema (`IDENTIDADE.md`). Uma grotesca de serviço
+  público, feita para formulário, tabela e número, sem a cara de "produto de
+  startup" do Inter, que era o rosto padrão de toda interface gerada. Tem
+  algarismos tabulares, e este é um produto de números.
 */
-const inter = Inter({
+const publicSans = Public_Sans({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-public-sans',
   display: 'swap',
 });
 
 /*
-  A segunda voz da interface. O sistema fala em Inter; o CLIENTE fala em
-  Newsreader itálico. Toda citação literal de uma reunião — o motivo de um
-  alerta, um sinal de churn — aparece nesta serifa, e só ela. É o princípio do
-  produto (nenhuma afirmação sem a fala que a sustenta) virando tipografia:
-  dá para ver de longe o que é leitura do sistema e o que é fala de gente.
+  A segunda voz da interface: o CLIENTE fala em Literata, uma serifa desenhada
+  para leitura longa em tela. Toda citação literal de uma reunião (o motivo de
+  um alerta, um sinal de churn) aparece nesta serifa, e só ela. Em pé, não em
+  itálico: é transcrição, não epígrafe.
 */
-const newsreader = Newsreader({
+const literata = Literata({
   subsets: ['latin'],
-  style: ['italic'],
-  variable: '--font-newsreader',
+  variable: '--font-literata',
   display: 'swap',
 });
 
@@ -50,7 +46,7 @@ export const metadata: Metadata = {
 
 /**
  * Aplica o tema salvo antes da primeira pintura, para não piscar.
- * O padrão é o escuro (conceito "Radar de verdade"); o claro é opcional,
+ * O padrão é o claro (conceito "Papel e tinta"); o escuro é opcional,
  * guardado no localStorage.
  */
 const SCRIPT_TEMA = `(function(){try{var t=localStorage.getItem('benjamin-tema');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t)}}catch(e){}})()`;
@@ -59,10 +55,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   /*
    * A tela de entrada não usa o Shell.
    *
-   * Com a navegação em volta, todo item do menu levaria de volta para o login —
-   * e o `<div class="subir">` do Shell anima `transform`, o que cria contexto
-   * de posicionamento e faz qualquer `position: fixed` dentro dele se ancorar
-   * no main em vez da janela. O cartão de login saía recortado por causa disso.
+   * Com a navegação em volta, todo item do menu levaria de volta para o login.
    *
    * O caminho chega por cabeçalho, posto pelo middleware: server component não
    * lê a URL.
@@ -81,11 +74,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const motor = 'regras';
 
   return (
-    <html lang="pt-BR" data-theme="dark" suppressHydrationWarning>
+    <html lang="pt-BR" data-theme="light" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_TEMA }} />
       </head>
-      <body className={`${inter.variable} ${newsreader.variable} ${jetbrains.variable} font-sans antialiased`}>
+      <body className={`${publicSans.variable} ${literata.variable} ${jetbrains.variable} font-sans antialiased`}>
         {semShell ? children : <Shell motor={motor}>{children}</Shell>}
       </body>
     </html>
