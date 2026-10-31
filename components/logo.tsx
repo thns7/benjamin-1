@@ -6,7 +6,7 @@
  * sem ele seria só um B grosso.
  *
  * Haste e barriga de cima leem `--ink` e invertem com o tema; a barriga de
- * baixo lê `--accent`, o azul de caneta da marca. Não há
+ * baixo lê `--acao`, o verde ciano forte da marca. Não há
  * ficha atrás: o B é a marca inteira, e precisa funcionar sozinho no papel, no
  * cartão e gravado em relevo (ver a identidade em `IDENTIDADE.md`).
  *
@@ -24,7 +24,7 @@ export function Logo({ size = 28 }: { size?: number }) {
       aria-label="Benjamin"
       className="shrink-0"
     >
-      <MarcaFormas cor="var(--ink)" destaque="var(--accent)" />
+      <MarcaFormas cor="var(--ink)" destaque="var(--acao)" />
     </svg>
   );
 }

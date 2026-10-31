@@ -7,8 +7,9 @@
   Três camadas, cada uma com um papel:
 
     base    papel neutro e tinta     → fundos, texto, estrutura
-    marca   azul de caneta           → botão principal (acao), links, foco e
-                                       menu ativo (accent), a barriga do B
+    marca   verde ciano              → botão principal e barriga do B (acao,
+                                       forte), links, foco e menu ativo
+                                       (accent, o mesmo tom mais fundo)
     risco   verde, âmbar, vermelho   → só onde há dado de risco:
             health (saudável), warn (atenção), risk (risco alto)
 
@@ -42,19 +43,21 @@
   --ink-dim: #474b53;
   --ink-faint: #656a73;
 
-  /* Marca: azul de caneta, a tinta da esferográfica sobre o papel. Segura texto
-     branco (7,3:1) e é texto sobre o papel. */
-  --accent: #1f44d6;
-  --accent-vivid: #1f44d6;
-  --accent-soft: #e8ecfc;
-  --acao: #1f44d6;
-  --on-acao: #ffffff;
-  --ai: #1f44d6;
-  --ai-soft: #e8ecfc;
+  /* Marca: verde ciano forte. Saturado assim, ele não segura texto branco
+     (2:1), então o botão leva texto escuro (7,9:1). Onde a cor é texto sobre o
+     papel (link, foco, menu ativo), vale o mesmo tom mais fundo (4,9:1). */
+  --accent: #00806e;
+  --accent-vivid: #00806e;
+  --accent-soft: #d9f6f0;
+  --acao: #00c9ab;
+  --on-acao: #04221e;
+  --ai: #00806e;
+  --ai-soft: #d9f6f0;
 
   /* Escala de risco. Todos passam no WCAG AA como texto sobre o papel. */
-  --health: #2b7544;
-  --health-soft: #e4f0e7;
+  /* Verde de saúde puxado para o amarelo: não pode ser lido como a marca. */
+  --health: #3e7b1f;
+  --health-soft: #e9f2e2;
   --warn: #8f5c0b;
   --warn-soft: #f7eddb;
   --risk: #b3362b;
@@ -83,18 +86,17 @@
   --ink-dim: #b3b6be;
   --ink-faint: #8d919a;
 
-  /* No escuro o azul clareia para ser lido como texto; o botão fica mais fundo
-     para segurar texto branco (5,5:1). */
-  --accent: #8ea2ff;
-  --accent-vivid: #8ea2ff;
-  --accent-soft: rgb(142 162 255 / 0.14);
-  --acao: #3a5ae8;
-  --on-acao: #ffffff;
-  --ai: #8ea2ff;
-  --ai-soft: rgb(142 162 255 / 0.14);
+  /* No escuro o ciano forte serve de texto e de botão, com texto escuro. */
+  --accent: #3fe0c5;
+  --accent-vivid: #3fe0c5;
+  --accent-soft: rgb(63 224 197 / 0.13);
+  --acao: #1fd4b6;
+  --on-acao: #04221e;
+  --ai: #3fe0c5;
+  --ai-soft: rgb(63 224 197 / 0.13);
 
-  --health: #57b47c;
-  --health-soft: rgb(87 180 124 / 0.13);
+  --health: #7cc35a;
+  --health-soft: rgb(124 195 90 / 0.13);
   --warn: #dfa043;
   --warn-soft: rgb(223 160 67 / 0.13);
   --risk: #ef6a5e;
