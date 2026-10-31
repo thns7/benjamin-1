@@ -181,7 +181,7 @@ export function Shell({ children, motor }: { children: ReactNode; motor: string 
       <header className="no-print vidro-sutil fixed inset-x-0 top-0 z-20 flex items-center justify-between border-b border-line px-4 py-2.5 md:hidden">
         <Link href="/" className="flex items-center gap-2.5">
           <Logo size={24} />
-          <Wordmark />
+          <Wordmark className="!text-[11px] !tracking-[0.34em]" />
         </Link>
         <div className="flex items-center gap-2">
           <BotaoNova compacto />

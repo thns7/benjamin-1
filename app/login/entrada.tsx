@@ -47,7 +47,7 @@ export function Entrada({ destino, motivo }: { destino: string; motivo?: string 
     <div className="w-full max-w-[380px]">
       <div className="mb-8 flex flex-col items-center text-center">
         <Logo size={44} />
-        <Wordmark className="mt-3 !text-[18px]" />
+        <Wordmark className="mt-5 !text-[15px] !tracking-[0.5em] pl-[0.5em]" />
         <p className="mt-3 text-[11.5px] text-ink-faint">{TAGLINE}</p>
         <p className="mt-6 text-[12.5px] leading-relaxed text-ink-dim">
           Entre com o e-mail e a senha da sua conta.

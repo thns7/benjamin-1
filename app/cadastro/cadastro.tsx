@@ -96,7 +96,7 @@ export function Cadastro() {
         <a href="/apresentacao" aria-label="Benjamin, página inicial">
           <Logo size={40} />
         </a>
-        <Wordmark className="mt-3 !text-[18px]" />
+        <Wordmark className="mt-4 !text-[14px] !tracking-[0.5em] pl-[0.5em]" />
         <h1 className="mt-6 text-[22px] font-semibold tracking-[-0.02em]">Crie a conta da sua empresa</h1>
         <p className="mt-1.5 text-[13.5px] text-ink-dim">Seu radar de churn fica pronto em um minuto.</p>
       </div>

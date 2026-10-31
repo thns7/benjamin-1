@@ -6,7 +6,7 @@
  * sem ele seria só um B grosso.
  *
  * Haste e barriga de cima leem `--ink` e invertem com o tema; a barriga de
- * baixo lê `--accent`, o verde-petróleo da marca. Não há
+ * baixo lê `--accent`, o azul de caneta da marca. Não há
  * ficha atrás: o B é a marca inteira, e precisa funcionar sozinho no papel, no
  * cartão e gravado em relevo (ver a identidade em `IDENTIDADE.md`).
  *
@@ -45,13 +45,19 @@ export function MarcaFormas({ cor, destaque = cor }: { cor: string; destaque?: s
 }
 
 /**
- * O nome, escrito como nome: caixa normal, peso firme, sem espaçamento de
- * letreiro. Caixa alta fina e espaçada era o figurino de marca gerada; o B já
- * faz o trabalho de símbolo, a palavra só precisa ser lida.
+ * O nome espaçado é a identidade. Caixa alta e tracking largo transformam oito
+ * letras em uma régua horizontal, por isso o wordmark nunca aparece em corpo
+ * grande: ele ocupa largura, não altura.
+ *
+ * `aria-label` devolve a palavra inteira ao leitor de tela, que de outro modo
+ * soletraria as letras uma a uma por causa do espaçamento.
  */
 export function Wordmark({ className = '' }: { className?: string }) {
   return (
-    <span className={`block text-[15px] font-bold leading-none tracking-[-0.01em] text-ink ${className}`}>
+    <span
+      aria-label="Benjamin"
+      className={`block text-[12.5px] font-medium uppercase leading-none tracking-[0.42em] text-ink ${className}`}
+    >
       Benjamin
     </span>
   );
