@@ -7,7 +7,7 @@
   Três camadas, cada uma com um papel:
 
     base    papel neutro e tinta     → fundos, texto, estrutura
-    marca   verde-petróleo           → botão principal (acao), links, foco e
+    marca   azul de caneta           → botão principal (acao), links, foco e
                                        menu ativo (accent), a barriga do B
     risco   verde, âmbar, vermelho   → só onde há dado de risco:
             health (saudável), warn (atenção), risk (risco alto)
@@ -29,27 +29,28 @@
 /* Tema claro: o padrão. Papel neutro, sem tom de creme. */
 :root,
 [data-theme='light'] {
-  --canvas: #f4f5f5;
-  --canvas-deep: #eceeee;
+  --canvas: #f5f5f6;
+  --canvas-deep: #ededef;
   --surface: #ffffff;
   --surface-solid: #ffffff;
-  --surface-2: #f4f5f5;
-  --surface-3: #e6e8e8;
-  --line: #dfe2e2;
-  --line-strong: #c3c9c9;
+  --surface-2: #f5f5f6;
+  --surface-3: #e7e8eb;
+  --line: #e0e1e5;
+  --line-strong: #c6c9cf;
 
-  --ink: #15191a;
-  --ink-dim: #465052;
-  --ink-faint: #646e71;
+  --ink: #15171b;
+  --ink-dim: #474b53;
+  --ink-faint: #656a73;
 
-  /* Marca: verde-petróleo. Segura texto branco (7,4:1) e é texto sobre o papel. */
-  --accent: #0e5a63;
-  --accent-vivid: #0e5a63;
-  --accent-soft: #e2eeef;
-  --acao: #0e5a63;
+  /* Marca: azul de caneta, a tinta da esferográfica sobre o papel. Segura texto
+     branco (7,3:1) e é texto sobre o papel. */
+  --accent: #1f44d6;
+  --accent-vivid: #1f44d6;
+  --accent-soft: #e8ecfc;
+  --acao: #1f44d6;
   --on-acao: #ffffff;
-  --ai: #0e5a63;
-  --ai-soft: #e2eeef;
+  --ai: #1f44d6;
+  --ai-soft: #e8ecfc;
 
   /* Escala de risco. Todos passam no WCAG AA como texto sobre o papel. */
   --health: #2b7544;
@@ -60,35 +61,37 @@
   --risk-soft: #f8e6e3;
   --gold: #8f5c0b;
 
-  --barra: #f4f5f5;
+  --barra: #f5f5f6;
 
-  --shadow: 0 1px 2px rgb(21 25 26 / 0.05);
-  --shadow-lift: 0 4px 12px -4px rgb(21 25 26 / 0.14);
+  --shadow: 0 1px 2px rgb(21 23 27 / 0.05);
+  --shadow-lift: 0 4px 12px -4px rgb(21 23 27 / 0.14);
   --glow: none;
 }
 
-/* Tema escuro: opcional, no botão de tema. Grafite, não preto azulado. */
+/* Tema escuro: opcional, no botão de tema. Grafite neutro. */
 [data-theme='dark'] {
-  --canvas: #111415;
-  --canvas-deep: #0c0e0f;
-  --surface: #181c1d;
-  --surface-solid: #181c1d;
-  --surface-2: #1f2425;
-  --surface-3: #2a3032;
+  --canvas: #121316;
+  --canvas-deep: #0d0e10;
+  --surface: #1a1b1f;
+  --surface-solid: #1a1b1f;
+  --surface-2: #212328;
+  --surface-3: #2c2e34;
   --line: rgb(255 255 255 / 0.09);
   --line-strong: rgb(255 255 255 / 0.17);
 
-  --ink: #e9ecec;
-  --ink-dim: #b0b8b9;
-  --ink-faint: #8b9496;
+  --ink: #eaebee;
+  --ink-dim: #b3b6be;
+  --ink-faint: #8d919a;
 
-  --accent: #74bcc3;
-  --accent-vivid: #74bcc3;
-  --accent-soft: rgb(116 188 195 / 0.13);
-  --acao: #2a7880;
+  /* No escuro o azul clareia para ser lido como texto; o botão fica mais fundo
+     para segurar texto branco (5,5:1). */
+  --accent: #8ea2ff;
+  --accent-vivid: #8ea2ff;
+  --accent-soft: rgb(142 162 255 / 0.14);
+  --acao: #3a5ae8;
   --on-acao: #ffffff;
-  --ai: #74bcc3;
-  --ai-soft: rgb(116 188 195 / 0.13);
+  --ai: #8ea2ff;
+  --ai-soft: rgb(142 162 255 / 0.14);
 
   --health: #57b47c;
   --health-soft: rgb(87 180 124 / 0.13);
@@ -98,7 +101,7 @@
   --risk-soft: rgb(239 106 94 / 0.13);
   --gold: #dfa043;
 
-  --barra: #111415;
+  --barra: #121316;
 
   --shadow: 0 1px 2px rgb(0 0 0 / 0.35);
   --shadow-lift: 0 4px 12px -4px rgb(0 0 0 / 0.6);

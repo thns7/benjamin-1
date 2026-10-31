@@ -25,7 +25,7 @@ import './landing.css';
  * isso na tela. A confiança vem do que é verdade no produto: evidência
  * literal, abstenção, anonimização e dados no Brasil.
  *
- * Cor: papel e tinta, o verde-petróleo da marca só nos botões, e a escala de
+ * Cor: papel e tinta, o azul de caneta da marca só nos botões, e a escala de
  * risco (verde, âmbar, vermelho) só onde há risco. Sem animação.
  */
 

@@ -20,7 +20,6 @@ O que fica de fora, de propósito, porque é o figurino de interface gerada em s
 - etiqueta em pílula acima do título, botão em pílula, ícone dentro de quadradinho colorido;
 - ícone de "brilhinho" para tudo que envolve IA (o que vem de modelo se distingue pelo rótulo);
 - entrada em cascata, revelação ao rolar, faixa que passa sem parar, varredura girando;
-- caixa alta fina e espaçada no nome da marca.
 
 ## A peça central: o radar
 
@@ -28,14 +27,14 @@ Um radar circular, lido como gráfico. Cada conta é um ponto; **quanto mais per
 
 ## Marca
 
-Um **B geométrico em três peças**: a haste é uma pílula e as duas barrigas são blocos separados. **A barriga de baixo é verde-petróleo** e é a assinatura: a mesma forma das aspas que abrem cada fala do cliente.
+Um **B geométrico em três peças**: a haste é uma pílula e as duas barrigas são blocos separados. **A barriga de baixo é azul de caneta** e é a assinatura: a mesma forma das aspas que abrem cada fala do cliente.
 
 - **Favicon:** `app/icon.svg` (claro e escuro conforme o sistema).
 - **Ícone de app:** `app/apple-icon.tsx`, B de tinta sobre o papel.
 
-## Nome
+## Wordmark
 
-`Benjamin`: caixa normal, negrito, sem espaçamento de letreiro. Componente `<Wordmark />`.
+`B E N J A M I N`: caixa alta, tracking largo, corpo pequeno. Ocupa largura, não altura. Componente `<Wordmark />`.
 
 ## Cores
 
@@ -43,15 +42,16 @@ Três camadas, cada uma com um papel. **A marca nunca indica risco, e o risco nu
 
 | Camada | Claro (padrão) | Escuro (opcional) | Onde |
 | --- | --- | --- | --- |
-| Base: fundo | `#F4F5F5` | `#111415` | página |
-| Base: painel | `#FFFFFF` | `#181C1D` | cartões, radar |
-| Base: texto | `#15191A` | `#E9ECEC` | texto |
-| Marca: texto, link, foco (`accent`) | `#0E5A63` | `#74BCC3` | links, menu ativo, foco |
-| Marca: botão (`acao`) | `#0E5A63` + texto branco | `#2A7880` + texto branco | um botão principal por tela |
+| Base: fundo | `#F5F5F6` | `#121316` | página |
+| Base: painel | `#FFFFFF` | `#1A1B1F` | cartões, radar |
+| Base: texto | `#15171B` | `#EAEBEE` | texto |
+| Marca: texto, link, foco (`accent`) | `#1F44D6` | `#8EA2FF` | links, menu ativo, foco |
+| Marca: botão (`acao`) | `#1F44D6` + texto branco | `#3A5AE8` + texto branco | um botão principal por tela |
 | Risco: saudável (`health`) | `#2B7544` | `#57B47C` | contas saudáveis |
 | Risco: atenção (`warn`) | `#8F5C0B` | `#DFA043` | contas em atenção |
 | Risco: alto (`risk`) | `#B3362B` | `#EF6A5E` | contas em risco alto |
 
+- A marca é o **azul de caneta**: a tinta da esferográfica sobre o papel. Viva, mas longe do violeta e do neon, e sem colidir com a escala de risco.
 - O papel é neutro, sem tom de creme.
 - Todas as cores de risco passam no WCAG AA como texto sobre o painel.
 - A landing é **sempre clara** (`data-theme="light"`), independente do tema escolhido no app.
@@ -67,7 +67,7 @@ Painel branco, linha fina de 1 px e, quando algo sobe de verdade, uma sombra cur
 - JetBrains Mono só para identificador técnico e para o campo onde se cola a transcrição.
 - Menor corpo de texto: 11,5 px.
 
-Rótulos em frase normal, sem caixa alta espaçada.
+Rótulos em frase normal, sem caixa alta espaçada; o wordmark é a única palavra em caixa alta.
 
 Sem travessão (— ou –) em texto da interface. Em **título** (reunião, alerta, aba do navegador), o separador é a barra reta: "Follow-up | integração de entregas". Em **frase**, use a pontuação que a frase pede: dois-pontos para explicação, ponto para uma segunda ideia, vírgula ou parênteses para um aposto. Valor ausente é "n/d". Intervalo numérico é "0 a 100". Transcrições e citações ficam como o cliente falou, porque a citação precisa bater letra por letra com a transcrição.
 
@@ -79,4 +79,4 @@ Só o que comunica estado: hover, foco, carregamento e progresso, entre 150 e 25
 
 1. 2026-10: papel e tinta (preto e branco), depois carbono no lugar do azul.
 2. 2026-10-29: conceito "Radar de verdade": escuro, violeta como marca, escala de risco viva, radar circular com varredura.
-3. 2026-10-31: conceito "Papel e tinta": claro por padrão, verde-petróleo no lugar do violeta, radar parado, Public Sans e Literata, sem brilho, vidro nem animação decorativa. O motivo foi tirar a cara de SaaS gerado por IA.
+3. 2026-10-31: conceito "Papel e tinta": claro por padrão, radar parado, Public Sans e Literata, sem brilho, vidro nem animação decorativa. O motivo foi tirar a cara de SaaS gerado por IA. A marca passou um dia em verde-petróleo, achado sem vida, e ficou no azul de caneta; o wordmark espaçado foi mantido.
