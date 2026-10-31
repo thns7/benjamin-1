@@ -27,7 +27,7 @@ Um radar circular, lido como gráfico. Cada conta é um ponto; **quanto mais per
 
 ## Marca
 
-Um **B geométrico em três peças**: a haste é uma pílula e as duas barrigas são blocos separados. **A barriga de baixo é azul de caneta** e é a assinatura: a mesma forma das aspas que abrem cada fala do cliente.
+Um **B geométrico em três peças**: a haste é uma pílula e as duas barrigas são blocos separados. **A barriga de baixo é verde ciano** e é a assinatura: a mesma forma das aspas que abrem cada fala do cliente.
 
 - **Favicon:** `app/icon.svg` (claro e escuro conforme o sistema).
 - **Ícone de app:** `app/apple-icon.tsx`, B de tinta sobre o papel.
@@ -45,13 +45,14 @@ Três camadas, cada uma com um papel. **A marca nunca indica risco, e o risco nu
 | Base: fundo | `#F5F5F6` | `#121316` | página |
 | Base: painel | `#FFFFFF` | `#1A1B1F` | cartões, radar |
 | Base: texto | `#15171B` | `#EAEBEE` | texto |
-| Marca: texto, link, foco (`accent`) | `#1F44D6` | `#8EA2FF` | links, menu ativo, foco |
-| Marca: botão (`acao`) | `#1F44D6` + texto branco | `#3A5AE8` + texto branco | um botão principal por tela |
-| Risco: saudável (`health`) | `#2B7544` | `#57B47C` | contas saudáveis |
+| Marca: forte (`acao`) | `#00C9AB` + texto `#04221E` | `#1FD4B6` + texto `#04221E` | um botão principal por tela, barriga do B |
+| Marca: texto, link, foco (`accent`) | `#00806E` | `#3FE0C5` | links, menu ativo, foco |
+| Risco: saudável (`health`) | `#3E7B1F` | `#7CC35A` | contas saudáveis |
 | Risco: atenção (`warn`) | `#8F5C0B` | `#DFA043` | contas em atenção |
 | Risco: alto (`risk`) | `#B3362B` | `#EF6A5E` | contas em risco alto |
 
-- A marca é o **azul de caneta**: a tinta da esferográfica sobre o papel. Viva, mas longe do violeta e do neon, e sem colidir com a escala de risco.
+- A marca é o **verde ciano forte**. Saturado demais para segurar texto branco, por isso o botão leva texto escuro; onde a marca é texto sobre o papel, vale o mesmo tom mais fundo (`accent`).
+- O verde de "saudável" puxa para o amarelo, para nunca ser lido como a marca.
 - O papel é neutro, sem tom de creme.
 - Todas as cores de risco passam no WCAG AA como texto sobre o painel.
 - A landing é **sempre clara** (`data-theme="light"`), independente do tema escolhido no app.
@@ -79,4 +80,4 @@ Só o que comunica estado: hover, foco, carregamento e progresso, entre 150 e 25
 
 1. 2026-10: papel e tinta (preto e branco), depois carbono no lugar do azul.
 2. 2026-10-29: conceito "Radar de verdade": escuro, violeta como marca, escala de risco viva, radar circular com varredura.
-3. 2026-10-31: conceito "Papel e tinta": claro por padrão, radar parado, Public Sans e Literata, sem brilho, vidro nem animação decorativa. O motivo foi tirar a cara de SaaS gerado por IA. A marca passou um dia em verde-petróleo, achado sem vida, e ficou no azul de caneta; o wordmark espaçado foi mantido.
+3. 2026-10-31: conceito "Papel e tinta": claro por padrão, radar parado, Public Sans e Literata, sem brilho, vidro nem animação decorativa. O motivo foi tirar a cara de SaaS gerado por IA. A marca passou por verde-petróleo (sem vida) e azul de caneta, e ficou no verde ciano forte; o wordmark espaçado foi mantido.
