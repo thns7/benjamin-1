@@ -46,8 +46,7 @@ export const metadata: Metadata = {
 
 /**
  * Aplica o tema salvo antes da primeira pintura, para não piscar.
- * O padrão é o claro (conceito "Papel e tinta"); o escuro é opcional,
- * guardado no localStorage.
+ * O padrão é o escuro; o claro é opcional, guardado no localStorage.
  */
 const SCRIPT_TEMA = `(function(){try{var t=localStorage.getItem('benjamin-tema');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t)}}catch(e){}})()`;
 
@@ -74,7 +73,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const motor = 'regras';
 
   return (
-    <html lang="pt-BR" data-theme="light" suppressHydrationWarning>
+    <html lang="pt-BR" data-theme="dark" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_TEMA }} />
       </head>

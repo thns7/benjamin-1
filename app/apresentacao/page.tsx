@@ -7,7 +7,7 @@ import {
   CartaoFala,
   LinhaDoTempo,
   RadarDeExemplo,
-  TabelaDeFalas,
+  FaixaDeFalas,
   TelaCanais,
   TelaLeitura,
   TelaRadar,
@@ -25,8 +25,8 @@ import './landing.css';
  * isso na tela. A confiança vem do que é verdade no produto: evidência
  * literal, abstenção, anonimização e dados no Brasil.
  *
- * Cor: papel e tinta, o verde ciano da marca só nos botões, e a escala de
- * risco (verde, âmbar, vermelho) só onde há risco. Sem animação.
+ * Cor: grafite, o verde ciano da marca nos botões e no radar, e a escala de
+ * risco (verde, âmbar, vermelho) só onde há risco. Movimento em landing.css.
  */
 
 const TITULO = 'Saiba quais clientes vão cancelar antes da renovação';
@@ -121,16 +121,16 @@ const PERGUNTAS = [
 function Secao({ titulo, children }: { titulo: string; children: React.ReactNode }) {
   return (
     <section className="mx-auto grid max-w-[1180px] gap-8 px-5 py-20 sm:px-8 lg:grid-cols-[280px_1fr] lg:gap-16 lg:py-24">
-      <h2 className="max-w-[18ch] text-[28px] font-bold leading-[1.15] tracking-[-0.02em] sm:text-[32px]">{titulo}</h2>
-      <div className="min-w-0">{children}</div>
+      <h2 className="revela max-w-[18ch] text-[28px] font-bold leading-[1.15] tracking-[-0.02em] sm:text-[32px]">{titulo}</h2>
+      <div className="revela min-w-0">{children}</div>
     </section>
   );
 }
 
 export default function ApresentacaoPage() {
   return (
-    // A landing é sempre clara, como o padrão do app: é lida como um documento.
-    <div data-theme="light" className="landing min-h-dvh overflow-x-clip bg-canvas text-ink">
+    // A landing é sempre escura, como o padrão do app.
+    <div data-theme="dark" className="landing min-h-dvh overflow-x-clip bg-canvas text-ink">
       <header className="sticky top-0 z-30 border-b border-line bg-canvas">
         <div className="mx-auto flex max-w-[1180px] items-center justify-between px-5 py-3.5 sm:px-8">
           <Link href="/apresentacao" className="flex items-center gap-2.5" aria-label="Benjamin, página inicial">
@@ -183,6 +183,14 @@ export default function ApresentacaoPage() {
           </div>
         </section>
 
+        {/* Faixa de falas: o que o Benjamin ouve, passando sem parar. */}
+        <section aria-label="Sinais que o Benjamin marca" className="pb-16">
+          <FaixaDeFalas />
+          <p className="mx-auto mt-3 max-w-[1180px] px-5 text-[12px] text-ink-faint sm:px-8">
+            Exemplos de falas e do sinal que o Benjamin marca em cada uma. A cor é o nível de risco.
+          </p>
+        </section>
+
         {/* Problema */}
         <div className="border-t border-line bg-surface">
           <Secao titulo="O cliente avisa antes de cancelar. O aviso fica na gravação.">
@@ -199,17 +207,6 @@ export default function ApresentacaoPage() {
             <div className="mt-14">
               <LinhaDoTempo />
             </div>
-          </Secao>
-        </div>
-
-        {/* O que o Benjamin marca */}
-        <div className="border-t border-line">
-          <Secao titulo="O que ele ouve nas reuniões">
-            <p className="mb-8 max-w-[60ch] text-[16.5px] leading-relaxed text-ink-dim">
-              Cada fala que muda o risco de uma conta ganha um nome. A cor é o nível de risco: vermelho, âmbar ou verde.
-            </p>
-            <TabelaDeFalas />
-            <p className="mt-3 text-[12px] text-ink-faint">Exemplos de falas e do sinal que o Benjamin marca em cada uma.</p>
           </Secao>
         </div>
 
