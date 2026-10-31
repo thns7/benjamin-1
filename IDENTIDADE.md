@@ -1,6 +1,6 @@
 # Identidade visual
 
-Referência da marca do Benjamin, conceito **"Radar de verdade"** (2026-10-29). O código é a fonte da verdade: `components/logo.tsx` (marca), `components/radar-ui.tsx` (radar e citação), `app/globals.css` (cores) e `app/layout.tsx` (fontes).
+Referência da marca do Benjamin, conceito **"Papel e tinta"** (2026-10-31). O código é a fonte da verdade: `components/logo.tsx` (marca), `components/radar-ui.tsx` (radar e citação), `app/globals.css` (cores e material) e `app/layout.tsx` (fontes).
 
 ## Posicionamento
 
@@ -9,45 +9,64 @@ Referência da marca do Benjamin, conceito **"Radar de verdade"** (2026-10-29). 
 - **Frase da marca:** *Conversas que viram retenção.* (`TAGLINE` em `components/logo.tsx`)
 - **Tom:** calmo, preciso, sem exagero. Nunca prometer o que o motor não mostra com evidência.
 
+## Princípio visual
+
+O Benjamin é uma ferramenta de trabalho lida durante o expediente, não uma vitrine. A interface se parece com um relatório bem diagramado: papel, tinta, linhas finas e a cor só onde ela quer dizer alguma coisa.
+
+O que fica de fora, de propósito, porque é o figurino de interface gerada em série:
+
+- violeta ou neon sobre fundo preto, brilho em botão, halo e degradê de fundo;
+- vidro, desfoque e granulado;
+- etiqueta em pílula acima do título, botão em pílula, ícone dentro de quadradinho colorido;
+- ícone de "brilhinho" para tudo que envolve IA (o que vem de modelo se distingue pelo rótulo);
+- entrada em cascata, revelação ao rolar, faixa que passa sem parar, varredura girando;
+
 ## A peça central: o radar
 
-Um radar circular de verdade. Cada conta é um ponto; **quanto mais perto do centro, maior o risco**. Os anéis ficam nos cortes de faixa (67 e 34), o tamanho do ponto é o contrato e uma varredura violeta gira sem parar (parada para quem pede menos movimento). Componente: `<RadarPolar>`; posições: `posicionarNoPolar()` em `lib/radar.ts`, estáveis por conta.
+Um radar circular, lido como gráfico. Cada conta é um ponto; **quanto mais perto do centro, maior o risco**. Os anéis ficam nos cortes de faixa (67 e 34), o tamanho do ponto é o contrato e o anel de risco alto tem um fundo vermelho muito leve. **Parado**: sem varredura e sem halo. Componente: `<RadarPolar>`; posições: `posicionarNoPolar()` em `lib/radar.ts`, estáveis por conta.
 
 ## Marca
 
-Um **B geométrico em três peças**: a haste é uma pílula e as duas barrigas são blocos separados. **A barriga de baixo é violeta** e é a assinatura: a mesma forma das aspas que abrem cada fala do cliente.
+Um **B geométrico em três peças**: a haste é uma pílula e as duas barrigas são blocos separados. **A barriga de baixo é verde ciano** e é a assinatura: a mesma forma das aspas que abrem cada fala do cliente.
 
 - **Favicon:** `app/icon.svg` (claro e escuro conforme o sistema).
-- **Ícone de app:** `app/apple-icon.tsx`, B claro sobre o fundo escuro.
+- **Ícone de app:** `app/apple-icon.tsx`, B de tinta sobre o papel.
 
 ## Wordmark
 
-`B E N J A M I N`: caixa alta, peso leve (300), tracking largo. Componente `<Wordmark />`.
+`B E N J A M I N`: caixa alta, tracking largo, corpo pequeno. Ocupa largura, não altura. Componente `<Wordmark />`.
 
 ## Cores
 
 Três camadas, cada uma com um papel. **A marca nunca indica risco, e o risco nunca decora.**
 
-| Camada | Escuro (padrão) | Claro (opcional) | Onde |
+| Camada | Claro (padrão) | Escuro (opcional) | Onde |
 | --- | --- | --- | --- |
-| Base: fundo | `#0B0A10` | `#FAFAFA` | página |
-| Base: painel | `#14121C` | `#FFFFFF` | cartões, radar |
-| Base: texto | `#F4F3F7` | `#161616` | texto |
-| Marca: texto, link, foco (`accent`) | `#8B7BFF` | `#5B3FD9` | links, menu ativo, foco |
-| Marca: botão (`acao`) | `#6A55F5` + texto branco | `#5B3FD9` | um botão principal por tela |
-| Risco: saudável (`health`) | `#3FB67F` | `#2E7D5B` | contas saudáveis |
-| Risco: atenção (`warn`) | `#E9A23B` | `#9A6410` | contas em atenção |
-| Risco: alto (`risk`) | `#FF5A4E` | `#BE3F32` | contas em risco alto |
+| Base: fundo | `#F5F5F6` | `#121316` | página |
+| Base: painel | `#FFFFFF` | `#1A1B1F` | cartões, radar |
+| Base: texto | `#15171B` | `#EAEBEE` | texto |
+| Marca: forte (`acao`) | `#00C9AB` + texto `#04221E` | `#1FD4B6` + texto `#04221E` | um botão principal por tela, barriga do B |
+| Marca: texto, link, foco (`accent`) | `#00806E` | `#3FE0C5` | links, menu ativo, foco |
+| Risco: saudável (`health`) | `#3E7B1F` | `#7CC35A` | contas saudáveis |
+| Risco: atenção (`warn`) | `#8F5C0B` | `#DFA043` | contas em atenção |
+| Risco: alto (`risk`) | `#B3362B` | `#EF6A5E` | contas em risco alto |
 
-- No claro, âmbar e vermelho escurecem para passar no WCAG AA como texto.
-- `acao` existe porque o violeta claro (bom como texto sobre o escuro) não segura texto branco em cima.
-- A landing é **sempre escura** (`data-theme="dark"`), independente do tema escolhido no app.
+- A marca é o **verde ciano forte**. Saturado demais para segurar texto branco, por isso o botão leva texto escuro; onde a marca é texto sobre o papel, vale o mesmo tom mais fundo (`accent`).
+- O verde de "saudável" puxa para o amarelo, para nunca ser lido como a marca.
+- O papel é neutro, sem tom de creme.
+- Todas as cores de risco passam no WCAG AA como texto sobre o painel.
+- A landing é **sempre clara** (`data-theme="light"`), independente do tema escolhido no app.
+
+## Material
+
+Painel branco, linha fina de 1 px e, quando algo sobe de verdade, uma sombra curta com deslocamento. Cantos de 6 a 12 px. Card clicável só escurece a borda no hover; nada sobe e nada brilha.
 
 ## Tipografia
 
-- **Inter** é a voz do sistema: navegação, títulos, números (`tabular-nums`).
-- **Newsreader itálico** é a voz do cliente: **só** as citações literais das reuniões (`<Citacao>`).
-- JetBrains Mono só para identificador técnico.
+- **Public Sans** é a voz do sistema: navegação, títulos, números (`tabular-nums`). Uma grotesca de serviço público, feita para formulário e tabela.
+- **Literata, em pé,** é a voz do cliente: **só** as citações literais das reuniões (`<Citacao>`). É transcrição, não epígrafe, por isso não vai em itálico.
+- JetBrains Mono só para identificador técnico e para o campo onde se cola a transcrição.
+- Menor corpo de texto: 11,5 px.
 
 Rótulos em frase normal, sem caixa alta espaçada; o wordmark é a única palavra em caixa alta.
 
@@ -55,9 +74,10 @@ Sem travessão (— ou –) em texto da interface. Em **título** (reunião, ale
 
 ## Movimento
 
-A varredura do radar e as revelações ao rolar da landing (melhoria progressiva). Com `prefers-reduced-motion`, tudo para no estado final.
+Só o que comunica estado: hover, foco, carregamento e progresso, entre 150 e 250 ms. Nenhuma animação de entrada, de rolagem ou em laço.
 
 ## Histórico
 
 1. 2026-10: papel e tinta (preto e branco), depois carbono no lugar do azul.
-2. 2026-10-29: conceito "Radar de verdade" — escuro, violeta como marca, escala de risco viva, radar circular.
+2. 2026-10-29: conceito "Radar de verdade": escuro, violeta como marca, escala de risco viva, radar circular com varredura.
+3. 2026-10-31: conceito "Papel e tinta": claro por padrão, radar parado, Public Sans e Literata, sem brilho, vidro nem animação decorativa. O motivo foi tirar a cara de SaaS gerado por IA. A marca passou por verde-petróleo (sem vida) e azul de caneta, e ficou no verde ciano forte; o wordmark espaçado foi mantido.

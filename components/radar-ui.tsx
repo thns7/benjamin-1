@@ -73,8 +73,8 @@ function Aspas({ className = '' }: { className?: string }) {
 }
 
 /**
- * A fala literal do cliente. Sempre em Newsreader itálico — a voz humana da
- * interface — e sempre com quem disse e onde.
+ * A fala literal do cliente. Sempre na serifa Literata, em pé (a voz humana da
+ * interface), e sempre com quem disse e onde.
  */
 export function Citacao({
   texto,
@@ -87,13 +87,13 @@ export function Citacao({
   tom?: Tom;
   className?: string;
 }) {
-  const corpo = { pequeno: 'text-[15px]', normal: 'text-[16.5px]', grande: 'text-[21px]' }[tamanho];
+  const corpo = { pequeno: 'text-[14.5px]', normal: 'text-[16px]', grande: 'text-[20px]' }[tamanho];
   const marca = { pequeno: 'mt-[5px] size-2.5', normal: 'mt-[6px] size-3', grande: 'mt-[8px] size-3.5' }[tamanho];
   const cor = tom === 'risk' ? 'text-risk' : 'text-ink-faint';
   return (
     <blockquote className={`flex gap-2 ${className}`}>
       <Aspas className={`${marca} ${cor}`} />
-      <p className={`font-fala italic leading-[1.35] tracking-[-0.005em] text-ink ${corpo}`}>{texto}</p>
+      <p className={`font-fala leading-[1.45] text-ink ${corpo}`}>{texto}</p>
     </blockquote>
   );
 }
@@ -149,8 +149,8 @@ const COR_PONTO: Record<FaixaRisco, string> = {
 /**
  * Radar circular: a peça central do Benjamin. Cada conta é um ponto; quanto
  * mais perto do centro, maior o risco de churn. Os anéis ficam nos cortes de
- * faixa (67 e 34), o tamanho do ponto é o contrato e a varredura violeta gira
- * sem parar (parada para quem pede menos movimento).
+ * faixa (67 e 34) e o tamanho do ponto é o contrato. Parado de propósito: é
+ * gráfico para ler, não animação para olhar.
  *
  * `comLinks` liga cada ponto à página da conta; a landing usa o mesmo
  * desenho com dados fictícios, sem link.
@@ -182,14 +182,13 @@ export function RadarPolar({
           <div className="radar-anel radar-anel-alto" style={anel(ANEL_ALTO)} />
           <div className="absolute inset-x-[3%] top-1/2 h-px bg-line" />
           <div className="absolute inset-y-[3%] left-1/2 w-px bg-line" />
-          <div className="radar-varredura" />
         </div>
 
         {pontos.map((p) => {
           const d = diametro(p);
           const ponto = (
             <span
-              className={`block rounded-full ${p.faixa === 'alto' ? 'radar-ponto-alto' : ''} ${p.tamanho == null ? 'border-2' : ''}`}
+              className={`block rounded-full ${p.tamanho == null ? 'border-2' : 'ring-2 ring-surface'}`}
               style={{
                 width: d,
                 height: d,
@@ -204,7 +203,7 @@ export function RadarPolar({
               href={`/clientes/${p.id}`}
               title={`${p.nome}: risco ${p.risco}`}
               aria-label={`${p.nome}: risco ${p.risco}`}
-              className="absolute z-10 -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-125"
+              className="absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-full hover:outline hover:outline-2 hover:outline-offset-2 hover:outline-ink"
               style={posicao(p)}
             >
               {ponto}
@@ -227,7 +226,7 @@ export function RadarPolar({
               <span
                 key={`nome-${p.id}`}
                 aria-hidden
-                className="pointer-events-none absolute z-20 hidden -translate-y-1/2 whitespace-nowrap rounded-full border border-line bg-canvas/90 px-2 py-0.5 text-[12px] font-semibold text-ink backdrop-blur-sm sm:block"
+                className="pointer-events-none absolute z-20 hidden -translate-y-1/2 whitespace-nowrap rounded-sm bg-surface px-1.5 py-0.5 text-[12px] font-semibold text-ink sm:block"
                 style={
                   aDireita
                     ? { left: `calc(${p.x}% + ${folga}px)`, top: `${p.y}%` }

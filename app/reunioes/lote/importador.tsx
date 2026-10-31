@@ -60,9 +60,9 @@ const hoje = () => new Date().toISOString().slice(0, 10);
 const CAMPO =
   'w-full min-w-0 rounded-md border border-line bg-surface-2 px-2 py-1.5 text-[12.5px] text-ink placeholder:text-ink-faint transition-colors focus:border-accent focus:outline-none disabled:opacity-60';
 const BOTAO =
-  'inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface-2 px-3 py-1.5 text-[12px] font-medium text-ink transition-all duration-300 hover:border-line-strong disabled:opacity-50';
+  'inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface-2 px-3 py-1.5 text-[12px] font-medium text-ink transition-colors duration-150 hover:border-line-strong disabled:opacity-50';
 const BOTAO_PRIMARIO =
-  'inline-flex items-center gap-1.5 rounded-lg bg-acao px-3.5 py-2 text-[12.5px] font-semibold text-on-acao transition-all duration-300 hover:shadow-glow disabled:opacity-50';
+  'inline-flex items-center gap-1.5 rounded-lg bg-acao px-3.5 py-2 text-[12.5px] font-semibold text-on-acao transition-colors duration-150 hover:opacity-90 disabled:opacity-50';
 
 const FORMATOS_ACEITOS =
   '.txt,.md,.vtt,.srt,.sbv,.docx,.odt,.rtf,.json,.csv,.tsv,.xlsx,.zip,.mp3,.m4a,.wav,.ogg,.oga,.opus,.webm,.flac,.aac,.wma,.mp4,.m4v,.mov,.mpeg,.mpga,.mkv,.3gp,.amr,audio/*,video/*';
@@ -394,7 +394,7 @@ export function Importador() {
 
       {fase === 'revisao' && semFalante ? (
         <Aviso tom="neutro" icone={<CircleAlert size={14} />}>
-          {semFalante} {semFalante === 1 ? 'reunião não tem' : 'reuniões não têm'} rótulo de quem falou (formato <code className="font-mono text-[11px]">Nome: fala</code>). Elas
+          {semFalante} {semFalante === 1 ? 'reunião não tem' : 'reuniões não têm'} rótulo de quem falou (formato <code className="font-mono text-[11.5px]">Nome: fala</code>). Elas
           são analisadas, mas talk ratio, voz do cliente e os escores que dependem de separar vendedor e cliente ficam em branco: o motor se abstém em vez de chutar.
           {audiosIncluidos ? ' Áudio transcrito também chega sem rótulo.' : ''}
         </Aviso>
@@ -582,7 +582,7 @@ function Numero({ rotulo, valor, detalhe, tom }: { rotulo: string; valor: number
     <div className="min-w-0">
       <p className="text-[11.5px] font-semibold text-ink-faint">{rotulo}</p>
       <p className={`mt-2 font-mono text-[24px] leading-none tabular-nums ${cor}`}>{valor}</p>
-      <p className="mt-2 truncate text-[11px] text-ink-faint" title={detalhe}>
+      <p className="mt-2 truncate text-[11.5px] text-ink-faint" title={detalhe}>
         {detalhe}
       </p>
     </div>
@@ -643,11 +643,11 @@ function Soltar({
             <p className="mt-4 text-[14px] font-medium text-ink">
               Lendo {leitura ? `${Math.min(leitura.feitos + 1, leitura.total)} de ${leitura.total}` : ''} arquivos…
             </p>
-            <p className="mt-1 max-w-md truncate font-mono text-[11px] text-ink-faint">{leitura?.caminho}</p>
+            <p className="mt-1 max-w-md truncate font-mono text-[11.5px] text-ink-faint">{leitura?.caminho}</p>
           </>
         ) : (
           <>
-            <div className="flex size-12 items-center justify-center rounded-xl border border-line bg-accent-soft text-accent">
+            <div className="flex justify-center text-accent">
               <FolderUp size={20} />
             </div>
             <p className="mt-4 text-[15px] font-semibold tracking-[-0.01em] text-ink">Solte aqui uma pasta, um zip ou vários arquivos</p>
@@ -831,7 +831,7 @@ function LinhaTabela({
           {l.origem === 'audio' ? <AudioLines size={12} className="shrink-0 text-ink-faint" /> : <FileText size={12} className="shrink-0 text-ink-faint" />}
           <span className="truncate">{nomeBase(l.caminho.split(' › ').pop() ?? l.caminho)}</span>
         </p>
-        <p className={`mt-0.5 text-[11px] ${semTranscricao || l.falantes === 0 ? 'text-warn' : 'text-ink-faint'}`}>
+        <p className={`mt-0.5 text-[11.5px] ${semTranscricao || l.falantes === 0 ? 'text-warn' : 'text-ink-faint'}`}>
           {semTranscricao ? 'transcrição indisponível' : detalhes.join(' · ')}
         </p>
       </td>
@@ -880,7 +880,7 @@ function LinhaTabela({
 
 function Situacao({ estado }: { estado?: Estado }) {
   const chip = (tom: string, icone: ReactNode, texto: ReactNode) => (
-    <span className={`inline-flex items-center gap-1.5 rounded-md border px-1.5 py-0.5 text-[11px] font-medium ${tom}`}>
+    <span className={`inline-flex items-center gap-1.5 rounded-md border px-1.5 py-0.5 text-[11.5px] font-medium ${tom}`}>
       {icone}
       {texto}
     </span>
@@ -898,7 +898,7 @@ function Situacao({ estado }: { estado?: Estado }) {
       return (
         <div className="grid gap-1">
           {chip('border-line bg-warn-soft text-warn', <Pause size={11} />, 'Aguardando')}
-          <p className="text-[11px] leading-snug text-ink-faint">{estado.motivo}</p>
+          <p className="text-[11.5px] leading-snug text-ink-faint">{estado.motivo}</p>
         </div>
       );
     case 'concluida':
@@ -912,7 +912,7 @@ function Situacao({ estado }: { estado?: Estado }) {
       return (
         <div className="grid gap-1">
           {chip('border-risk/25 bg-risk-soft text-risk', <CircleAlert size={11} />, estado.etapa === 'transcrever' ? 'Erro na transcrição' : 'Erro na análise')}
-          <p className="text-[11px] leading-snug text-ink-faint">{estado.mensagem}</p>
+          <p className="text-[11.5px] leading-snug text-ink-faint">{estado.mensagem}</p>
         </div>
       );
     case 'cancelada':

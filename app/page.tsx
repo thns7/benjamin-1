@@ -36,7 +36,7 @@ function Chip({ ativo, href, children }: { ativo: boolean; href: string; childre
     <Link
       href={href}
       aria-current={ativo ? 'page' : undefined}
-      className={`rounded-full px-3 py-1 text-[12px] font-medium transition-colors ${
+      className={`rounded-md px-3 py-1 text-[12px] font-medium transition-colors ${
         ativo ? 'bg-accent-soft text-accent' : 'text-ink-dim hover:bg-surface-3 hover:text-ink'
       }`}
     >
@@ -221,7 +221,7 @@ export default async function RadarPage({ searchParams }: { searchParams: Promis
           className="lg:sticky lg:top-8"
         />
 
-        <section className="vidro overflow-hidden rounded-2xl">
+        <section className="vidro overflow-hidden rounded-xl">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-4">
             <div>
               <h2 className="text-[15px] font-semibold tracking-[-0.01em] text-ink">Contas por receita em risco</h2>

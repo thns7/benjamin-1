@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Ban, Loader2, Quote, Sparkles, TriangleAlert } from 'lucide-react';
+import { Ban, Loader2, TriangleAlert } from 'lucide-react';
 import type { Evidence } from '@/lib/analysis';
 import { Badge, Mono } from '@/components/ui';
 
@@ -61,11 +61,10 @@ export function PainelEnriquecimento({
   }
 
   return (
-    <section className="rounded-lg border border-ai/30 bg-ai-soft/15 p-4">
+    <section className="rounded-lg border border-line bg-surface p-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <h3 className="flex items-center gap-1.5 text-[13px] font-semibold text-ink">
-            <Sparkles size={14} className="text-ai" />
             Leitura generativa
             <Badge tom="ai">opcional</Badge>
           </h3>
@@ -80,15 +79,15 @@ export function PainelEnriquecimento({
           type="button"
           onClick={enriquecer}
           disabled={rodando}
-          className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-ai/40 bg-surface-2 px-3 py-1.5 text-[12px] font-medium text-ai transition-colors hover:border-ai disabled:opacity-60"
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-line bg-surface px-3 py-1.5 text-[12.5px] font-medium text-ink transition-colors hover:border-line-strong hover:bg-surface-2 disabled:opacity-60"
         >
-          {rodando ? <Loader2 size={13} className="animate-spin" /> : <Sparkles size={13} />}
+          {rodando ? <Loader2 size={13} className="animate-spin" /> : null}
           {rodando ? 'Gerando' : dados ? 'Gerar de novo' : 'Enriquecer com IA'}
         </button>
       </div>
 
       {rodando ? (
-        <p className="mt-3 text-[11px] leading-relaxed text-ink-faint">
+        <p className="mt-3 text-[11.5px] leading-relaxed text-ink-faint">
           A camada gratuita do provedor tem fila variável: medimos de 4,5 s a 25 s para a mesma
           reunião. O briefing determinístico ao lado levou milissegundos e já está pronto.
         </p>
@@ -102,14 +101,14 @@ export function PainelEnriquecimento({
       ) : null}
 
       {dados ? (
-        <div className="mt-4 space-y-3 border-t border-ai/20 pt-3">
+        <div className="mt-4 space-y-3 border-t border-line pt-3">
           {dados.resumo ? (
             <div>
               <p className="mb-1 text-[11.5px] font-semibold text-ink-faint">
                 Resumo gerado
               </p>
               <p className="text-[13px] leading-relaxed text-ink-dim">{dados.resumo}</p>
-              <p className="mt-1.5 text-[10.5px] leading-relaxed text-ink-faint">
+              <p className="mt-1.5 text-[11.5px] leading-relaxed text-ink-faint">
                 Prosa gerada por modelo. Não é possível ancorar um texto corrido num trecho único,
                 então ele fica aqui, rotulado, e não substitui o resumo extrativo acima.
               </p>
@@ -128,9 +127,8 @@ export function PainelEnriquecimento({
                     <button
                       type="button"
                       onClick={() => onSelecionar(n.evidence)}
-                      className="mt-0.5 flex w-full items-start gap-1.5 rounded border-l-2 border-ai/40 bg-surface-2/60 px-2 py-1 text-left text-[11px] italic leading-relaxed text-ink-dim transition-colors hover:border-ai hover:text-ink"
+                      className="mt-1 block w-full rounded-md bg-surface-2 px-2.5 py-1.5 text-left font-fala text-[13.5px] leading-relaxed text-ink-dim transition-colors hover:bg-surface-3 hover:text-ink"
                     >
-                      <Quote size={10} className="mt-0.5 shrink-0 text-ink-faint" />
                       {n.evidence.quote}
                     </button>
                   </li>
@@ -148,9 +146,8 @@ export function PainelEnriquecimento({
               <button
                 type="button"
                 onClick={() => onSelecionar(dados.proxima_acao?.evidence)}
-                className="mt-0.5 flex w-full items-start gap-1.5 rounded border-l-2 border-ai/40 bg-surface-2/60 px-2 py-1 text-left text-[11px] italic leading-relaxed text-ink-dim transition-colors hover:border-ai hover:text-ink"
+                className="mt-1 block w-full rounded-md bg-surface-2 px-2.5 py-1.5 text-left font-fala text-[13.5px] leading-relaxed text-ink-dim transition-colors hover:bg-surface-3 hover:text-ink"
               >
-                <Quote size={10} className="mt-0.5 shrink-0 text-ink-faint" />
                 {dados.proxima_acao.evidence.quote}
               </button>
             </div>
@@ -158,18 +155,18 @@ export function PainelEnriquecimento({
 
           {dados.descartados.length > 0 ? (
             <div className="rounded-md border border-warn/30 bg-warn-soft/20 px-3 py-2">
-              <p className="flex items-center gap-1.5 text-[11px] font-semibold text-warn">
+              <p className="flex items-center gap-1.5 text-[11.5px] font-semibold text-warn">
                 <Ban size={12} />
                 {dados.descartados.length} observação(ões) recusada(s)
               </p>
-              <p className="mt-1 text-[11px] leading-relaxed text-ink-dim">
+              <p className="mt-1 text-[11.5px] leading-relaxed text-ink-dim">
                 O modelo produziu, mas a citação apresentada não existe na transcrição. Foram
                 descartadas antes de chegar à tela. É a regra de evidência aplicada ao LLM.
               </p>
             </div>
           ) : null}
 
-          <p className="flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-ai/20 pt-2 text-[10.5px] text-ink-faint">
+          <p className="flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-ai/20 pt-2 text-[11.5px] text-ink-faint">
             <span>
               motor <Mono tom="ai">{dados.model}</Mono>
             </span>

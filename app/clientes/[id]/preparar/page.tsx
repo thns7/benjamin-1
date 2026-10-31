@@ -37,7 +37,7 @@ function Linha({
 }) {
   return (
     <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-line/60 py-2 last:border-0">
-      <span className="inline-flex w-[168px] shrink-0 items-center gap-1.5 text-[11px] font-semibold text-ink-faint">
+      <span className="inline-flex w-[168px] shrink-0 items-center gap-1.5 text-[11.5px] font-semibold text-ink-faint">
         {icone}
         {rotulo}
       </span>
@@ -90,7 +90,7 @@ export default async function PrepararPage({ params }: { params: Promise<{ id: s
 
       {semHistorico ? (
         <div className="vidro-sutil rounded-xl border border-dashed border-line-strong px-6 py-12 text-center">
-          <div className="mx-auto mb-3 flex size-10 items-center justify-center rounded-lg border border-line bg-surface-2 text-ink-faint">
+          <div className="mx-auto mb-3 flex justify-center text-ink-faint">
             <CalendarClock size={18} />
           </div>
           <h3 className="text-[13px] font-semibold text-ink">Ainda não há histórico para preparar</h3>
@@ -111,7 +111,7 @@ export default async function PrepararPage({ params }: { params: Promise<{ id: s
           {/* Situação */}
           <section className="vidro rounded-xl p-4">
             <h2 className="mb-1 text-[13px] font-semibold text-ink">Onde a conta está</h2>
-            <p className="mb-3 text-[11px] text-ink-faint">
+            <p className="mb-3 text-[11.5px] text-ink-faint">
               Cada linha vem de reuniões analisadas. Nada aqui foi digitado à mão.
             </p>
 
@@ -128,7 +128,7 @@ export default async function PrepararPage({ params }: { params: Promise<{ id: s
             {p.principalNecessidade ? (
               <Linha rotulo="Principal necessidade" icone={<Target size={11} />}>
                 {p.principalNecessidade.texto}{' '}
-                <Mono tom="accent" className="text-[11px]">
+                <Mono tom="accent" className="text-[11.5px]">
                   {p.principalNecessidade.mencoes}×
                 </Mono>
               </Linha>
@@ -152,7 +152,7 @@ export default async function PrepararPage({ params }: { params: Promise<{ id: s
             {p.ultimaDecisao ? (
               <Linha rotulo="Última decisão">
                 {p.ultimaDecisao.texto}{' '}
-                <span className="font-mono text-[11px] text-ink-faint">
+                <span className="font-mono text-[11.5px] text-ink-faint">
                   ({fmtData(p.ultimaDecisao.data)})
                 </span>
               </Linha>
@@ -162,11 +162,11 @@ export default async function PrepararPage({ params }: { params: Promise<{ id: s
               <Linha key={`n${i}`} rotulo="Pendência nossa">
                 {t.descricao}
                 {t.diasAtraso > 0 ? (
-                  <span className="ml-2 inline-flex items-center gap-1 rounded border border-risk/40 bg-risk-soft px-1.5 py-0.5 text-[10.5px] font-medium text-risk">
+                  <span className="ml-2 inline-flex items-center gap-1 rounded border border-risk/40 bg-risk-soft px-1.5 py-0.5 text-[11.5px] font-medium text-risk">
                     <TriangleAlert size={10} /> atrasada há {t.diasAtraso}d
                   </span>
                 ) : t.prazo ? (
-                  <span className="ml-2 font-mono text-[11px] text-ink-faint">prazo {fmtData(t.prazo)}</span>
+                  <span className="ml-2 font-mono text-[11.5px] text-ink-faint">prazo {fmtData(t.prazo)}</span>
                 ) : null}
               </Linha>
             ))}
@@ -175,7 +175,7 @@ export default async function PrepararPage({ params }: { params: Promise<{ id: s
               <Linha key={`c${i}`} rotulo="Pendência do cliente">
                 {t.descricao}
                 {t.diasAtraso > 0 ? (
-                  <span className="ml-2 font-mono text-[11px] text-warn">atrasada há {t.diasAtraso}d</span>
+                  <span className="ml-2 font-mono text-[11.5px] text-warn">atrasada há {t.diasAtraso}d</span>
                 ) : null}
               </Linha>
             ))}
@@ -204,7 +204,7 @@ export default async function PrepararPage({ params }: { params: Promise<{ id: s
                         </Mono>
                         {p.interesse.variacao != null && p.interesse.variacao !== 0 ? (
                           <span
-                            className={`inline-flex items-center gap-0.5 text-[11px] ${
+                            className={`inline-flex items-center gap-0.5 text-[11.5px] ${
                               tomVariacao === 'health' ? 'text-health' : 'text-risk'
                             }`}
                           >
@@ -218,7 +218,7 @@ export default async function PrepararPage({ params }: { params: Promise<{ id: s
                         ) : null}
                       </div>
                       {p.interesse.anterior != null ? (
-                        <p className="text-[10.5px] text-ink-faint">era {p.interesse.anterior}</p>
+                        <p className="text-[11.5px] text-ink-faint">era {p.interesse.anterior}</p>
                       ) : null}
                     </>
                   ) : (
@@ -236,7 +236,7 @@ export default async function PrepararPage({ params }: { params: Promise<{ id: s
                         <Mono tom="ai" className="text-2xl">
                           {p.confianca.atual}
                         </Mono>
-                        <span className="inline-flex items-center gap-0.5 text-[11px] text-ink-dim">
+                        <span className="inline-flex items-center gap-0.5 text-[11.5px] text-ink-dim">
                           <ShieldCheck size={11} />
                           {p.confianca.rotulo}
                         </span>
@@ -264,7 +264,7 @@ export default async function PrepararPage({ params }: { params: Promise<{ id: s
                     ))}
                   </div>
                   {p.bant.missing.length > 0 ? (
-                    <p className="mt-1.5 text-[11px] text-warn">falta: {p.bant.missing.join(', ')}</p>
+                    <p className="mt-1.5 text-[11.5px] text-warn">falta: {p.bant.missing.join(', ')}</p>
                   ) : null}
                 </div>
               ) : null}
@@ -277,7 +277,7 @@ export default async function PrepararPage({ params }: { params: Promise<{ id: s
               <Lightbulb size={14} className="text-ai" />
               Recomendações para esta conversa
             </h2>
-            <p className="mb-3 text-[11px] text-ink-faint">
+            <p className="mb-3 text-[11.5px] text-ink-faint">
               Priorizadas pelo que trava o negócio. Cada uma mostra o dado do histórico que a originou. A
               decisão continua sendo sua.
             </p>
@@ -294,7 +294,7 @@ export default async function PrepararPage({ params }: { params: Promise<{ id: s
                     key={r.ordem}
                     className="flex gap-3 rounded-md border border-line bg-surface px-3 py-2.5"
                   >
-                    <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-ai-soft font-mono text-[11px] font-semibold text-ai">
+                    <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-ai-soft font-mono text-[11.5px] font-semibold text-ai">
                       {r.ordem}
                     </span>
                     <div className="min-w-0">

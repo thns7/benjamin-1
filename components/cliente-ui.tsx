@@ -57,7 +57,7 @@ export function Sparkline({
   rotulo?: string;
 }) {
   if (valores.length === 0) {
-    return <p className="text-[11px] text-ink-faint">Sem série ainda.</p>;
+    return <p className="text-[11.5px] text-ink-faint">Sem série ainda.</p>;
   }
 
   const pad = 4;
@@ -160,7 +160,7 @@ export function ListaFatores({
   fatores: { label: string; delta: number; detalhe?: string }[];
 }) {
   if (fatores.length === 0) {
-    return <p className="text-[11px] text-ink-faint">Sem fatores registrados.</p>;
+    return <p className="text-[11.5px] text-ink-faint">Sem fatores registrados.</p>;
   }
   return (
     <ul className="space-y-1.5">
@@ -168,7 +168,7 @@ export function ListaFatores({
         <li key={`${f.label}-${i}`} className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <p className="text-[12px] leading-snug text-ink-dim">{f.label}</p>
-            {f.detalhe ? <p className="text-[11px] text-ink-faint">{f.detalhe}</p> : null}
+            {f.detalhe ? <p className="text-[11.5px] text-ink-faint">{f.detalhe}</p> : null}
           </div>
           <span className="shrink-0 text-[12px] font-medium tabular-nums text-ink">
             {f.delta >= 0 ? '+' : ''}
