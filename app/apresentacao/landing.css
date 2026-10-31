@@ -3,9 +3,12 @@
 
   COR: a escala de risco é a única cor além da marca. Verde (saudável), âmbar
   (atenção) e vermelho (risco) não são decoração: cada vez que aparecem, dizem
-  o quanto uma conta está perto de cancelar. O resto é papel e tinta.
+  o quanto uma conta está perto de cancelar.
 
-  MOVIMENTO: nenhum. A página é lida, não assistida; tudo aparece já no lugar.
+  MOVIMENTO: a varredura do radar no topo (radar-ui), a faixa de falas, a onda
+  de áudio, o grifo na fala e revelações discretas ao rolar. As de rolagem usam
+  scroll-driven animations como melhoria progressiva: sem suporte, o conteúdo
+  só aparece parado. Tudo para com prefers-reduced-motion.
 */
 
 .landing {
@@ -15,4 +18,121 @@
   --atencao-suave: var(--warn-soft);
   --risco: var(--risk);
   --risco-suave: var(--risk-soft);
+}
+
+/* ------------------------------------------------------------------ *
+ * Faixa de falas que passa sem parar
+ * ------------------------------------------------------------------ */
+
+@keyframes desliza {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.faixa-trilha {
+  animation: desliza 60s linear infinite;
+}
+
+.faixa:hover .faixa-trilha {
+  animation-play-state: paused;
+}
+
+/* Some nas bordas em vez de cortar seco. */
+.faixa {
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+/* ------------------------------------------------------------------ *
+ * Mini-telas dos passos
+ * ------------------------------------------------------------------ */
+
+@keyframes onda {
+  0%,
+  100% {
+    transform: scaleY(0.25);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.onda-barra {
+  transform-origin: center;
+  animation: onda 1.2s ease-in-out infinite;
+}
+
+/* O grifo que passa sobre a frase de risco, como marca-texto. */
+@keyframes marcar-loop {
+  0%,
+  15% {
+    background-size: 0% 100%;
+  }
+  45%,
+  85% {
+    background-size: 100% 100%;
+  }
+  100% {
+    background-size: 0% 100%;
+  }
+}
+
+.marca-loop {
+  background-image: linear-gradient(transparent 58%, color-mix(in srgb, var(--risco) 30%, transparent) 58%);
+  background-repeat: no-repeat;
+  animation: marcar-loop 4s ease-in-out infinite;
+}
+
+/* ------------------------------------------------------------------ *
+ * Revelação ao rolar (melhoria progressiva)
+ * ------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    @keyframes revela {
+      from {
+        opacity: 0;
+        transform: translateY(28px);
+      }
+    }
+
+    .revela {
+      animation: revela linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+
+    /* O trecho de risco da linha do tempo se desenha conforme a seção entra. */
+    @keyframes traca {
+      from {
+        transform: scaleX(0);
+      }
+    }
+
+    .traco-tempo {
+      transform-origin: left;
+      animation: traca linear both;
+      animation-timeline: --linha-tempo;
+      animation-range: entry 30% cover 55%;
+    }
+
+    .linha-tempo {
+      view-timeline: --linha-tempo block;
+    }
+  }
+}
+
+/*
+  Movimento reduzido: as animações em laço param no estado final (a regra
+  global só encurta a duração, o que faria um laço piscar).
+*/
+@media (prefers-reduced-motion: reduce) {
+  .faixa-trilha,
+  .onda-barra,
+  .marca-loop {
+    animation: none;
+  }
+  .marca-loop {
+    background-size: 100% 100%;
+  }
 }
