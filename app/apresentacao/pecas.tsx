@@ -5,7 +5,7 @@ import { faixaRisco, posicionarNoPolar, type ContaRadar } from '@/lib/radar';
 /*
  * Peças visuais da landing. Todas são ilustrações com dados fictícios e dizem
  * isso na tela: a landing não inventa cliente, número de uso nem depoimento.
- * Sem JavaScript no navegador e sem animação.
+ * Sem JavaScript no navegador: as animações são CSS (landing.css).
  */
 
 /* ------------------------------------------------------------------ *
@@ -92,18 +92,27 @@ const COR_NIVEL = {
   saude: 'bg-[var(--saude)]',
 };
 
-/** O que o cliente diz, e o nome que o Benjamin dá para isso. Lido como tabela. */
-export function TabelaDeFalas() {
+/** O que o cliente diz, e o nome que o Benjamin dá para isso, passando sem parar. */
+export function FaixaDeFalas() {
+  const item = (f: (typeof FALAS)[number], k: string, copia: boolean) => (
+    <li
+      key={k}
+      aria-hidden={copia || undefined}
+      className="flex shrink-0 items-center gap-3 rounded-md border border-line bg-surface py-2 pl-3 pr-4"
+    >
+      <span className={`size-2 shrink-0 rounded-full ${COR_NIVEL[f.nivel]}`} aria-hidden />
+      <span className="font-fala text-[16px] text-ink">{f.texto}</span>
+      <span className="text-[12px] font-medium text-ink-faint">{f.sinal}</span>
+    </li>
+  );
   return (
-    <ul className="grid border-t border-line md:grid-cols-2 md:gap-x-12" aria-label="Exemplos de falas que o Benjamin marca">
-      {FALAS.map((f) => (
-        <li key={f.texto} className="flex items-baseline gap-3 border-b border-line py-3.5">
-          <span className={`size-2 shrink-0 translate-y-[-2px] rounded-full ${COR_NIVEL[f.nivel]}`} aria-hidden />
-          <span className="min-w-0 flex-1 font-fala text-[16px] leading-snug text-ink">{f.texto}</span>
-          <span className="shrink-0 text-[12.5px] font-medium text-ink-dim">{f.sinal}</span>
-        </li>
-      ))}
-    </ul>
+    <div className="faixa overflow-hidden py-2" aria-label="Exemplos de falas que o Benjamin marca">
+      {/* Duas cópias: quando a primeira sai pela esquerda, a segunda está no lugar dela. */}
+      <ul className="faixa-trilha flex w-max gap-3 pr-3">
+        {FALAS.map((f, i) => item(f, `a${i}`, false))}
+        {FALAS.map((f, i) => item(f, `b${i}`, true))}
+      </ul>
+    </div>
   );
 }
 
@@ -116,7 +125,7 @@ export function LinhaDoTempo() {
   // Centro de cada coluna da grade de 8: é onde fica o ponto de cada semana.
   const centro = (s: number) => `${((s - 0.5) / semanas.length) * 100}%`;
   return (
-    <figure aria-label="Exemplo: o aviso aparece na semana 3 e o cancelamento chega na semana 8">
+    <figure aria-label="Exemplo: o aviso aparece na semana 3 e o cancelamento chega na semana 8" className="linha-tempo">
       <div className="relative pt-32 sm:pt-28">
         {/* Fio do aviso: sai do ponto da semana 3 e some atrás do balão. */}
         <div className="absolute w-px bg-[var(--risco)]" style={{ left: centro(3), top: 40, bottom: 31 }} aria-hidden />
@@ -130,7 +139,7 @@ export function LinhaDoTempo() {
         {/* Antes do aviso a linha é neutra; do aviso ao cancelamento, é risco. */}
         <div className="relative h-[3px] bg-line-strong">
           <div
-            className="absolute inset-y-0 right-[6.25%] bg-[var(--risco)]"
+            className="traco-tempo absolute inset-y-0 right-[6.25%] bg-[var(--risco)]"
             style={{ left: centro(3) }}
             aria-hidden
           />
@@ -174,12 +183,16 @@ export function LinhaDoTempo() {
 
 const ALTURAS = [0.4, 0.9, 0.6, 1, 0.5, 0.8, 0.35, 0.95, 0.55, 0.75, 0.45, 0.85, 0.3, 0.7];
 
-/** Forma de onda parada: diz "áudio" sem precisar se mexer. */
-function Onda({ cor }: { cor: string }) {
+/** Forma de onda viva: as duas vozes da reunião, cada uma no seu ritmo. */
+function Onda({ cor, atraso }: { cor: string; atraso: number }) {
   return (
     <div className="flex h-7 items-center gap-[3px]" aria-hidden>
       {ALTURAS.map((h, i) => (
-        <span key={i} className={`block w-[3px] rounded-[1px] ${cor}`} style={{ height: `${h * 100}%` }} />
+        <span
+          key={i}
+          className={`onda-barra block w-[3px] rounded-[1px] ${cor}`}
+          style={{ height: `${h * 100}%`, animationDelay: `${atraso + i * 0.09}s` }}
+        />
       ))}
     </div>
   );
@@ -191,12 +204,12 @@ export function TelaCanais() {
       <div className="flex items-center gap-3">
         <Mic size={14} className="shrink-0 text-ink-dim" aria-hidden />
         <span className="w-16 text-[12px] text-ink-dim">Seu time</span>
-        <Onda cor="bg-ink-dim" />
+        <Onda cor="bg-ink-dim" atraso={0} />
       </div>
       <div className="flex items-center gap-3">
         <MonitorUp size={14} className="shrink-0 text-ink-dim" aria-hidden />
         <span className="w-16 text-[12px] text-ink-dim">Cliente</span>
-        <Onda cor="bg-accent" />
+        <Onda cor="bg-acao" atraso={0.4} />
       </div>
     </div>
   );
@@ -208,7 +221,7 @@ export function TelaLeitura() {
       <p className="text-[12px] text-ink-faint">Renata, cliente</p>
       <p className="mt-1 font-fala text-[15.5px] leading-snug">
         o painel ficou bom, mas{' '}
-        <span className="bg-[var(--risco-suave)] text-[var(--risco)]">se não resolver a integração a gente cancela</span>
+        <span className="marca-loop">se não resolver a integração a gente cancela</span>
       </p>
       <p className="mt-3 text-[12px] font-semibold text-[var(--risco)]">Intenção de cancelar</p>
     </div>

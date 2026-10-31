@@ -65,7 +65,7 @@ function ehAtivo(pathname: string, href: string): boolean {
 }
 
 function AlternadorTema() {
-  const [tema, setTema] = useState<'dark' | 'light'>('light');
+  const [tema, setTema] = useState<'dark' | 'light'>('dark');
 
   useEffect(() => {
     const atual = document.documentElement.getAttribute('data-theme');
@@ -105,11 +105,11 @@ function BotaoNova({ compacto = false }: { compacto?: boolean }) {
   return (
     <Link
       href="/reunioes/nova"
-      className={`inline-flex items-center justify-center gap-1.5 rounded-md bg-acao font-semibold text-on-acao transition-opacity duration-150 hover:opacity-90 ${
+      className={`group inline-flex items-center justify-center gap-1.5 rounded-md bg-acao font-semibold text-on-acao transition-opacity duration-150 hover:opacity-90 ${
         compacto ? 'px-2.5 py-1.5 text-[12px]' : 'w-full px-3 py-2 text-[13px]'
       }`}
     >
-      <Plus size={compacto ? 13 : 14} />
+      <Plus size={compacto ? 13 : 14} className="transition-transform duration-300 group-hover:rotate-90" />
       {compacto ? 'Analisar' : 'Analisar reunião'}
     </Link>
   );
@@ -191,7 +191,7 @@ export function Shell({ children, motor }: { children: ReactNode; motor: string 
       </header>
 
       <main className="min-w-0 flex-1 px-4 pb-20 pt-20 md:px-10 md:pt-10">
-        <div className="mx-auto max-w-[1200px]">{children}</div>
+        <div className="subir mx-auto max-w-[1200px]">{children}</div>
       </main>
 
       {/* Navegação inferior do mobile */}

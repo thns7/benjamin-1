@@ -149,8 +149,8 @@ const COR_PONTO: Record<FaixaRisco, string> = {
 /**
  * Radar circular: a peça central do Benjamin. Cada conta é um ponto; quanto
  * mais perto do centro, maior o risco de churn. Os anéis ficam nos cortes de
- * faixa (67 e 34) e o tamanho do ponto é o contrato. Parado de propósito: é
- * gráfico para ler, não animação para olhar.
+ * faixa (67 e 34), o tamanho do ponto é o contrato e uma varredura ciano gira
+ * sem parar (parada para quem pede menos movimento).
  *
  * `comLinks` liga cada ponto à página da conta; a landing usa o mesmo
  * desenho com dados fictícios, sem link.
@@ -182,6 +182,7 @@ export function RadarPolar({
           <div className="radar-anel radar-anel-alto" style={anel(ANEL_ALTO)} />
           <div className="absolute inset-x-[3%] top-1/2 h-px bg-line" />
           <div className="absolute inset-y-[3%] left-1/2 w-px bg-line" />
+          <div className="radar-varredura" />
         </div>
 
         {pontos.map((p) => {
@@ -203,7 +204,7 @@ export function RadarPolar({
               href={`/clientes/${p.id}`}
               title={`${p.nome}: risco ${p.risco}`}
               aria-label={`${p.nome}: risco ${p.risco}`}
-              className="absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-full hover:outline hover:outline-2 hover:outline-offset-2 hover:outline-ink"
+              className="absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-full transition-transform hover:scale-125"
               style={posicao(p)}
             >
               {ponto}
