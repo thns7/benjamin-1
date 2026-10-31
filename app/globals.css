@@ -1,124 +1,108 @@
 @import 'tailwindcss';
 
 /*
-  Benjamin — sistema de cor (conceito "Radar de verdade", 2026-10-29).
+  Benjamin — sistema de cor (conceito "Papel e tinta", 2026-10-31).
   Toda cor tem significado. A referência completa está em `IDENTIDADE.md`.
 
   Três camadas, cada uma com um papel:
 
-    base    carbono escuro e tinta clara → fundos, texto, estrutura
-    marca   violeta                      → botão principal (acao), menu ativo,
-                                           links e foco (accent), a barriga do B
-    risco   verde, âmbar, vermelho       → só onde há dado de risco:
+    base    papel neutro e tinta     → fundos, texto, estrutura
+    marca   verde-petróleo           → botão principal (acao), links, foco e
+                                       menu ativo (accent), a barriga do B
+    risco   verde, âmbar, vermelho   → só onde há dado de risco:
             health (saudável), warn (atenção), risk (risco alto)
 
-  A marca nunca indica risco, e o risco nunca decora. Se tudo for violeta ou
-  vermelho, nada chama atenção: um botão principal por tela, e a escala de
-  risco só onde há uma conta sendo avaliada.
+  A marca nunca indica risco, e o risco nunca decora. Um botão principal por
+  tela; a escala de risco só onde há uma conta sendo avaliada.
 
-  O escuro é o padrão: é onde o radar e a escala brilham. O claro continua no
-  botão de tema, com a mesma marca e tons ajustados para o papel (o âmbar e o
-  vermelho escurecem para passar no WCAG AA como texto).
+  O claro é o padrão: o trabalho de CS é ler conta e fala de cliente durante o
+  expediente, num escritório claro. O escuro continua no botão de tema.
 
-  `accent` e `accent-vivid` ficaram como dois tokens por compatibilidade (muitos
-  usos no código). `acao` / `on-acao` existem porque o violeta claro, bom para
-  texto sobre o escuro, não segura texto branco: o botão usa o violeta mais
-  fundo. As classes `.vidro*` mantêm o nome; o material é painel liso.
+  Sem brilho, sem degradê, sem desfoque e sem grão: profundidade é uma linha
+  fina e, onde algo sobe de verdade, uma sombra curta com deslocamento.
+
+  `accent` e `accent-vivid` seguem como dois tokens por compatibilidade, e
+  `ai` é o próprio accent: o que vem de modelo se distingue pelo rótulo, não
+  por uma cor própria. As classes `.vidro*` mantêm o nome; o material é papel.
 */
 
-/* Tema escuro: o padrão desde o conceito "Radar de verdade" (2026-10-29). */
+/* Tema claro: o padrão. Papel neutro, sem tom de creme. */
 :root,
-[data-theme='dark'] {
-  --canvas: #0b0a10;
-  --canvas-deep: #08070c;
-  --surface: #14121c;
-  --surface-solid: #14121c;
-  --surface-2: #1b1926;
-  --surface-3: #26232f;
-  --line: rgb(255 255 255 / 0.08);
-  --line-strong: rgb(255 255 255 / 0.16);
-
-  --ink: #f4f3f7;
-  --ink-dim: #b5b3bf;
-  --ink-faint: #908d9b;
-
-  /* Marca: violeta. accent é texto, link e foco; acao é o fundo do botão
-     principal, mais escuro para segurar texto branco (5,0:1). */
-  --accent: #8b7bff;
-  --accent-vivid: #8b7bff;
-  --accent-soft: rgb(139 123 255 / 0.14);
-  --acao: #6a55f5;
-  --on-acao: #ffffff;
-  --ai: #8b7bff;
-  --ai-soft: rgb(139 123 255 / 0.14);
-
-  /* Escala de risco: verde, âmbar, vermelho. Só onde há dado de risco. */
-  --health: #3fb67f;
-  --health-soft: rgb(63 182 127 / 0.14);
-  --warn: #e9a23b;
-  --warn-soft: rgb(233 162 59 / 0.14);
-  --risk: #ff5a4e;
-  --risk-soft: rgb(255 90 78 / 0.14);
-  --gold: #e9a23b;
-
-  --barra: rgb(11 10 16 / 0.82);
-  --barra-blur: blur(14px) saturate(130%);
-
-  --shadow:
-    0 1px 2px rgb(0 0 0 / 0.4),
-    0 12px 32px -16px rgb(0 0 0 / 0.7);
-  --shadow-lift:
-    0 2px 6px rgb(0 0 0 / 0.45),
-    0 24px 48px -20px rgb(0 0 0 / 0.8);
-  --glow: 0 10px 32px -10px rgb(106 85 245 / 0.75);
-
-  --grao: 0.03;
-}
-
-/* Tema claro: opcional, no botão de tema. Mesma marca, tons para o papel. */
 [data-theme='light'] {
-  --canvas: #fafafa;
-  --canvas-deep: #f4f4f4;
+  --canvas: #f4f5f5;
+  --canvas-deep: #eceeee;
   --surface: #ffffff;
   --surface-solid: #ffffff;
-  --surface-2: #f4f4f4;
-  --surface-3: #e5e5e5;
-  --line: #e5e5e5;
-  --line-strong: #d4d4d4;
+  --surface-2: #f4f5f5;
+  --surface-3: #e6e8e8;
+  --line: #dfe2e2;
+  --line-strong: #c3c9c9;
 
-  --ink: #161616;
-  --ink-dim: #525252;
-  --ink-faint: #6f6f6f;
+  --ink: #15191a;
+  --ink-dim: #465052;
+  --ink-faint: #646e71;
 
-  --accent: #5b3fd9;
-  --accent-vivid: #5b3fd9;
-  --accent-soft: #eeebfc;
-  --acao: #5b3fd9;
+  /* Marca: verde-petróleo. Segura texto branco (7,4:1) e é texto sobre o papel. */
+  --accent: #0e5a63;
+  --accent-vivid: #0e5a63;
+  --accent-soft: #e2eeef;
+  --acao: #0e5a63;
   --on-acao: #ffffff;
-  --ai: #5b3fd9;
-  --ai-soft: #eeebfc;
+  --ai: #0e5a63;
+  --ai-soft: #e2eeef;
 
-  --health: #2e7d5b;
-  --health-soft: #e6f2ec;
-  /* Âmbar escurecido: o #E9A23B do escuro não passa como texto no papel. */
-  --warn: #9a6410;
-  --warn-soft: #fbf1df;
-  --risk: #be3f32;
-  --risk-soft: #fbeae7;
-  --gold: #9a6410;
+  /* Escala de risco. Todos passam no WCAG AA como texto sobre o papel. */
+  --health: #2b7544;
+  --health-soft: #e4f0e7;
+  --warn: #8f5c0b;
+  --warn-soft: #f7eddb;
+  --risk: #b3362b;
+  --risk-soft: #f8e6e3;
+  --gold: #8f5c0b;
 
-  --barra: rgb(250 250 250 / 0.86);
-  --barra-blur: blur(14px) saturate(140%);
+  --barra: #f4f5f5;
 
-  --shadow:
-    0 1px 2px rgb(22 22 22 / 0.04),
-    0 8px 24px -14px rgb(22 22 22 / 0.12);
-  --shadow-lift:
-    0 2px 4px rgb(22 22 22 / 0.05),
-    0 16px 36px -16px rgb(22 22 22 / 0.18);
-  --glow: 0 8px 24px -8px rgb(91 63 217 / 0.55);
+  --shadow: 0 1px 2px rgb(21 25 26 / 0.05);
+  --shadow-lift: 0 4px 12px -4px rgb(21 25 26 / 0.14);
+  --glow: none;
+}
 
-  --grao: 0.02;
+/* Tema escuro: opcional, no botão de tema. Grafite, não preto azulado. */
+[data-theme='dark'] {
+  --canvas: #111415;
+  --canvas-deep: #0c0e0f;
+  --surface: #181c1d;
+  --surface-solid: #181c1d;
+  --surface-2: #1f2425;
+  --surface-3: #2a3032;
+  --line: rgb(255 255 255 / 0.09);
+  --line-strong: rgb(255 255 255 / 0.17);
+
+  --ink: #e9ecec;
+  --ink-dim: #b0b8b9;
+  --ink-faint: #8b9496;
+
+  --accent: #74bcc3;
+  --accent-vivid: #74bcc3;
+  --accent-soft: rgb(116 188 195 / 0.13);
+  --acao: #2a7880;
+  --on-acao: #ffffff;
+  --ai: #74bcc3;
+  --ai-soft: rgb(116 188 195 / 0.13);
+
+  --health: #57b47c;
+  --health-soft: rgb(87 180 124 / 0.13);
+  --warn: #dfa043;
+  --warn-soft: rgb(223 160 67 / 0.13);
+  --risk: #ef6a5e;
+  --risk-soft: rgb(239 106 94 / 0.13);
+  --gold: #dfa043;
+
+  --barra: #111415;
+
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.35);
+  --shadow-lift: 0 4px 12px -4px rgb(0 0 0 / 0.6);
+  --glow: none;
 }
 
 @theme inline {
@@ -150,9 +134,9 @@
   --color-risk-soft: var(--risk-soft);
   --color-gold: var(--gold);
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-public-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, monospace;
-  --font-fala: var(--font-newsreader), ui-serif, Georgia, serif;
+  --font-fala: var(--font-literata), ui-serif, Georgia, serif;
 
   --shadow-panel: var(--shadow);
   --shadow-lift: var(--shadow-lift);
@@ -160,37 +144,24 @@
 }
 
 html,
-[data-theme='dark'] {
-  color-scheme: dark;
-}
-
 [data-theme='light'] {
   color-scheme: light;
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
 }
 
 body {
   background-color: var(--canvas);
   color: var(--ink);
-  /* cv11: "a" de um andar e ss03: vírgula e aspas mais redondas no Inter. */
-  font-feature-settings: 'cv11', 'ss03';
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
-/* Grão quase invisível: o papel da identidade, não plástico chapado. */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  pointer-events: none;
-  opacity: var(--grao);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
 /*
   Painel. Um só lugar define o material: papel branco, linha fina e sombra
-  curta. O nome `.vidro` é herança da identidade anterior — ver o topo.
+  curta. O nome `.vidro` é herança de uma identidade anterior; ver o topo.
 */
 .vidro {
   background: var(--surface);
@@ -198,63 +169,27 @@ body::after {
   box-shadow: var(--shadow);
 }
 
-/* Barras fixas: precisam de leve transparência para o conteúdo passar por baixo. */
+/* Barras fixas: chapadas, separadas do conteúdo pela linha, sem desfoque. */
 .vidro-sutil {
   background: var(--barra);
-  backdrop-filter: var(--barra-blur);
-  -webkit-backdrop-filter: var(--barra-blur);
 }
 
-/* Elevação no hover — só onde o card é clicável. */
+/* Card clicável: a borda escurece no hover. Nada sobe, nada brilha. */
 .vidro-hover {
-  transition:
-    box-shadow 0.28s cubic-bezier(0.2, 0.7, 0.2, 1),
-    transform 0.28s cubic-bezier(0.2, 0.7, 0.2, 1),
-    border-color 0.28s ease;
+  transition: border-color 0.15s ease;
 }
 
 .vidro-hover:hover {
-  transform: translateY(-2px);
   border-color: var(--line-strong);
-  box-shadow: var(--shadow-lift);
 }
-
-/* Entrada: uma orquestração no carregamento vale mais que dez microinterações. */
-@keyframes subir {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-.subir {
-  animation: subir 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-
-.escalonar > * {
-  animation: subir 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-.escalonar > *:nth-child(1) { animation-delay: 0.02s; }
-.escalonar > *:nth-child(2) { animation-delay: 0.06s; }
-.escalonar > *:nth-child(3) { animation-delay: 0.1s; }
-.escalonar > *:nth-child(4) { animation-delay: 0.14s; }
-.escalonar > *:nth-child(5) { animation-delay: 0.18s; }
-.escalonar > *:nth-child(6) { animation-delay: 0.22s; }
-.escalonar > *:nth-child(7) { animation-delay: 0.26s; }
-.escalonar > *:nth-child(8) { animation-delay: 0.3s; }
 
 /*
-  Radar circular (components/radar-ui.tsx). O fundo esquenta para o centro,
-  onde ficam as contas em risco; a varredura violeta é a marca em movimento.
+  Radar circular (components/radar-ui.tsx). É um gráfico, não um efeito: disco
+  liso, anéis finos nos cortes de faixa, pontos chapados. Sem varredura girando
+  e sem halo; o vermelho do centro já diz onde olhar.
 */
 .radar-polar {
-  background:
-    radial-gradient(circle, color-mix(in srgb, var(--risk) 20%, transparent) 0%, color-mix(in srgb, var(--risk) 6%, transparent) 26%, color-mix(in srgb, var(--warn) 5%, transparent) 46%, transparent 72%),
-    var(--surface);
+  background: var(--surface);
 }
 
 .radar-anel {
@@ -263,42 +198,17 @@ body::after {
   top: 50%;
   transform: translate(-50%, -50%);
   border-radius: 9999px;
-  border: 1px dashed var(--line-strong);
+  border: 1px solid var(--line);
   pointer-events: none;
 }
 
 .radar-anel-medio {
-  border-color: color-mix(in srgb, var(--warn) 45%, transparent);
+  border-color: color-mix(in srgb, var(--warn) 40%, transparent);
 }
 
 .radar-anel-alto {
-  border-color: color-mix(in srgb, var(--risk) 55%, transparent);
-}
-
-@keyframes radar-gira {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.radar-varredura {
-  position: absolute;
-  inset: 0;
-  border-radius: 9999px;
-  background: conic-gradient(from 0deg, transparent 0deg, transparent 290deg, color-mix(in srgb, var(--accent) 30%, transparent) 356deg, color-mix(in srgb, var(--accent) 70%, transparent) 360deg);
-  animation: radar-gira 5s linear infinite;
-  pointer-events: none;
-}
-
-.radar-ponto-alto {
-  box-shadow: 0 0 16px 2px color-mix(in srgb, var(--risk) 65%, transparent);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .radar-varredura {
-    animation: none;
-    transform: rotate(-60deg);
-  }
+  border-color: color-mix(in srgb, var(--risk) 45%, transparent);
+  background: color-mix(in srgb, var(--risk) 4%, transparent);
 }
 
 /* Acessibilidade: foco sempre visível, inclusive na navegação por teclado. */
@@ -316,14 +226,16 @@ body::after {
   outline: none;
 }
 
-/*
-  Fundo em tinta, texto na cor do canvas. Fixar `color: #fff` aqui funcionava
-  enquanto o acento era âmbar, mas com a paleta monocromática `accent-vivid`
-  vira branco no tema escuro — e seria branco sobre branco.
-*/
+/* Seleção na cor da marca, clara o bastante para o texto continuar legível. */
 ::selection {
-  background: var(--ink);
-  color: var(--canvas);
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  color: var(--ink);
+}
+
+
+input,
+textarea {
+  caret-color: var(--accent);
 }
 
 /* Densidade de terminal de operação: scrollbar fina, sem ocupar espaço visual. */
@@ -346,7 +258,7 @@ body::after {
 
 /*
   Impressão: o briefing pré-reunião é feito para ser levado em papel para a call.
-  Some a navegação, o vidro e o grão — economiza tinta e melhora a leitura.
+  Some a navegação e a sombra: economiza tinta e melhora a leitura.
 */
 @media print {
   .no-print {
@@ -377,14 +289,7 @@ body::after {
     background-image: none;
   }
 
-  body::after {
-    display: none;
-  }
-
-  .vidro,
-  .vidro-sutil {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
+  .vidro {
     box-shadow: none;
   }
 
@@ -399,9 +304,5 @@ body::after {
   *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
-  }
-
-  .vidro-hover:hover {
-    transform: none;
   }
 }

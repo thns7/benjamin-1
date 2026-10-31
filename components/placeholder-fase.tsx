@@ -18,7 +18,7 @@ export function PlaceholderFase({
   return (
     <div className="rounded-lg border border-dashed border-warn/40 bg-warn-soft/30 px-6 py-10">
       <div className="mx-auto max-w-lg text-center">
-        <div className="mx-auto mb-3 flex size-10 items-center justify-center rounded-lg border border-warn/40 bg-surface text-warn">
+        <div className="mx-auto mb-3 flex justify-center text-warn">
           <Hammer size={17} />
         </div>
         <h3 className="text-[13px] font-semibold text-ink">

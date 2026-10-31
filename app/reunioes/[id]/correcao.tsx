@@ -58,7 +58,7 @@ export function ControleCorrecao({ campo, valor }: { campo: string; valor: unkno
   if (estado === 'confirmado') {
     return (
       <span
-        className="inline-flex shrink-0 items-center gap-1 rounded border border-health/40 bg-health-soft px-1.5 py-0.5 text-[10px] font-medium text-health"
+        className="inline-flex shrink-0 items-center gap-1 rounded border border-health/40 bg-health-soft px-1.5 py-0.5 text-[11.5px] font-medium text-health"
         title="Você confirmou esta extração"
       >
         <Check size={10} />
@@ -70,7 +70,7 @@ export function ControleCorrecao({ campo, valor }: { campo: string; valor: unkno
   if (estado === 'corrigido') {
     return (
       <span
-        className="inline-flex shrink-0 items-center gap-1 rounded border border-warn/40 bg-warn-soft px-1.5 py-0.5 text-[10px] font-medium text-warn"
+        className="inline-flex shrink-0 items-center gap-1 rounded border border-warn/40 bg-warn-soft px-1.5 py-0.5 text-[11.5px] font-medium text-warn"
         title="Marcado como incorreto. A taxa de correção deste campo sobe na tela de Validação"
       >
         <X size={10} />
@@ -107,7 +107,7 @@ export function ControleCorrecao({ campo, valor }: { campo: string; valor: unkno
       >
         <X size={12} />
       </button>
-      {estado === 'erro' ? <span className="text-[10px] text-risk">falhou</span> : null}
+      {estado === 'erro' ? <span className="text-[11.5px] text-risk">falhou</span> : null}
     </span>
   );
 }

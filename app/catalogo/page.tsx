@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { Sparkles } from 'lucide-react';
 import { PageHeader } from '@/components/ui';
 import { SemBanco } from '@/components/sem-banco';
 import { supabaseConfigurado, supabaseServer } from '@/lib/supabase/server';
@@ -39,9 +38,8 @@ export default async function CatalogoPage({ searchParams }: { searchParams: Pro
   return (
     <>
       {novo ? (
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-accent/30 bg-accent-soft px-5 py-4">
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-line bg-surface px-5 py-4">
           <div className="flex items-start gap-3">
-            <Sparkles size={18} className="mt-0.5 shrink-0 text-accent" aria-hidden />
             <div>
               <p className="text-[14.5px] font-semibold">Empresa {orgRes.data?.name ? `${orgRes.data.name} ` : ''}criada.</p>
               <p className="mt-0.5 text-[13px] text-ink-dim">

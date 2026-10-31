@@ -29,7 +29,7 @@ export function CriarEmpresa({ nomeInicial, empresaInicial }: { nomeInicial: str
   }
 
   return (
-    <form onSubmit={criar} className="vidro rounded-2xl p-6">
+    <form onSubmit={criar} className="vidro rounded-xl p-6">
       <Campo id="empresa" rotulo="Empresa" icone={<Building2 size={14} />}>
         <input id="empresa" autoFocus required minLength={2} maxLength={120} value={empresa} onChange={(e) => setEmpresa(e.target.value)} disabled={enviando} className={classeInput} placeholder="Nome da sua empresa" />
       </Campo>

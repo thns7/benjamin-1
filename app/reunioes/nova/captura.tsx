@@ -83,7 +83,7 @@ export function CapturaPorAudio({ onTexto }: { onTexto: (t: string) => void }) {
             e.target.value = '';
           }}
         />
-        <span className="mb-2 flex size-10 items-center justify-center rounded-lg border border-line bg-surface text-ink-dim">
+        <span className="mb-2 flex justify-center text-ink-dim">
           {enviando ? <Loader2 size={17} className="animate-spin" /> : <Upload size={17} />}
         </span>
         <span className="text-[12.5px] font-medium text-ink">
@@ -125,7 +125,7 @@ export function CapturaPorAudio({ onTexto }: { onTexto: (t: string) => void }) {
         </div>
       ) : null}
 
-      <p className="flex items-start gap-1.5 text-[11px] leading-relaxed text-ink-faint">
+      <p className="flex items-start gap-1.5 text-[11.5px] leading-relaxed text-ink-faint">
         <AudioLines size={12} className="mt-0.5 shrink-0" />O áudio é enviado ao provedor de
         transcrição e não fica armazenado. Sem credencial de STT configurada, o sistema mostra o erro
         real em vez de simular uma transcrição: texto inventado aqui contaminaria todo o resto da
@@ -163,8 +163,8 @@ function SemRotuloDeFalante() {
       </p>
       <p className="mt-2 text-[11.5px] leading-relaxed text-ink-dim">
         Para recuperar tudo isso, prefixe cada fala com o nome de quem fala no texto transcrito (
-        <code className="rounded bg-surface-3 px-1 py-0.5 font-mono text-[10.5px]">Ana:</code> e{' '}
-        <code className="rounded bg-surface-3 px-1 py-0.5 font-mono text-[10.5px]">João:</code>)
+        <code className="rounded bg-surface-3 px-1 py-0.5 font-mono text-[11.5px]">Ana:</code> e{' '}
+        <code className="rounded bg-surface-3 px-1 py-0.5 font-mono text-[11.5px]">João:</code>)
         antes de analisar. É o que Meet, Teams e Zoom já entregam quando a legenda é exportada por
         lá.
       </p>

@@ -129,7 +129,7 @@ export default async function CoachingPage() {
       <section className="vidro rounded-xl px-5 py-4">
         <div className="grid grid-cols-2 gap-x-8 gap-y-6 lg:grid-cols-4 sm:[&>*+*]:border-l sm:[&>*+*]:border-line sm:[&>*+*]:pl-8">
         <div className="min-w-0">
-          <p className="text-[11px] font-medium text-ink-faint">
+          <p className="text-[11.5px] font-medium text-ink-faint">
             Talk ratio médio
           </p>
           <p className={`mt-2 font-mono text-2xl ${mediaTalk > 0 ? '' : 'text-ink-faint'}`}>
@@ -137,30 +137,30 @@ export default async function CoachingPage() {
               {mediaTalk > 0 ? pct(mediaTalk) : 'n/d'}
             </Mono>
           </p>
-          <p className="mt-1 text-[11px] text-ink-faint">
+          <p className="mt-1 text-[11.5px] text-ink-faint">
             faixa de referência {pct(FAIXA_IDEAL.min)} a {pct(FAIXA_IDEAL.max)}
           </p>
         </div>
         <div className="min-w-0">
-          <p className="text-[11px] font-medium text-ink-faint">
+          <p className="text-[11.5px] font-medium text-ink-faint">
             Perguntas por reunião
           </p>
           <p className="mt-2 font-mono text-2xl text-ink">{mediaPerguntas.toFixed(1)}</p>
-          <p className="mt-1 text-[11px] text-ink-faint">{mediaAbertas.toFixed(1)} abertas em média</p>
+          <p className="mt-1 text-[11.5px] text-ink-faint">{mediaAbertas.toFixed(1)} abertas em média</p>
         </div>
         <div className="min-w-0">
-          <p className="text-[11px] font-medium text-ink-faint">
+          <p className="text-[11.5px] font-medium text-ink-faint">
             Maior monólogo
           </p>
           <p className="mt-2 font-mono text-2xl text-ink">{Math.round(mediaMonologo)}</p>
-          <p className="mt-1 text-[11px] text-ink-faint">palavras, média das reuniões</p>
+          <p className="mt-1 text-[11.5px] text-ink-faint">palavras, média das reuniões</p>
         </div>
         <div className="min-w-0">
-          <p className="text-[11px] font-medium text-ink-faint">
+          <p className="text-[11.5px] font-medium text-ink-faint">
             Cobertura BANT
           </p>
           <p className="mt-2 font-mono text-2xl text-ink">{mediaBant.toFixed(1)}/4</p>
-          <p className="mt-1 text-[11px] text-ink-faint">média por reunião</p>
+          <p className="mt-1 text-[11.5px] text-ink-faint">média por reunião</p>
         </div>
         </div>
       </section>
@@ -239,7 +239,7 @@ export default async function CoachingPage() {
         >
           <div className="overflow-x-auto">
             <table className="w-full text-[12.5px]">
-              <thead className="border-b border-line text-left text-[11px] text-ink-faint">
+              <thead className="border-b border-line text-left text-[11.5px] text-ink-faint">
                 <tr>
                   <th className="py-2 pr-4 font-medium">Reunião</th>
                   <th className="py-2 pr-4 font-medium">Data</th>
@@ -263,7 +263,7 @@ export default async function CoachingPage() {
                           {l.reuniao.title}
                         </Link>
                       </td>
-                      <td className="py-2 pr-4 font-mono text-[11px] text-ink-dim">
+                      <td className="py-2 pr-4 font-mono text-[11.5px] text-ink-dim">
                         {fmtData(l.reuniao.meeting_date)}
                       </td>
                       <td className="py-2 pr-4">
@@ -295,7 +295,7 @@ export default async function CoachingPage() {
                         ) : (
                           <>
                             <Mono>{l.metricas.seller_questions}</Mono>
-                            <span className="text-[11px] text-ink-faint">
+                            <span className="text-[11.5px] text-ink-faint">
                               {' '}
                               ({l.metricas.open_questions ?? 0} abertas)
                             </span>
