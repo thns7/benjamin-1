@@ -6,12 +6,14 @@
  * sem ele seria só um B grosso.
  *
  * Haste e barriga de cima leem `--ink` e invertem com o tema; a barriga de
- * baixo lê `--acao`, o verde ciano forte da marca. Não há
+ * baixo é a tinta da marca: faixas de marinho, azul escuro e azul claro. Não há
  * ficha atrás: o B é a marca inteira, e precisa funcionar sozinho no papel, no
  * cartão e gravado em relevo (ver a identidade em `IDENTIDADE.md`).
  *
- * Formas chapadas, sem gradiente nem `id` de SVG: a barra lateral e o
- * cabeçalho do mobile coexistem no DOM e não há nada para colidir.
+ * O degradê precisa de um `id` de SVG. A barra lateral e o cabeçalho do
+ * mobile coexistem no DOM, com um deles escondido, e um degradê definido num
+ * SVG escondido não pinta no outro; por isso o `id` vem do tamanho, que nunca
+ * se repete na mesma tela.
  */
 export function Logo({ size = 28 }: { size?: number }) {
   return (
@@ -24,8 +26,25 @@ export function Logo({ size = 28 }: { size?: number }) {
       aria-label="Benjamin"
       className="shrink-0"
     >
-      <MarcaFormas cor="var(--ink)" destaque="var(--acao)" />
+      <defs>
+        <Tinta id={`tinta-${size}`} />
+      </defs>
+      <MarcaFormas cor="var(--ink)" destaque={`url(#tinta-${size})`} />
     </svg>
+  );
+}
+
+/** A tinta da marca no SVG: as mesmas três faixas do `--tinta` do CSS, com a divisão seca. */
+export function Tinta({ id }: { id: string }) {
+  return (
+    <linearGradient id={id} x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stopColor="#07103f" />
+      <stop offset="0.33" stopColor="#0c1d6b" />
+      <stop offset="0.33" stopColor="#1336d9" />
+      <stop offset="0.66" stopColor="#1f57f5" />
+      <stop offset="0.66" stopColor="#18b4ff" />
+      <stop offset="1" stopColor="#5fd0ff" />
+    </linearGradient>
   );
 }
 
@@ -38,7 +57,7 @@ export function MarcaFormas({ cor, destaque = cor }: { cor: string; destaque?: s
     <g fill={cor}>
       <rect x="4.5" y="4" width="5.75" height="24" rx="2.875" />
       <path d="M14 4H19.5A5.5 5.5 0 0 1 19.5 15H14Q13 15 13 14V5Q13 4 14 4Z" />
-      {/* A barriga de baixo é a assinatura: na cor da marca, a mesma forma das aspas das falas. */}
+      {/* A barriga de baixo é a assinatura: na tinta da marca, a mesma forma das aspas das falas. */}
       <path d="M13 25C13 20.2 16.8 16 21.5 16A6 6 0 0 1 21.5 28H14Q13 28 13 27Z" fill={destaque} />
     </g>
   );
