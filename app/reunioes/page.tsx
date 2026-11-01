@@ -2,6 +2,7 @@ import { MessagesSquare } from 'lucide-react';
 import { BotaoLink, EmptyState, PageHeader } from '@/components/ui';
 import { supabaseConfigurado, supabaseServer } from '@/lib/supabase/server';
 import { SemBanco } from '@/components/sem-banco';
+import { ROTULO_TIPO } from '@/lib/lote/tipos';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,6 +16,14 @@ type LinhaReuniao = {
   status: string;
 };
 
+const ROTULO_STATUS: Record<string, string> = {
+  analyzed: 'Analisada',
+  analyzing: 'Analisando',
+  error: 'Erro',
+};
+
+const fmtData = (iso: string) => new Date(`${iso.slice(0, 10)}T00:00:00`).toLocaleDateString('pt-BR');
+
 export default async function ReunioesPage() {
   if (!supabaseConfigurado()) {
     return (
@@ -25,9 +34,7 @@ export default async function ReunioesPage() {
           acoes={
             <>
               <BotaoLink href="/reunioes/lote">Importar em lote</BotaoLink>
-              <BotaoLink href="/reunioes/nova" variante="primario">
-                Nova reunião
-              </BotaoLink>
+              <BotaoLink href="/reunioes/nova">Nova reunião</BotaoLink>
             </>
           }
         />
@@ -55,9 +62,7 @@ export default async function ReunioesPage() {
         acoes={
           <>
             <BotaoLink href="/reunioes/lote">Importar em lote</BotaoLink>
-            <BotaoLink href="/reunioes/nova" variante="primario">
-              Nova reunião
-            </BotaoLink>
+            <BotaoLink href="/reunioes/nova">Nova reunião</BotaoLink>
           </>
         }
       />
@@ -93,10 +98,14 @@ export default async function ReunioesPage() {
                     </a>
                   </td>
                   <td className="px-4 py-2.5 tabular-nums text-ink-dim">
-                    {r.meeting_date}
+                    {r.meeting_date ? fmtData(r.meeting_date) : 'n/d'}
                   </td>
-                  <td className="px-4 py-2.5 text-ink-dim">{r.meeting_type}</td>
-                  <td className="px-4 py-2.5 font-mono text-ink-dim">{r.status}</td>
+                  <td className="px-4 py-2.5 text-ink-dim">
+                    {ROTULO_TIPO[r.meeting_type as keyof typeof ROTULO_TIPO] ?? r.meeting_type}
+                  </td>
+                  <td className={`px-4 py-2.5 ${r.status === 'error' ? 'text-risk' : 'text-ink-dim'}`}>
+                    {ROTULO_STATUS[r.status] ?? r.status}
+                  </td>
                 </tr>
               ))}
             </tbody>
