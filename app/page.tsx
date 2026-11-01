@@ -129,11 +129,8 @@ export default async function RadarPage({ searchParams }: { searchParams: Promis
   const { faixa = 'todas' } = await searchParams;
   const { contas, resumo } = await carregarRadar();
 
-  const acoes = (
-    <BotaoLink href="/reunioes/nova" variante="primario">
-      Analisar reunião
-    </BotaoLink>
-  );
+  // Secundário: o botão principal da tela é o da barra lateral.
+  const acoes = <BotaoLink href="/reunioes/nova">Analisar reunião</BotaoLink>;
 
   if (contas.length === 0) {
     return (
