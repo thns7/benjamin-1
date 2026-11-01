@@ -25,7 +25,7 @@ import './landing.css';
  * isso na tela. A confiança vem do que é verdade no produto: evidência
  * literal, abstenção, anonimização e dados no Brasil.
  *
- * Cor: grafite, o verde ciano da marca nos botões e no radar, e a escala de
+ * Cor: grafite, a tinta azul da marca nos botões e no radar, e a escala de
  * risco (verde, âmbar, vermelho) só onde há risco. Movimento em landing.css.
  */
 
