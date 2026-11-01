@@ -90,11 +90,7 @@ export default async function ClientesPage() {
       <PageHeader
         titulo="Contas"
         descricao="A memória de cada conta: health score, estágio, objeções em aberto e valor de contrato."
-        acoes={
-          <BotaoLink href="/reunioes/nova" variante="primario">
-            Analisar reunião
-          </BotaoLink>
-        }
+        acoes={<BotaoLink href="/reunioes/nova">Analisar reunião</BotaoLink>}
       />
 
       {clientes.length === 0 ? (
