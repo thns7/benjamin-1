@@ -1,9 +1,9 @@
 import { ImageResponse } from 'next/og';
-import { MarcaFormas } from '@/components/logo';
+import { MarcaFormas, Tinta } from '@/components/logo';
 
 /**
  * Ícone de tela inicial do iPhone. O iOS não aceita SVG aqui, então a marca é
- * desenhada em PNG: B claro sobre o grafite, com a barriga de baixo em verde ciano.
+ * desenhada em PNG: B claro sobre o grafite, com a barriga de baixo na tinta azul.
  * Fundo sólido e cheio, porque o iOS arredonda o canto sozinho.
  */
 export const size = { width: 180, height: 180 };
@@ -23,7 +23,10 @@ export default function AppleIcon() {
         }}
       >
         <svg width="104" height="104" viewBox="0 0 32 32" fill="none">
-          {MarcaFormas({ cor: '#eaebee', destaque: '#1fd4b6' })}
+          <defs>
+            {Tinta({ id: 'tinta' })}
+          </defs>
+          {MarcaFormas({ cor: '#eaebee', destaque: 'url(#tinta)' })}
         </svg>
       </div>
     ),

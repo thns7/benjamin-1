@@ -1,15 +1,17 @@
 @import 'tailwindcss';
 
 /*
-  Benjamin — sistema de cor (conceito "Grafite e ciano", 2026-10-31).
+  Benjamin — sistema de cor (conceito "Grafite e tinta azul", 2026-11-01).
   Toda cor tem significado. A referência completa está em `IDENTIDADE.md`.
 
   Três camadas, cada uma com um papel:
 
     base    grafite e tinta clara    → fundos, texto, estrutura
-    marca   verde ciano              → botão principal e barriga do B (acao,
-                                       forte), links, foco e menu ativo
-                                       (accent, o mesmo tom mais fundo)
+    marca   tinta azul               → três faixas com divisão seca, marinho,
+                                       azul escuro e azul claro vibrante, no
+                                       botão principal e na barriga do B
+                                       (acao); azul liso em link, foco e menu
+                                       ativo (accent)
     risco   verde, âmbar, vermelho   → só onde há dado de risco:
             health (saudável), warn (atenção), risk (risco alto)
 
@@ -18,8 +20,9 @@
 
   O escuro é o padrão; o claro continua no botão de tema.
 
-  Sem brilho, sem degradê de fundo, sem desfoque e sem grão: profundidade é uma
-  linha fina e, onde algo sobe de verdade, uma sombra curta com deslocamento.
+  O único degradê é a tinta da marca, e só em peça da marca. Sem brilho, sem
+  degradê de fundo, sem desfoque e sem grão: profundidade é uma linha fina e,
+  onde algo sobe de verdade, uma sombra curta com deslocamento.
   O movimento fica: entrada da tela, hover que sobe, varredura do radar.
 
   `accent` e `accent-vivid` seguem como dois tokens por compatibilidade, e
@@ -42,21 +45,21 @@
   --ink-dim: #474b53;
   --ink-faint: #656a73;
 
-  /* Marca: verde ciano forte. Saturado assim, ele não segura texto branco
-     (2:1), então o botão leva texto escuro (7,9:1). Onde a cor é texto sobre o
-     papel (link, foco, menu ativo), vale o mesmo tom mais fundo (4,9:1). */
-  --accent: #00806e;
-  --accent-vivid: #00806e;
-  --accent-soft: #d9f6f0;
-  --acao: #00c9ab;
-  --on-acao: #04221e;
-  --ai: #00806e;
-  --ai-soft: #d9f6f0;
+  /* Marca: tinta azul. O botão é a tinta (--tinta) com texto branco, que cai
+     na faixa do meio; onde a marca é texto sobre o papel, vale o azul escuro
+     da faixa do meio (7,6:1). */
+  --accent: #1336d9;
+  --accent-vivid: #1336d9;
+  --accent-soft: #e6ecfd;
+  --acao: #1336d9;
+  --on-acao: #ffffff;
+  --tinta: linear-gradient(135deg, #07103f 0%, #0c1d6b 34%, #1336d9 34%, #1f57f5 76%, #18b4ff 76%, #5fd0ff 100%);
+  --ai: #1336d9;
+  --ai-soft: #e6ecfd;
 
   /* Escala de risco. Todos passam no WCAG AA como texto sobre o papel. */
-  /* Verde de saúde puxado para o amarelo: não pode ser lido como a marca. */
-  --health: #3e7b1f;
-  --health-soft: #e9f2e2;
+  --health: #2b7544;
+  --health-soft: #e4f0e7;
   --warn: #8f5c0b;
   --warn-soft: #f7eddb;
   --risk: #b3362b;
@@ -86,17 +89,18 @@
   --ink-dim: #b3b6be;
   --ink-faint: #8d919a;
 
-  /* No escuro o ciano forte serve de texto e de botão, com texto escuro. */
-  --accent: #3fe0c5;
-  --accent-vivid: #3fe0c5;
-  --accent-soft: rgb(63 224 197 / 0.13);
-  --acao: #1fd4b6;
-  --on-acao: #04221e;
-  --ai: #3fe0c5;
-  --ai-soft: rgb(63 224 197 / 0.13);
+  /* No escuro a tinta é a mesma; como texto, vale o azul claro vibrante. */
+  --accent: #4cc6ff;
+  --accent-vivid: #4cc6ff;
+  --accent-soft: rgb(76 198 255 / 0.14);
+  --acao: #1336d9;
+  --on-acao: #ffffff;
+  --tinta: linear-gradient(135deg, #07103f 0%, #0c1d6b 34%, #1336d9 34%, #1f57f5 76%, #18b4ff 76%, #5fd0ff 100%);
+  --ai: #4cc6ff;
+  --ai-soft: rgb(76 198 255 / 0.14);
 
-  --health: #7cc35a;
-  --health-soft: rgb(124 195 90 / 0.13);
+  --health: #57b47c;
+  --health-soft: rgb(87 180 124 / 0.13);
   --warn: #dfa043;
   --warn-soft: rgb(223 160 67 / 0.13);
   --risk: #ef6a5e;
@@ -179,6 +183,19 @@ body {
   background: var(--barra);
 }
 
+/*
+  Tinta: todo fundo na cor da marca (`bg-acao`) recebe as três faixas de
+  tinta, marinho, azul escuro e azul claro, com a divisão marcada entre elas. A
+  cor lisa de `--acao` fica por baixo, para quem não pinta o degradê.
+
+  No botão, a faixa clara começa em 76% e fica no canto: o texto branco,
+  centralizado, cai inteiro sobre o marinho e o azul escuro. Na barriga do B
+  (components/logo.tsx), onde não há texto, as três faixas têm o mesmo tamanho.
+*/
+.bg-acao {
+  background-image: var(--tinta);
+}
+
 /* Elevação no hover: só onde o card é clicável. */
 .vidro-hover {
   transition:
@@ -211,7 +228,7 @@ body {
 
 /*
   Radar circular (components/radar-ui.tsx): disco liso, anéis finos nos cortes
-  de faixa, pontos chapados e uma varredura ciano girando. Sem halo; o vermelho
+  de faixa, pontos chapados e uma varredura azul girando. Sem halo; o vermelho
   do centro já diz onde olhar.
 */
 .radar-polar {
@@ -252,8 +269,8 @@ body {
     from 0deg,
     transparent 0deg,
     transparent 300deg,
-    color-mix(in srgb, var(--acao) 22%, transparent) 357deg,
-    color-mix(in srgb, var(--acao) 60%, transparent) 360deg
+    color-mix(in srgb, var(--accent) 22%, transparent) 357deg,
+    color-mix(in srgb, var(--accent) 65%, transparent) 360deg
   );
   animation: radar-gira 6s linear infinite;
   pointer-events: none;
